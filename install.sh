@@ -37,7 +37,10 @@ if [[ -z "$RECIPIENT" ]]; then
         echo "==> IMESSAGE_RECIPIENT already in ~/.zshrc"
         RECIPIENT="$(grep "IMESSAGE_RECIPIENT" "$HOME/.zshrc" | head -1 | sed -E 's/.*IMESSAGE_RECIPIENT="?([^"]+)"?.*/\1/')"
     else
-        printf "Enter the iMessage recipient (your phone in +14155551234 or Apple-ID email): "
+        echo "Enter iMessage recipient(s). For multiple, comma-separate them."
+        echo "  Format: +14155551234 (E.164 phone) or apple-id@example.com"
+        echo "  Example: +14155551234,+15125558899"
+        printf "Recipient(s): "
         read -r RECIPIENT
         printf '\nexport IMESSAGE_RECIPIENT="%s"\n' "$RECIPIENT" >> "$HOME/.zshrc"
         echo "==> Wrote IMESSAGE_RECIPIENT to ~/.zshrc (open a new shell to pick it up)"

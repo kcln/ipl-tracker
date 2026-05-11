@@ -19,7 +19,7 @@ Runs every 15 minutes via launchd. On each run:
 4. Sends only the newest undelivered message via iMessage; older ones are marked skipped.
 5. Commits and pushes the diff to `kcln/ipl-tracker`.
 
-After **May 31, 2026** (final day), it posts a season recap and unloads its own launchd job.
+After May 31, 2026 (the final), it runs once on **June 1** to post a season recap and unloads its own launchd job — no further runs.
 
 ## Setup
 
@@ -32,7 +32,11 @@ cd ipl-tracker
 The installer will:
 
 - Create `venv/` and install dependencies.
-- Prompt you for `IMESSAGE_RECIPIENT` (your phone in `+14155551234` form, or your Apple ID email) and append it to `~/.zshrc`.
+- Prompt you for `IMESSAGE_RECIPIENT` and append it to `~/.zshrc`. **Multiple recipients are supported** — pass them comma-separated, e.g.
+  ```
+  IMESSAGE_RECIPIENT="+14155551234,+15125558899,friend@icloud.com" bash install.sh
+  ```
+  Each recipient gets the message as an individual iMessage (not a group chat). Best-effort: a single bad number won't block delivery to the others.
 - Render `launchd/com.kcln.ipltracker.plist` with absolute paths and load it into `~/Library/LaunchAgents/`.
 
 Then manually:

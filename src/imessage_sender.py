@@ -1,7 +1,8 @@
 """Send iMessages via Messages.app on macOS using AppleScript.
 
-Reads target handle from $IMESSAGE_RECIPIENT (phone number in E.164,
-e.g. +14155551234, or an email tied to iMessage).
+Reads target handles from $IMESSAGE_RECIPIENT — single recipient or a
+comma-separated list (E.164 phone like +14155551234 or an Apple-ID email).
+Each recipient gets the message as an individual iMessage (not a group).
 """
 from __future__ import annotations
 
@@ -17,12 +18,10 @@ def _log(msg: str) -> None:
 
 
 def _escape_for_applescript(s: str) -> str:
-    # Escape backslashes and quotes, preserve newlines as literal \n in script
     return s.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
 
 
 def _ensure_messages_running() -> None:
-    # `tell application "Messages" to activate` will launch it if not running.
     try:
         subprocess.run(
             ["osascript", "-e", 'tell application "Messages" to activate'],
@@ -32,21 +31,14 @@ def _ensure_messages_running() -> None:
         _log(f"could not activate Messages.app: {e}")
 
 
-def send(body: str) -> bool:
-    """Returns True on success, False on failure. Never raises."""
-    recipient = os.environ.get("IMESSAGE_RECIPIENT", "").strip()
-    if not recipient:
-        _log("IMESSAGE_RECIPIENT env var not set; skipping send")
-        return False
-    if not body or not body.strip():
-        _log("empty message body; skipping send")
-        return False
+def _parse_recipients() -> list[str]:
+    raw = os.environ.get("IMESSAGE_RECIPIENT", "")
+    return [r.strip() for r in raw.split(",") if r.strip()]
 
-    _ensure_messages_running()
 
+def _send_one(body: str, recipient: str) -> bool:
     safe_body = _escape_for_applescript(body)
     safe_recipient = recipient.replace('"', '\\"')
-
     script = f'''
     tell application "Messages"
         set targetService to 1st account whose service type = iMessage
@@ -60,16 +52,39 @@ def send(body: str) -> bool:
             capture_output=True, text=True, timeout=20,
         )
     except subprocess.TimeoutExpired:
-        _log("osascript timed out")
+        _log(f"osascript timed out for {recipient}")
         return False
     except OSError as e:
         _log(f"osascript not available: {e}")
         return False
-
     if result.returncode != 0:
-        _log(f"osascript failed: rc={result.returncode} stderr={result.stderr.strip()}")
+        _log(f"send to {recipient} failed: rc={result.returncode} {result.stderr.strip()}")
         return False
     _log(f"sent {len(body)} chars to {recipient}")
+    return True
+
+
+def send(body: str) -> bool:
+    """Send `body` to every recipient in IMESSAGE_RECIPIENT.
+
+    Returns True if **at least one** recipient received it. Best-effort —
+    a single bad number won't block delivery to the others.
+    """
+    recipients = _parse_recipients()
+    if not recipients:
+        _log("IMESSAGE_RECIPIENT env var not set; skipping send")
+        return False
+    if not body or not body.strip():
+        _log("empty message body; skipping send")
+        return False
+
+    _ensure_messages_running()
+    ok_count = sum(1 for r in recipients if _send_one(body, r))
+    if ok_count == 0:
+        _log(f"all {len(recipients)} sends failed")
+        return False
+    if ok_count < len(recipients):
+        _log(f"partial: {ok_count}/{len(recipients)} sends succeeded")
     return True
 
 
