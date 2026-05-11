@@ -38,7 +38,7 @@ def _format_date_long(date_iso: str) -> str:
 
 
 def _top4_line(label: str, teams: list[str]) -> str:
-    return f"{label}: " + (", ".join(teams) if teams else "—")
+    return f"{label}: " + (", ".join(teams) if teams else "(unavailable)")
 
 
 def morning_message(

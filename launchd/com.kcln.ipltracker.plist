@@ -18,6 +18,8 @@
     <dict>
         <key>IMESSAGE_RECIPIENT</key>
         <string>__IMESSAGE_RECIPIENT__</string>
+        <key>CRICAPI_KEY</key>
+        <string>__CRICAPI_KEY__</string>
         <key>PATH</key>
         <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
     </dict>

@@ -6,7 +6,10 @@ A macOS-native cron job that watches the 2026 Indian Premier League, predicts ea
 
 Runs every 15 minutes via launchd. On each run:
 
-1. Fetches today's fixtures, standings, and squad stats — ESPN Cricinfo first, Cricbuzz HTML scrape as fallback.
+1. Fetches today's fixtures, standings, and squad stats — tries three tiers in order:
+   - **ESPN Cricinfo JSON API** (primary, no key needed)
+   - **CricAPI** (set `CRICAPI_KEY` env var; free tier ≈100 calls/day from <https://cricapi.com/>)
+   - **Cricbuzz HTML scrape** (floor; ~4 matches visible, no standings)
 2. Generates whichever of these are due but missing for today (PT):
    - **morning brief** — once after 00:00 PT, lists today's matches with predictions
    - **post-match** — once each match completes
@@ -101,7 +104,18 @@ This is deliberately simple — no ML, no historical training data, no external 
 
 ## Troubleshooting
 
-**ESPN returns 403.** Common from cloud / VPN IPs. The fetcher falls back to Cricbuzz HTML. If both fail the script logs the error and exits cleanly — no broken messages are sent.
+**ESPN returns 403.** Akamai blocks many IP ranges (cloud egress, some residential). Two ways to recover:
+
+- **Best:** sign up for a free CricAPI account at <https://cricapi.com/>, copy your API key, then:
+  ```bash
+  echo 'export CRICAPI_KEY="your-key-here"' >> ~/.zshrc
+  launchctl unload ~/Library/LaunchAgents/com.kcln.ipltracker.plist
+  # also add CRICAPI_KEY to the plist's EnvironmentVariables block, then:
+  launchctl load ~/Library/LaunchAgents/com.kcln.ipltracker.plist
+  ```
+  CricAPI gives you full fixtures + standings + match status.
+- **Fallback:** Cricbuzz HTML scrape works without a key but only sees ~4 matches at a time (recent + upcoming) and gives no standings. Predictions degrade to form-only.
+- **Floor:** if all three fail the script logs the error and exits cleanly — no broken messages are sent.
 
 **iMessage send fails silently.** Most often missing Automation permission. After granting it, run `./venv/bin/python3 src/imessage_sender.py` — it sends a single self-test line. You can also confirm `IMESSAGE_RECIPIENT` is set: `launchctl getenv IMESSAGE_RECIPIENT` (set via the plist) or `echo $IMESSAGE_RECIPIENT` in a new shell.
 
