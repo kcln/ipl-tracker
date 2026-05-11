@@ -117,7 +117,11 @@ def _maybe_generate_post_match(
             continue
         # Find recorded prediction for this match (from morning brief generation we re-derive)
         all_teams = [r["team"] for r in standings] or list({t for m in todays for t in m["teams"]})
-        from . import predictor as _p  # local import to avoid cycles in standalone script mode
+        # Use already-imported predictor (worked around in module-vs-script init at top)
+        if __package__ in (None, ""):
+            from src import predictor as _p
+        else:
+            from . import predictor as _p
         predicted, _ = _p.predict_winner(
             match["teams"][0], match["teams"][1],
             standings, recent, squads, all_teams,

@@ -16,11 +16,24 @@ W_NRR = 0.30
 W_SQUAD = 0.30
 
 
-def _form_score(team: str, recent_matches: Iterable[dict]) -> float:
-    """Wins in last 5 matches for `team`, normalized to 0..1."""
+def _form_score(team: str, recent_matches: Iterable[dict], standings: list[dict] | None = None) -> float:
+    """Wins in last 5 matches for `team`, normalized to 0..1.
+
+    Prefers the standings 'performance' field (e.g. 'W,W,L,L,W') which is
+    iplt20's authoritative last-5 — falls back to scanning recent_matches."""
+    if standings:
+        for row in standings:
+            if row.get("team") == team:
+                perf = row.get("performance") or ""
+                results = [r for r in perf.split(",") if r in ("W", "L", "T", "NR")]
+                results = results[-5:] if results else []
+                if results:
+                    wins = sum(1 for r in results if r == "W")
+                    return wins / len(results)
+                break
     last_five = [m for m in recent_matches if team in m.get("teams", []) and m.get("status") == "complete"][-5:]
     if not last_five:
-        return 0.5  # neutral prior
+        return 0.5
     wins = sum(1 for m in last_five if m.get("winner") == team)
     return wins / len(last_five)
 
@@ -60,12 +73,12 @@ def predict_winner(
 ) -> tuple[str, str]:
     """Return (predicted_winner, one-sentence reason)."""
     a_score = (
-        W_FORM * _form_score(team_a, recent_matches)
+        W_FORM * _form_score(team_a, recent_matches, standings)
         + W_NRR * _nrr_score(team_a, standings)
         + W_SQUAD * _squad_score(team_a, squads, all_teams)
     )
     b_score = (
-        W_FORM * _form_score(team_b, recent_matches)
+        W_FORM * _form_score(team_b, recent_matches, standings)
         + W_NRR * _nrr_score(team_b, standings)
         + W_SQUAD * _squad_score(team_b, squads, all_teams)
     )
@@ -74,8 +87,8 @@ def predict_winner(
     loser = team_b if winner == team_a else team_a
 
     # Build human reason: cite the strongest factor
-    w_form = _form_score(winner, recent_matches)
-    l_form = _form_score(loser, recent_matches)
+    w_form = _form_score(winner, recent_matches, standings)
+    l_form = _form_score(loser, recent_matches, standings)
     w_nrr = _nrr_score(winner, standings)
     l_nrr = _nrr_score(loser, standings)
     w_sq = _squad_score(winner, squads, all_teams)

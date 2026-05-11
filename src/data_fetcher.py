@@ -1,14 +1,14 @@
 """Fetch IPL 2026 data — tiered source strategy.
 
 Tiers (in order; first that yields data wins):
-  1. ESPN Cricinfo JSON API   (hs-consumer-api.espncricinfo.com)
-  2. CricAPI                   (api.cricapi.com — requires CRICAPI_KEY env var)
-  3. Cricbuzz HTML scrape      (parses /cricket-series/... page; ~4 matches visible)
+  1. IPLT20 official feed     (ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com)
+  2. ESPN Cricinfo JSON API   (hs-consumer-api.espncricinfo.com)
+  3. CricAPI                  (api.cricapi.com — requires CRICAPI_KEY env var)
+  4. Cricbuzz HTML scrape     (floor — limited match info, no standings)
 
-ESPN is often 403-blocked by Akamai on residential/cloud IPs. CricAPI free tier
-gives ~100 calls/day with full schedule + points table. Cricbuzz HTML is the
-floor — limited to recent/upcoming matches the page renders server-side, and
-its points table is loaded client-side so we can't scrape standings from there.
+The IPLT20 S3-backed feed is what iplt20.com itself uses. It's public, no key,
+no auth, no rate limit, and contains: full schedule, points table (with last-5
+form), top run scorers, most wickets. CompetitionID 284 = IPL 2026.
 
 Cache TTLs (per spec):
   fixtures  : 24h     squads    : 7d
@@ -34,9 +34,13 @@ DATA_DIR = REPO_ROOT / "data"
 CACHE_DIR = DATA_DIR / "_cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+# Primary: iplt20.com official feed
+IPLT20_BASE = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds"
+IPLT20_COMP_ID = 284  # IPL 2026 (from competition.js)
+
 ESPN_SERIES_ID = 1510719
-CRICBUZZ_SERIES_ID = 8901  # IPL 2026 per cricbuzz URL slug
-CRICAPI_SERIES_ID_FALLBACK = "ipl-2026"  # CricAPI lookup hint
+CRICBUZZ_SERIES_ID = 8901
+CRICAPI_SERIES_ID_FALLBACK = "ipl-2026"
 
 ESPN_BASE = "https://hs-consumer-api.espncricinfo.com/v1/pages/series"
 ESPN_HEADERS = {
@@ -124,7 +128,8 @@ def fetch_fixtures(force: bool = False) -> list[dict]:
             return cached.get("matches", [])
 
     matches = (
-        _fixtures_from_espn()
+        _fixtures_from_iplt20()
+        or _fixtures_from_espn()
         or _fixtures_from_cricapi()
         or _fixtures_from_cricbuzz()
         or []
@@ -145,7 +150,8 @@ def fetch_standings(force: bool = False) -> list[dict]:
             return cached.get("standings", [])
 
     standings = (
-        _standings_from_espn()
+        _standings_from_iplt20()
+        or _standings_from_espn()
         or _standings_from_cricapi()
         or []
     )
@@ -165,7 +171,7 @@ def fetch_squads(force: bool = False) -> dict[str, dict]:
         if cached:
             return cached.get("teams", {})
 
-    teams = _squad_stats_from_espn() or {}
+    teams = _squad_stats_from_iplt20() or _squad_stats_from_espn() or {}
     if teams:
         _write_cache("squads", {"fetched_at": datetime.now().isoformat(), "teams": teams})
     return teams
@@ -179,12 +185,182 @@ def fetch_current_match(match_id: str) -> dict | None:
         return cached.get("match")
 
     match = (
-        _match_from_espn(match_id)
+        _match_from_iplt20(match_id)
+        or _match_from_espn(match_id)
         or _match_from_cricbuzz(match_id)
     )
     if match:
         _write_cache(cache_key, {"fetched_at": datetime.now().isoformat(), "match": match})
     return match
+
+
+# ─────────────────────────────────────────
+# IPLT20 official feed (primary)
+# ─────────────────────────────────────────
+
+_JSONP_RE = re.compile(r"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*\(\s*(.+?)\s*\)\s*;?\s*$", re.DOTALL)
+
+
+def _iplt20_fetch(path: str) -> dict | None:
+    url = f"{IPLT20_BASE}{path}"
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        if r.status_code != 200:
+            _log(f"iplt20 {path} returned {r.status_code}")
+            return None
+        text = r.text
+        m = _JSONP_RE.match(text)
+        payload = m.group(1) if m else text
+        return json.loads(payload)
+    except (requests.RequestException, ValueError) as e:
+        _log(f"iplt20 {path} error: {e}")
+        return None
+
+
+_IPLT20_STATUS_MAP = {
+    "post": "complete",
+    "live": "live",
+    "in progress": "live",
+    "pre": "scheduled",
+    "upcoming": "scheduled",
+    "scheduled": "scheduled",
+}
+
+
+def _parse_iplt20_match(m: dict) -> dict | None:
+    try:
+        mid = str(m.get("MatchID"))
+        t1 = m.get("FirstBattingTeamCode") or _normalize_team(m.get("FirstBattingTeamName", ""))
+        t2 = m.get("SecondBattingTeamCode") or _normalize_team(m.get("SecondBattingTeamName", ""))
+        date_ist = m.get("MatchDate") or m.get("MatchDateNew")
+        # MatchDate is "YYYY-MM-DD"; MatchTime is "HH:MM" (24h, IST)
+        time_ist = m.get("MatchTime") or "00:00"
+        if not date_ist or "-" not in date_ist:
+            # Try parsing MatchDateNew "11 May 2026"
+            try:
+                date_ist = datetime.strptime(m.get("MatchDateNew", ""), "%d %b %Y").strftime("%Y-%m-%d")
+            except ValueError:
+                return None
+        status_raw = (m.get("MatchStatus") or "").lower().strip()
+        status = _IPLT20_STATUS_MAP.get(status_raw, "scheduled" if status_raw else "scheduled")
+        # Winner
+        winner = None
+        result_text = None
+        if status == "complete":
+            wt_id = m.get("WinningTeamID")
+            if wt_id and str(wt_id) == str(m.get("FirstBattingTeamID")):
+                winner = t1
+            elif wt_id and str(wt_id) == str(m.get("SecondBattingTeamID")):
+                winner = t2
+            result_text = (m.get("Commentss") or "").strip() or None
+        return {
+            "id": mid,
+            "teams": [_normalize_team(t1), _normalize_team(t2)],
+            "date_ist": date_ist,
+            "scheduled_ist": time_ist,
+            "status": status,
+            "result": result_text,
+            "winner": winner,
+        }
+    except (KeyError, ValueError, TypeError) as e:
+        _log(f"iplt20: skipping match: {e}")
+        return None
+
+
+def _fixtures_from_iplt20() -> list[dict] | None:
+    data = _iplt20_fetch(f"/{IPLT20_COMP_ID}-matchschedule.js")
+    if not data:
+        return None
+    raw = data.get("Matchsummary") or []
+    matches = [m for m in (_parse_iplt20_match(r) for r in raw) if m]
+    if matches:
+        _log(f"iplt20: parsed {len(matches)} matches from official feed")
+    return matches or None
+
+
+def _standings_from_iplt20() -> list[dict] | None:
+    data = _iplt20_fetch(f"/stats/{IPLT20_COMP_ID}-groupstandings.js")
+    if not data:
+        return None
+    rows = data.get("points") or []
+    out: list[dict] = []
+    for r in rows:
+        try:
+            out.append({
+                "team": r.get("TeamCode") or _normalize_team(r.get("TeamName", "")),
+                "played": int(r.get("Matches", 0)),
+                "won": int(r.get("Wins", 0)),
+                "lost": int(r.get("Loss", 0)),
+                "points": int(r.get("Points", 0)),
+                "nrr": float(r.get("NetRunRate", 0.0) or 0.0),
+                # Bonus: iplt20 gives last-5 form directly ("W,W,L,L,W")
+                "performance": r.get("Performance") or "",
+                "order": int(r.get("OrderNo", 0) or 0),
+            })
+        except (ValueError, TypeError):
+            continue
+    out.sort(key=lambda r: r.get("order") or 99)
+    return out or None
+
+
+def _squad_stats_from_iplt20() -> dict[str, dict] | None:
+    teams: dict[str, dict] = {}
+    runs = _iplt20_fetch(f"/stats/{IPLT20_COMP_ID}-toprunsscorers.js")
+    if runs:
+        for p in runs.get("toprunsscorers", []) or []:
+            try:
+                code = p.get("TeamCode")
+                if not code:
+                    continue
+                teams.setdefault(code, {"batters": [], "bowlers": []})
+                teams[code]["batters"].append({
+                    "name": p.get("StrikerName"),
+                    "runs": int(p.get("TotalRuns", 0)),
+                })
+            except (ValueError, TypeError):
+                continue
+    wickets = _iplt20_fetch(f"/stats/{IPLT20_COMP_ID}-mostwickets.js")
+    if wickets:
+        # Find the wicket count field — try a few likely names
+        rows = list(wickets.values())[0] if wickets else []
+        for p in rows or []:
+            try:
+                code = p.get("TeamCode")
+                if not code:
+                    continue
+                wkts = p.get("Wickets") or p.get("TotalWickets") or p.get("WicketsTaken") or p.get("wickets")
+                if wkts is None:
+                    continue
+                teams.setdefault(code, {"batters": [], "bowlers": []})
+                teams[code]["bowlers"].append({
+                    "name": p.get("BowlerName"),
+                    "wickets": int(wkts),
+                })
+            except (ValueError, TypeError):
+                continue
+    # Top 3 batters / bowlers per team
+    for code, t in teams.items():
+        t["batters"] = sorted(t["batters"], key=lambda b: b["runs"], reverse=True)[:3]
+        t["bowlers"] = sorted(t["bowlers"], key=lambda b: b["wickets"], reverse=True)[:3]
+    return teams or None
+
+
+def _match_from_iplt20(match_id: str) -> dict | None:
+    # The schedule feed already carries live state. Re-fetch (cached 60s upstream).
+    data = _iplt20_fetch(f"/{IPLT20_COMP_ID}-matchschedule.js")
+    if not data:
+        return None
+    for raw in data.get("Matchsummary", []) or []:
+        if str(raw.get("MatchID")) == str(match_id):
+            parsed = _parse_iplt20_match(raw)
+            if parsed:
+                return {
+                    "id": match_id,
+                    "status": parsed["status"],
+                    "result": parsed["result"],
+                    "winner": parsed["winner"],
+                }
+    return None
 
 
 # ─────────────────────────────────────────

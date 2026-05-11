@@ -6,8 +6,9 @@ A macOS-native cron job that watches the 2026 Indian Premier League, predicts ea
 
 Runs every 15 minutes via launchd. On each run:
 
-1. Fetches today's fixtures, standings, and squad stats — tries three tiers in order:
-   - **ESPN Cricinfo JSON API** (primary, no key needed)
+1. Fetches today's fixtures, standings, and squad stats — tries four tiers in order:
+   - **iplt20.com official feed** (primary; S3-backed, public, no key) — this is the source iplt20.com itself uses, hosted on `ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com`. Full 74-match schedule, points table with last-5 form, top run scorers, most wickets.
+   - **ESPN Cricinfo JSON API** (fallback, no key needed — often 403-blocked by Akamai)
    - **CricAPI** (set `CRICAPI_KEY` env var; free tier ≈100 calls/day from <https://cricapi.com/>)
    - **Cricbuzz HTML scrape** (floor; ~4 matches visible, no standings)
 2. Generates whichever of these are due but missing for today (PT):
@@ -104,18 +105,10 @@ This is deliberately simple — no ML, no historical training data, no external 
 
 ## Troubleshooting
 
-**ESPN returns 403.** Akamai blocks many IP ranges (cloud egress, some residential). Two ways to recover:
+**ESPN returns 403.** Expected. The iplt20.com official feed is the primary source and serves IPL data from a public S3 bucket — no key, no auth, no rate limit. ESPN/CricAPI/Cricbuzz remain configured as fallbacks. If you want them active:
 
-- **Best:** sign up for a free CricAPI account at <https://cricapi.com/>, copy your API key, then:
-  ```bash
-  echo 'export CRICAPI_KEY="your-key-here"' >> ~/.zshrc
-  launchctl unload ~/Library/LaunchAgents/com.kcln.ipltracker.plist
-  # also add CRICAPI_KEY to the plist's EnvironmentVariables block, then:
-  launchctl load ~/Library/LaunchAgents/com.kcln.ipltracker.plist
-  ```
-  CricAPI gives you full fixtures + standings + match status.
-- **Fallback:** Cricbuzz HTML scrape works without a key but only sees ~4 matches at a time (recent + upcoming) and gives no standings. Predictions degrade to form-only.
-- **Floor:** if all three fail the script logs the error and exits cleanly — no broken messages are sent.
+- **CricAPI:** sign up at <https://cricapi.com/>, copy your API key, then re-run the installer with `CRICAPI_KEY="your-key" bash install.sh`. The plist will be re-rendered with the key.
+- **All sources failing** is logged and exits cleanly — no broken messages are sent.
 
 **iMessage send fails silently.** Most often missing Automation permission. After granting it, run `./venv/bin/python3 src/imessage_sender.py` — it sends a single self-test line. You can also confirm `IMESSAGE_RECIPIENT` is set: `launchctl getenv IMESSAGE_RECIPIENT` (set via the plist) or `echo $IMESSAGE_RECIPIENT` in a new shell.
 

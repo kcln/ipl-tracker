@@ -1,6 +1,7 @@
 """Compose morning / post-match / end-of-day message bodies."""
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -106,11 +107,13 @@ def post_match_message(
 
 
 def _strip_winner_prefix(margin: str, winner: str, loser: str) -> str:
-    """ESPN's statusText often reads 'CSK won by 12 runs'. We render the
-    winner ourselves, so strip any leading 'X won by'/'beat Y by' phrasing."""
+    """Source feeds vary: ESPN's statusText reads 'CSK won by 12 runs';
+    iplt20 Commentss reads 'Delhi Capitals Won by 3  Wickets '. We render
+    the winner ourselves, so strip any leading 'X won by' phrasing and
+    normalize whitespace."""
     if not margin:
         return ""
-    m = margin.strip()
+    m = re.sub(r"\s+", " ", margin).strip()
     lower = m.lower()
     for prefix in (
         f"{winner.lower()} won by ",
