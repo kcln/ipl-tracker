@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 .DS_Store
 data/_cache/
+# Recipient list — personal info, kept out of the public repo
+recipients.txt

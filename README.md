@@ -32,11 +32,7 @@ cd ipl-tracker
 The installer will:
 
 - Create `venv/` and install dependencies.
-- Prompt you for `IMESSAGE_RECIPIENT` and append it to `~/.zshrc`. **Multiple recipients are supported** — pass them comma-separated, e.g.
-  ```
-  IMESSAGE_RECIPIENT="+14155551234,+15125558899,friend@icloud.com" bash install.sh
-  ```
-  Each recipient gets the message as an individual iMessage (not a group chat). Best-effort: a single bad number won't block delivery to the others.
+- Prompt you for an iMessage recipient. **Multiple recipients are supported** and you can add/remove them anytime with the included CLI — no reinstall, no launchd reload. See "Managing recipients" below.
 - Render `launchd/com.kcln.ipltracker.plist` with absolute paths and load it into `~/Library/LaunchAgents/`.
 
 Then manually:
@@ -47,6 +43,22 @@ Then manually:
    gh repo create kcln/ipl-tracker --public --source=. --remote=origin --push
    ```
 3. **Enable GitHub Pages.** Repo settings → Pages → source = `main` branch, folder = `/docs`. The included workflow then redeploys on every push to `docs/`.
+
+## Managing recipients
+
+The tracker reads recipients from `recipients.txt` at the repo root — one handle per line, `#` starts a comment. Edit it anytime; the next 15-min run picks up the change (no install or launchd reload). The file is gitignored so personal numbers don't end up in the public repo.
+
+Use the included CLI:
+
+```bash
+./recipients.sh list                   # show current recipients
+./recipients.sh add    +14155551234    # add a phone (E.164)
+./recipients.sh add    friend@icloud.com   # or an Apple-ID email
+./recipients.sh remove +14155551234    # remove one
+./recipients.sh test                   # send a self-test line to everyone
+```
+
+Each recipient gets the message as an individual iMessage (not a group chat). Best-effort delivery: a single bad number won't block the others. If `recipients.txt` doesn't exist or is empty, the sender falls back to the `IMESSAGE_RECIPIENT` env var (single handle or comma-separated list).
 
 ## Operations
 

@@ -1,8 +1,13 @@
 """Send iMessages via Messages.app on macOS using AppleScript.
 
-Reads target handles from $IMESSAGE_RECIPIENT — single recipient or a
-comma-separated list (E.164 phone like +14155551234 or an Apple-ID email).
-Each recipient gets the message as an individual iMessage (not a group).
+Recipient sources, in priority order:
+  1. `recipients.txt` at the repo root — one handle per line; `#` starts a
+     comment. Edit it anytime; the next run picks it up. No reload needed.
+  2. `$IMESSAGE_RECIPIENT` env var — single handle or comma-separated list.
+
+A handle is either an E.164 phone (`+14155551234`) or an Apple-ID email
+tied to iMessage. Each recipient gets the message as an individual iMessage
+(not a group chat).
 """
 from __future__ import annotations
 
@@ -10,6 +15,10 @@ import os
 import subprocess
 import sys
 from datetime import datetime
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+RECIPIENTS_FILE = REPO_ROOT / "recipients.txt"
 
 
 def _log(msg: str) -> None:
@@ -32,8 +41,29 @@ def _ensure_messages_running() -> None:
 
 
 def _parse_recipients() -> list[str]:
-    raw = os.environ.get("IMESSAGE_RECIPIENT", "")
-    return [r.strip() for r in raw.split(",") if r.strip()]
+    """File wins; env var is the fallback. De-duplicates while preserving order."""
+    recipients: list[str] = []
+    seen: set[str] = set()
+
+    if RECIPIENTS_FILE.exists():
+        try:
+            for raw_line in RECIPIENTS_FILE.read_text(encoding="utf-8").splitlines():
+                line = raw_line.split("#", 1)[0].strip()
+                if line and line not in seen:
+                    seen.add(line)
+                    recipients.append(line)
+        except OSError as e:
+            _log(f"could not read {RECIPIENTS_FILE.name}: {e}")
+
+    if not recipients:
+        env_val = os.environ.get("IMESSAGE_RECIPIENT", "")
+        for r in env_val.split(","):
+            r = r.strip()
+            if r and r not in seen:
+                seen.add(r)
+                recipients.append(r)
+
+    return recipients
 
 
 def _send_one(body: str, recipient: str) -> bool:
