@@ -138,6 +138,10 @@
       white-space: pre-wrap; word-wrap: break-word;
       background: transparent; border: 0; padding: 0; margin: 0;
     }
+    article pre strong {
+      font-weight: 700;
+      color: var(--text);
+    }
 
     /* ── Signup section ── */
     section.signup h2 {
@@ -340,7 +344,7 @@
       display: block;
       font-family: var(--font-label);
       font-size: var(--text-xs);
-      font-weight: 500;
+      font-weight: 700;   /* bolder per request */
       letter-spacing: 0.22em;
       text-transform: uppercase;
       margin-bottom: 10px;
@@ -350,13 +354,15 @@
     .signup-state .state-headline {
       font-family: var(--font-hero);
       font-style: italic;
-      font-weight: 700;
-      font-size: 28px;
-      letter-spacing: -0.015em;
-      line-height: 1.1;
+      font-weight: 900;   /* bolder per request — full Playfair black */
+      font-size: 32px;
+      letter-spacing: -0.018em;
+      line-height: 1.06;
       color: var(--text);
       margin-bottom: 8px;
     }
+    .signup-state.success .state-headline { color: var(--teal); }
+    .signup-state.error   .state-headline { color: var(--crimson); }
     .signup-state.success .state-headline em { color: var(--teal); font-style: italic; font-weight: 900; }
     .signup-state.error   .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
     .signup-state .state-body {
@@ -472,31 +478,29 @@
 <!-- ── MATCH LOG ── -->
 <section class="section" id="match-log">
 <div class="brand-section-label">Match log</div>
-<div id="days"><details data-day="2026-05-11" open=""><summary>Monday, May 11, 2026</summary><article data-type="morning" id="msg-2026-05-11-morning"><time datetime="2026-05-11T16:37:06.407513-07:00">Morning brief · 5:07am IST · 7:37pm ET · 6:37pm CT · 4:37pm PT</time><pre>IPL 2026 - Monday, May 11
+<div id="days"><details data-day="2026-05-11" open=""><summary>Monday, May 11, 2026</summary><article data-type="morning" id="msg-2026-05-11-morning"><time datetime="2026-05-11T16:37:06.407513-07:00">Morning brief</time><pre>IPL 2026 - Monday, May 11
 
 Today's matches:
 
-Match 1: PBKS vs DC
+Match 1: <strong>PBKS</strong> vs <strong>DC</strong>
 7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT
-Prediction: PBKS wins
-Reason: PBKS have a healthier net run rate
+Prediction: <strong>PBKS</strong> wins
+Reason: <strong>PBKS</strong> have a healthier net run rate
 
-Current top 4: RCB, SRH, GT, PBKS
-Predicted final top 4: SRH, RCB, GT, RR</pre></article><article data-type="post_match_1" id="msg-2026-05-11-post_match_1"><time datetime="2026-05-11T16:37:06.409431-07:00">Match 1 result · 5:07am IST · 7:37pm ET · 6:37pm CT · 4:37pm PT</time><pre>DC beat PBKS by 3 Wickets
+Current top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: <strong>SRH, RCB, GT, RR</strong></pre></article><article data-type="post_match_1" id="msg-2026-05-11-post_match_1"><time datetime="2026-05-11T16:37:06.409431-07:00">Match 1 result</time><pre><strong>DC</strong> beat <strong>PBKS</strong> by 3 Wickets
 
 Pre-match prediction: incorrect
 
-Updated top 4: RCB, SRH, GT, PBKS
-Predicted final top 4: SRH, RCB, GT, RR</pre></article><article data-type="end_of_day" id="msg-2026-05-11-end_of_day"><time datetime="2026-05-11T16:37:06.410964-07:00">Day recap · 5:07am IST · 7:37pm ET · 6:37pm CT · 4:37pm PT</time><pre>IPL 2026 - Monday, May 11 - Day recap
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: <strong>SRH, RCB, GT, RR</strong></pre></article><article data-type="end_of_day" id="msg-2026-05-11-end_of_day"><time datetime="2026-05-11T16:37:06.410964-07:00">Day recap</time><pre>IPL 2026 - Monday, May 11 - Day recap
 
-DC beat PBKS by 3 Wickets
+<strong>DC</strong> beat <strong>PBKS</strong> by 3 Wickets
 
 Predictions today: 0 of 1 correct
 
-Updated top 4: RCB, SRH, GT, PBKS
-Predicted final top 4: SRH, RCB, GT, RR
-
-Archive: https://kcln.github.io/ipl-tracker/</pre></article></details></div>
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: <strong>SRH, RCB, GT, RR</strong></pre></article></details></div>
 </section>
 <!-- ── SIGNUP ── -->
 <section class="section signup" id="signup">

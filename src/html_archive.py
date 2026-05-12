@@ -6,12 +6,18 @@ We parse with BeautifulSoup so we can re-insert articles idempotently
 from __future__ import annotations
 
 import html
+import re
 from datetime import datetime
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 
 from .state import IST, PT  # noqa: F401
+
+# Team codes used by the predictor / message_builder — bolded in the web view
+TEAM_CODES = ('CSK', 'MI', 'RCB', 'KKR', 'DC', 'PBKS', 'RR', 'SRH', 'GT', 'LSG')
+_TEAM_RE = re.compile(r'\b(' + '|'.join(TEAM_CODES) + r')\b')
+_TOP4_RE = re.compile(r'^(.*top 4:\s*)(.+)$', re.IGNORECASE)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -156,6 +162,10 @@ SHELL = """<!doctype html>
       color: var(--text);
       white-space: pre-wrap; word-wrap: break-word;
       background: transparent; border: 0; padding: 0; margin: 0;
+    }
+    article pre strong {
+      font-weight: 700;
+      color: var(--text);
     }
 
     /* ── Signup section ── */
@@ -359,7 +369,7 @@ SHELL = """<!doctype html>
       display: block;
       font-family: var(--font-label);
       font-size: var(--text-xs);
-      font-weight: 500;
+      font-weight: 700;   /* bolder per request */
       letter-spacing: 0.22em;
       text-transform: uppercase;
       margin-bottom: 10px;
@@ -369,13 +379,15 @@ SHELL = """<!doctype html>
     .signup-state .state-headline {
       font-family: var(--font-hero);
       font-style: italic;
-      font-weight: 700;
-      font-size: 28px;
-      letter-spacing: -0.015em;
-      line-height: 1.1;
+      font-weight: 900;   /* bolder per request — full Playfair black */
+      font-size: 32px;
+      letter-spacing: -0.018em;
+      line-height: 1.06;
       color: var(--text);
       margin-bottom: 8px;
     }
+    .signup-state.success .state-headline { color: var(--teal); }
+    .signup-state.error   .state-headline { color: var(--crimson); }
     .signup-state.success .state-headline em { color: var(--teal); font-style: italic; font-weight: 900; }
     .signup-state.error   .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
     .signup-state .state-body {
@@ -796,6 +808,45 @@ def _label_for(msg_type: str) -> str:
     return msg_type.replace("_", " ").title()
 
 
+def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str) -> None:
+    """Render the message body into a <pre> tag with these adjustments for
+    the web archive view (the iMessage text stays plain):
+
+      * Drop the trailing "Archive: <url>" line — redundant when you're
+        already looking at the archive.
+      * Bold team codes (CSK, MI, RCB, …) inline.
+      * Bold the team list after any "top 4:" prefix.
+    """
+    lines = [ln for ln in body_text.split('\n') if not ln.lstrip().startswith('Archive:')]
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+    for i, line in enumerate(lines):
+        if i > 0:
+            pre_tag.append('\n')
+
+        # "Current top 4: RCB, SRH, GT, PBKS" — bold the comma-separated list
+        m = _TOP4_RE.match(line)
+        if m:
+            pre_tag.append(m.group(1))
+            strong = soup.new_tag('strong')
+            strong.string = m.group(2)
+            pre_tag.append(strong)
+            continue
+
+        # Otherwise bold any standalone team-code tokens in the line
+        pos = 0
+        for match in _TEAM_RE.finditer(line):
+            if match.start() > pos:
+                pre_tag.append(line[pos:match.start()])
+            strong = soup.new_tag('strong')
+            strong.string = match.group(0)
+            pre_tag.append(strong)
+            pos = match.end()
+        if pos < len(line):
+            pre_tag.append(line[pos:])
+
+
 def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: str) -> None:
     soup = _ensure_index()
     details = _find_day_details(soup, date_iso) or _create_day_details(soup, date_iso)
@@ -807,31 +858,12 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
 
     article = soup.new_tag("article", id=article_id, attrs={"data-type": msg_type})
 
-    # Render timestamp in all four zones to match the message body convention
-    try:
-        from zoneinfo import ZoneInfo
-        dt = datetime.fromisoformat(generated_at_iso)
-        ist = dt.astimezone(ZoneInfo("Asia/Kolkata"))
-        et = dt.astimezone(ZoneInfo("America/New_York"))
-        ct = dt.astimezone(ZoneInfo("America/Chicago"))
-        pt = dt.astimezone(ZoneInfo("America/Los_Angeles"))
-
-        def _stamp(d, label):
-            return f"{d.strftime('%-I:%M %p').lower().replace(' ', '')} {label}"
-
-        ts_human = (
-            f"{_stamp(ist, 'IST')} · {_stamp(et, 'ET')} · "
-            f"{_stamp(ct, 'CT')} · {_stamp(pt, 'PT')}"
-        )
-    except (ValueError, ImportError):
-        ts_human = generated_at_iso
-
     time_tag = soup.new_tag("time", datetime=generated_at_iso)
-    time_tag.string = f"{_label_for(msg_type)} · {ts_human}"
+    time_tag.string = _label_for(msg_type)
     article.append(time_tag)
 
     pre = soup.new_tag("pre")
-    pre.string = body
+    _populate_pre(soup, pre, body)
     article.append(pre)
 
     # Insert articles in chronological order within the day
