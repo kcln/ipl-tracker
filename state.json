@@ -132,6 +132,15 @@
           "delivered_at": "2026-05-12T08:50:55.901949-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "GT vs SRH \u2014 Powerplay 2\n\nSRH: 34/4 after 6.0 overs, chasing 169.\n\nUpdated prediction: GT wins (90%)\nReason: 34/4 chasing 169 \u2014 RRR 9.6 vs CRR 5.7",
+          "generated_at": "2026-05-12T09:36:55.071931-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T09:36:56.508704-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ]
     }
