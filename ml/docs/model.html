@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>IPL ML model card</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #0f0f0f;
+  background: #ffffff;
+  margin: 0;
+  padding: 32px 20px;
+  line-height: 1.5;
+}
+.wrap { max-width: 760px; margin: 0 auto; }
+h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 18px; margin: 32px 0 8px; }
+.muted { color: #555; font-size: 13px; }
+.card { border: 1px solid #e6e6e6; border-radius: 8px; padding: 16px; margin: 12px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; }
+th { color: #555; font-weight: 500; }
+.kpi { font-size: 28px; font-weight: 700; }
+.kpi-row { display: flex; gap: 24px; flex-wrap: wrap; }
+.kpi-box { flex: 1; min-width: 140px; }
+.note { background: #fafafa; padding: 12px; border-radius: 8px; font-size: 13px; }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>IPL match prediction — model card</h1>
+  <p class="muted">Isolated ML engine. Status: infrastructure scaffolded; baselines pending Phase 0.</p>
+
+  <h2>Status</h2>
+  <div class="card">
+    <p>This card will be populated as models are trained. See <code>ml/PROGRESS.md</code> for phase tracking.</p>
+  </div>
+
+  <h2>Baselines</h2>
+  <table>
+    <thead><tr><th>Baseline</th><th>Pre-match accuracy</th></tr></thead>
+    <tbody>
+      <tr><td>Coin flip</td><td>50.0%</td></tr>
+      <tr><td>Toss winner wins</td><td>~53%</td></tr>
+      <tr><td>Heuristic (current tracker)</td><td>pending</td></tr>
+      <tr><td>Academic baseline</td><td>67–72%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Version history</h2>
+  <p class="muted">See <code>ml/docs/model_history.md</code>.</p>
+
+  <p class="muted">Last updated: <span id="updated">scaffold</span></p>
+</div>
+</body>
+</html>

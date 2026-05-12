@@ -11,3 +11,12 @@ optout.txt
 data/messages_cursor.json
 # Heartbeat — tracks when the tracker last ran (every cycle); not real data
 data/last_run.txt
+
+# ml/ engine (isolated; do not affect existing tracker)
+ml/data/historical/raw_json/
+ml/data/historical/*.parquet
+ml/data/backtest_results/*.parquet
+ml/.venv/
+ml/__pycache__/
+ml/**/__pycache__/
+ml/**/.pytest_cache/
