@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-05-11T23:18:36.017488-07:00",
+  "last_run": "2026-05-11T23:29:47.876562-07:00",
   "days": {
     "2026-05-11": {
       "matches": [
@@ -20,7 +20,7 @@
         {
           "type": "morning",
           "body": "IPL 2026 - Monday, May 11\n\nToday's matches:\n\nMatch 1: PBKS vs DC\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: PBKS wins\nReason: PBKS have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T20:28:16.375402-07:00",
+          "generated_at": "2026-05-11T23:29:44.857531-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -29,7 +29,7 @@
         {
           "type": "post_match_1",
           "body": "DC beat PBKS by 3 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T20:28:17.706825-07:00",
+          "generated_at": "2026-05-11T23:29:46.245061-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -38,9 +38,9 @@
         {
           "type": "end_of_day",
           "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\n\nPredictions today: 0 of 1 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
-          "generated_at": "2026-05-11T20:28:18.979073-07:00",
+          "generated_at": "2026-05-11T23:29:47.574959-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-11T20:28:19.236410-07:00",
+          "delivered_at": "2026-05-11T23:29:47.876538-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
