@@ -28,17 +28,54 @@ th { color: #555; font-weight: 500; }
 .kpi-box { flex: 1; min-width: 140px; }
 .note { background: #fafafa; padding: 12px; border-radius: 8px; font-size: 13px; }
 code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; }
+.warn { color: #a02000; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>IPL match prediction — model card</h1>
-  <p class="muted">Isolated ML engine. Status: infrastructure scaffolded; baselines pending Phase 0.</p>
+  <p class="muted">Isolated ML engine under <code>ml/</code>. Phase 0 complete: heuristic baseline established.</p>
 
-  <h2>Status</h2>
-  <div class="card">
-    <p>This card will be populated as models are trained. See <code>ml/PROGRESS.md</code> for phase tracking.</p>
+  <h2>Headline (2025 test set)</h2>
+  <div class="kpi-row">
+    <div class="card kpi-box">
+      <div class="muted">Heuristic accuracy</div>
+      <div class="kpi">54.3%</div>
+    </div>
+    <div class="card kpi-box">
+      <div class="muted">Brier</div>
+      <div class="kpi">0.288</div>
+    </div>
+    <div class="card kpi-box">
+      <div class="muted">Log loss</div>
+      <div class="kpi">0.801</div>
+    </div>
   </div>
+  <p class="muted">2025 test set: 70 matches. <span class="warn">Below 60% floor — continuing per plan.</span></p>
+
+  <h2>Per-season heuristic accuracy</h2>
+  <table>
+    <thead><tr><th>Season</th><th>Accuracy</th><th>Brier</th><th>n</th></tr></thead>
+    <tbody>
+      <tr><td>2008</td><td>60.3%</td><td>0.249</td><td>58</td></tr>
+      <tr><td>2009</td><td>51.8%</td><td>0.324</td><td>56</td></tr>
+      <tr><td>2010</td><td>42.4%</td><td>0.343</td><td>59</td></tr>
+      <tr><td>2011</td><td>50.0%</td><td>0.297</td><td>72</td></tr>
+      <tr><td>2012</td><td>47.3%</td><td>0.317</td><td>74</td></tr>
+      <tr><td>2013</td><td>52.7%</td><td>0.277</td><td>74</td></tr>
+      <tr><td>2014</td><td>66.1%</td><td>0.220</td><td>59</td></tr>
+      <tr><td>2015</td><td>50.0%</td><td>0.297</td><td>56</td></tr>
+      <tr><td>2016</td><td>48.3%</td><td>0.304</td><td>60</td></tr>
+      <tr><td>2017</td><td>53.4%</td><td>0.283</td><td>58</td></tr>
+      <tr><td>2018</td><td>56.7%</td><td>0.278</td><td>60</td></tr>
+      <tr><td>2019</td><td>57.9%</td><td>0.259</td><td>57</td></tr>
+      <tr><td>2021</td><td>46.1%</td><td>0.320</td><td>115</td></tr>
+      <tr><td>2022</td><td>60.8%</td><td>0.285</td><td>74</td></tr>
+      <tr><td>2023</td><td>41.1%</td><td>0.350</td><td>73</td></tr>
+      <tr><td>2024 (val)</td><td>56.3%</td><td>0.275</td><td>71</td></tr>
+      <tr><td>2025 (test)</td><td>54.3%</td><td>0.288</td><td>70</td></tr>
+    </tbody>
+  </table>
 
   <h2>Baselines</h2>
   <table>
@@ -46,15 +83,23 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
     <tbody>
       <tr><td>Coin flip</td><td>50.0%</td></tr>
       <tr><td>Toss winner wins</td><td>~53%</td></tr>
-      <tr><td>Heuristic (current tracker)</td><td>pending</td></tr>
+      <tr><td>Heuristic on cricsheet inputs</td><td><b>54.3%</b> (2025)</td></tr>
       <tr><td>Academic baseline</td><td>67–72%</td></tr>
     </tbody>
   </table>
 
+  <h2>Notes</h2>
+  <p class="note">
+    The heuristic wrapper feeds the existing tracker's <code>predict_winner</code> with cricsheet-derived
+    state. Some inputs (squad ranks, home_team flag, second_batting) are not present in cricsheet, so this
+    is a lower bound on the heuristic's capability. ML models in subsequent phases use the same cricsheet-only
+    inputs, so the comparison is apples-to-apples.
+  </p>
+
   <h2>Version history</h2>
   <p class="muted">See <code>ml/docs/model_history.md</code>.</p>
 
-  <p class="muted">Last updated: <span id="updated">scaffold</span></p>
+  <p class="muted">Last updated: 2026-05-12 (Phase 0).</p>
 </div>
 </body>
 </html>
