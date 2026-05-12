@@ -9,26 +9,50 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:           #F5F5F7;
+    /* Two-color palette ONLY: shades of purple + one warm brown. */
+    --bg:           #F8F5F1;          /* warm off-white pairs with brown */
     --card:         #FFFFFF;
-    --card-2:       #FAFAFB;
-    --ink:          #1D1D1F;
-    --ink-2:        #424246;
-    --ink-soft:     rgba(29,29,31,0.62);
-    --ink-faint:    rgba(29,29,31,0.40);
-    --hair:         rgba(29,29,31,0.10);
-    --hair-soft:    rgba(29,29,31,0.06);
-    --rose:         #E11D48;
-    --rose-soft:    rgba(225,29,72,0.08);
-    --blue:         #2563EB;
-    --blue-soft:    rgba(37,99,235,0.08);
-    --emerald:      #059669;
-    --emerald-soft: rgba(5,150,105,0.08);
+    --card-2:       #FAF8F5;
+
+    /* Brown — the "match-day updates" dark panel */
+    --brown:        #3F2A26;          /* deep warm brown */
+    --brown-2:      #5A3E37;          /* slightly lighter */
+    --brown-soft:   rgba(63,42,38,0.08);
+    --brown-hair:   rgba(63,42,38,0.14);
+
+    /* Text uses a warm near-black so it harmonises with the brown */
+    --ink:          #1F1612;
+    --ink-2:        #3D2E27;
+    --ink-soft:     rgba(31,22,18,0.62);
+    --ink-faint:    rgba(31,22,18,0.40);
+    --hair:         rgba(31,22,18,0.10);
+    --hair-soft:    rgba(31,22,18,0.06);
+
+    /* Purple scale — the only chromatic family */
+    --p-50:         #FAF5FF;
+    --p-100:        #F3E8FF;
+    --p-200:        #E9D5FF;
+    --p-300:        #D8B4FE;
+    --p-400:        #C084FC;
+    --p-500:        #A855F7;
+    --p-600:        #9333EA;
+    --p-700:        #7E22CE;
+    --p-800:        #6B21A8;
+    --p-900:        #581C87;
+
+    /* Legacy aliases so the rest of the stylesheet keeps working */
+    --rose:         var(--p-700);
+    --rose-soft:    rgba(126,34,206,0.10);
+    --blue:         var(--p-500);
+    --blue-soft:    rgba(168,85,247,0.10);
+    --emerald:      var(--p-400);
+    --emerald-soft: rgba(192,132,252,0.12);
+
     --radius-lg:    24px;
     --radius-md:    16px;
     --radius-sm:    10px;
-    --shadow-sm:    0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md:    0 1px 2px rgba(0,0,0,0.03), 0 8px 24px -8px rgba(0,0,0,0.06);
+    --shadow-sm:    0 1px 2px rgba(31,22,18,0.05);
+    --shadow-md:    0 1px 2px rgba(31,22,18,0.04), 0 8px 24px -8px rgba(31,22,18,0.10);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-font-smoothing: antialiased; }
@@ -63,7 +87,7 @@
   }
   nav .mark::before {
     content: ''; width: 24px; height: 24px;
-    background: linear-gradient(135deg, var(--rose), var(--blue));
+    background: linear-gradient(135deg, var(--p-400), var(--p-800));
     border-radius: 8px;
   }
   nav .live {
@@ -76,10 +100,10 @@
     transition: all 0.15s;
     display: inline-flex; align-items: center; gap: 8px;
   }
-  nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: pulse 1.6s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(225,29,72,0.6); } 50% { box-shadow: 0 0 0 6px rgba(225,29,72,0); } }
-  nav .live:hover { background: var(--ink); color: var(--card); }
-  nav .live:hover .dot { background: var(--rose); }
+  nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--p-600); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(147,51,234,0.6); } 50% { box-shadow: 0 0 0 6px rgba(147,51,234,0); } }
+  nav .live:hover { background: var(--brown); color: var(--card); }
+  nav .live:hover .dot { background: var(--p-400); }
 
   /* ── HERO BENTO ── */
   .hero-grid {
@@ -97,14 +121,14 @@
     border: 1px solid var(--hair-soft);
   }
   .h-card.dark {
-    background: var(--ink); color: var(--card);
+    background: var(--brown); color: var(--card);
   }
   .h-card.rose {
-    background: linear-gradient(135deg, var(--rose) 0%, #BE123C 100%);
+    background: linear-gradient(135deg, var(--p-600) 0%, var(--p-800) 100%);
     color: var(--card);
   }
   .h-card.blue {
-    background: linear-gradient(135deg, var(--blue) 0%, #1D4ED8 100%);
+    background: linear-gradient(135deg, var(--p-400) 0%, var(--p-600) 100%);
     color: var(--card);
   }
   .h-card .kicker {
@@ -120,7 +144,7 @@
     line-height: 1.0; letter-spacing: -0.025em;
   }
   .h-card h1 .grad {
-    background: linear-gradient(135deg, var(--rose), var(--blue));
+    background: linear-gradient(135deg, var(--p-400), var(--p-800));
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -209,7 +233,7 @@
     font-family: 'JetBrains Mono', monospace; font-size: 16px;
     transition: transform 0.25s, background 0.15s, color 0.15s;
   }
-  details.day[open] > summary .toggle { transform: rotate(45deg); background: var(--rose); color: var(--card); }
+  details.day[open] > summary .toggle { transform: rotate(45deg); background: var(--p-700); color: var(--card); }
 
   .day-body { padding: 0 28px 24px; }
   article {
@@ -252,7 +276,7 @@
     gap: 16px;
   }
   .signup-pitch {
-    background: var(--ink); color: var(--card);
+    background: var(--brown); color: var(--card);
     border-radius: var(--radius-lg);
     padding: 36px 32px;
     position: relative; overflow: hidden;
@@ -260,14 +284,14 @@
   .signup-pitch::before {
     content: '';
     position: absolute; bottom: -50%; right: -30%; width: 160%; height: 200%;
-    background: radial-gradient(circle, rgba(225,29,72,0.40) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(168,85,247,0.40) 0%, transparent 60%);
     pointer-events: none;
   }
   .signup-pitch-inner { position: relative; }
   .signup-pitch .kicker {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--rose);
+    color: var(--p-300);
     margin-bottom: 18px;
   }
   .signup-pitch h2 {
@@ -319,7 +343,7 @@
     transition: all 0.15s;
   }
   input::placeholder { color: var(--ink-faint); }
-  input:focus { background: var(--card); border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  input:focus { background: var(--card); border-color: var(--p-600); box-shadow: 0 0 0 4px var(--p-100); }
 
   .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .platform label.radio {
@@ -334,14 +358,14 @@
     transition: all 0.12s;
   }
   .platform label.radio:has(input:checked) {
-    background: var(--ink); color: var(--card);
+    background: var(--brown); color: var(--card);
   }
   .platform input[type="radio"] { display: none; }
 
   button.send {
     justify-self: stretch;
     font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px;
-    background: var(--ink); color: var(--card);
+    background: var(--brown); color: var(--card);
     padding: 16px 24px;
     border: 0; border-radius: var(--radius-sm);
     cursor: pointer;
@@ -352,7 +376,7 @@
     content: '→'; font-size: 18px;
     transition: transform 0.2s;
   }
-  button.send:hover { background: var(--rose); }
+  button.send:hover { background: var(--p-700); }
   button.send:hover::after { transform: translateX(4px); }
 
   .fine {
@@ -373,7 +397,8 @@
     font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.005em;
   }
   footer .made a {
-    background: linear-gradient(120deg, var(--rose-soft), var(--blue-soft));
+    background: linear-gradient(120deg, var(--p-100), var(--p-200));
+    color: var(--p-800);
     padding: 3px 10px; border-radius: 100px;
     font-weight: 600;
   }
@@ -429,7 +454,7 @@
     </div>
     <div class="h-card stat">
       <div class="kicker">Leader</div>
-      <div class="v" style="color: var(--rose);">RCB</div>
+      <div class="v" style="color: var(--p-700);">RCB</div>
       <div class="desc">14 pts · NRR +1.103 · Won 7 of last 11</div>
     </div>
   </section>
