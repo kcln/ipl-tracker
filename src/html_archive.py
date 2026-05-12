@@ -241,7 +241,7 @@ SHELL = """<!doctype html>
           <h2>Match-day updates, on your phone.</h2>
           <p>Predictions before play. Results as they happen. A clean recap at night. Free, no ads, opt out anytime.</p>
           <div class="stats">
-            <div><strong>~3</strong>texts / match day</div>
+            <div><strong>~7</strong>messages / match day</div>
             <div><strong>1-tap</strong>opt out</div>
           </div>
         </div>
