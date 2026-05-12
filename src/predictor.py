@@ -408,11 +408,28 @@ def predict_after_toss(
     winner = team_a if p_a >= 0.5 else team_b
     prob = p_a if winner == team_a else (1 - p_a)
 
-    # Reason
+    # Reason — framed from the predicted winner's perspective so the verdict
+    # and the supporting facts can never contradict each other.
     bits = []
     if toss_winner and toss_decision:
-        bits.append(f"{toss_winner} won the toss and chose to {toss_decision}")
-    if chase_rate is not None:
+        if toss_winner == winner:
+            # Toss winner is also our predicted winner — straightforward
+            bits.append(f"{toss_winner} won the toss and chose to {toss_decision}")
+            # Cite chase rate only if it backs the toss decision
+            if chase_rate is not None:
+                if toss_decision == "field" and chase_rate > 0.55:
+                    bits.append(f"chases win {int(chase_rate*100)}% here historically")
+                elif toss_decision == "bat" and chase_rate < 0.45:
+                    bits.append(f"batting first wins {int((1-chase_rate)*100)}% here historically")
+        else:
+            # Predicted winner LOST the toss — frame the toss either as a
+            # wrong call by the toss winner, or as a wash against pre-match form
+            if tilt < 0:
+                bits.append(f"{toss_winner} won the toss but chose to {toss_decision} — against the venue trend")
+            else:
+                bits.append(f"{winner}'s pre-match form outweighs the toss going to {toss_winner}")
+    elif chase_rate is not None:
+        # No toss info; cite the venue tendency only if it's directional
         if chase_rate > 0.55:
             bits.append(f"chases win {int(chase_rate*100)}% here historically")
         elif chase_rate < 0.45:
@@ -506,11 +523,16 @@ def predict_chase(
 
     required_rr = target / 20.0
     bits = [f"target {target}, RRR {required_rr:.2f}"]
+    # Frame the venue stat in the direction that supports the predicted winner
     if chase_rate is not None:
-        bits.append(f"chases win {int(chase_rate*100)}% at this ground")
-    if first_innings_runs >= 200:
+        if winner == batting_team:
+            bits.append(f"chases win {int(chase_rate*100)}% at this ground")
+        else:
+            bits.append(f"defense wins {int((1 - chase_rate)*100)}% at this ground")
+    # First-innings score color, only when it supports the verdict
+    if first_innings_runs >= 200 and winner == bowling_team:
         bits.append("200+ totals are rarely chased")
-    elif first_innings_runs < 140:
+    elif first_innings_runs < 140 and winner == batting_team:
         bits.append("a sub-140 total is usually chased")
     reason = " · ".join(bits)
     return winner, prob, reason
