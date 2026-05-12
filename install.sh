@@ -49,13 +49,15 @@ fi
 
 # 3. Render plist with absolute paths
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
-# CricAPI key is optional — empty string disables CricAPI tier
+# Optional tokens — empty values disable the corresponding feature
 CRICAPI_KEY_VAL="${CRICAPI_KEY:-}"
+SHEET_SYNC_TOKEN_VAL="${SHEET_SYNC_TOKEN:-}"
 sed \
     -e "s|__REPO_PATH__|$REPO_PATH|g" \
     -e "s|__HOME__|$HOME|g" \
     -e "s|__IMESSAGE_RECIPIENT__|$RECIPIENT|g" \
     -e "s|__CRICAPI_KEY__|$CRICAPI_KEY_VAL|g" \
+    -e "s|__SHEET_SYNC_TOKEN__|$SHEET_SYNC_TOKEN_VAL|g" \
     "$PLIST_SRC" > "$PLIST_DST"
 
 # 4. (Re)load launchd job

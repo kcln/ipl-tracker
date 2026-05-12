@@ -269,6 +269,75 @@ def _handle_season_end(state_obj: dict) -> bool:
 
 
 # ─────────────────────────────────────────
+# Signup → recipients.txt sync
+# ─────────────────────────────────────────
+
+SIGNUP_SHEET_URL = (
+    "https://script.google.com/macros/s/"
+    "AKfycbx8wwSgBEPz-SMMTtsi2sEt9xzAUWgDBAtN7Wdg94wJb8VLT-Q5dctZDO0rl_1s4yV6/exec"
+)
+
+
+def _sync_recipients_from_sheet() -> None:
+    """Pull approved signup phone numbers from the Apps Script Sheet and merge
+    them into recipients.txt. Best-effort — silent on network/auth failures
+    so a brief network blip never blocks message generation.
+
+    Requires SHEET_SYNC_TOKEN env var (matches a constant in the Apps Script).
+    """
+    import os as _os
+    import requests as _requests
+
+    token = _os.environ.get("SHEET_SYNC_TOKEN", "").strip()
+    if not token:
+        return  # sync disabled — recipients.txt manually managed
+
+    try:
+        r = _requests.get(
+            SIGNUP_SHEET_URL,
+            params={"action": "recipients", "token": token},
+            timeout=10,
+            allow_redirects=True,
+        )
+        if r.status_code != 200:
+            _log(f"recipient sync HTTP {r.status_code}", "warn")
+            return
+        data = r.json()
+    except (_requests.RequestException, ValueError) as e:
+        _log(f"recipient sync failed: {e}", "warn")
+        return
+
+    if not data.get("ok"):
+        _log(f"recipient sync rejected: {data.get('error')}", "warn")
+        return
+
+    sheet_phones = data.get("recipients") or []
+    if not sheet_phones:
+        return
+
+    path = REPO_ROOT / "recipients.txt"
+    existing: set[str] = set()
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.split("#", 1)[0].strip()
+            if line:
+                existing.add(line)
+
+    added = [p for p in sheet_phones if p and p not in existing]
+    if not added:
+        return
+
+    # Append (preserves ordering and any header comments already in the file)
+    with path.open("a", encoding="utf-8") as f:
+        if existing or path.stat().st_size == 0:
+            pass  # plain append
+        f.write("\n# auto-synced from signup form\n")
+        for p in added:
+            f.write(p + "\n")
+    _log(f"synced {len(added)} new recipient(s) from signup sheet", "ok")
+
+
+# ─────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────
 
@@ -277,6 +346,10 @@ def main() -> int:
     partial = False
 
     state_obj = state.load()
+
+    # Pull any new signups before generating messages so newcomers get
+    # whichever message is next due to fire.
+    _sync_recipients_from_sheet()
 
     if _handle_season_end(state_obj):
         return 0
