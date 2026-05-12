@@ -14,7 +14,6 @@ from __future__ import annotations
 import pathlib
 import pickle
 from functools import lru_cache
-from typing import Any
 
 import numpy as np
 

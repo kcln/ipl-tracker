@@ -5,8 +5,6 @@ only data from matches with date strictly before match_row["date"].
 """
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 import pandas as pd
 
@@ -167,8 +165,6 @@ def build_features(match_row: dict, state: dict) -> dict:
 def build_features_dataset(matches_df: pd.DataFrame) -> pd.DataFrame:
     """Walk matches chronologically and produce a feature row per match using
     point-in-time state. Same logic as backtest harness, but returns features."""
-    from ml.src.backtest import run_backtest
-
     df = matches_df.copy()
     df = df.dropna(subset=["date", "team1", "team2", "season"]).sort_values(["date", "match_id"]).reset_index(drop=True)
     df["date"] = pd.to_datetime(df["date"])

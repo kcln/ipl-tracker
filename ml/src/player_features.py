@@ -10,7 +10,6 @@ All stats are PIT — only data from balls BEFORE the match's date is used.
 from __future__ import annotations
 
 import pathlib
-from collections import defaultdict
 
 import numpy as np
 import pandas as pd

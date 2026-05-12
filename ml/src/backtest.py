@@ -6,7 +6,6 @@ calling predict_fn(match_row, state), and aggregating per-season metrics.
 from __future__ import annotations
 
 import datetime as dt
-import math
 import os
 import pathlib
 from typing import Callable

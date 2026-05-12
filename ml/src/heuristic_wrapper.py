@@ -8,9 +8,6 @@ from __future__ import annotations
 
 import pathlib
 import sys
-from typing import Any
-
-import pandas as pd
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 # Add repo root so we can import the existing src.predictor
@@ -29,7 +26,7 @@ def _build_standings(season: int, state: dict) -> list[dict]:
     table: dict[str, dict] = {}
     for m in completed:
         for t in (m["team1"], m["team2"]):
-            row = table.setdefault(t, {
+            table.setdefault(t, {
                 "team": t, "played": 0, "won": 0, "lost": 0, "tied": 0,
                 "points": 0, "nrr": 0.0, "for_runs": 0, "order": 0, "performance": "",
                 "is_qualified": False,

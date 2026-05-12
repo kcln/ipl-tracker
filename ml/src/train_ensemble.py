@@ -30,8 +30,10 @@ def _load_pkl(name):
 
 
 def _git_sha():
-    try: return subprocess.check_output(["git","rev-parse","HEAD"], cwd=ROOT, text=True).strip()
-    except: return "unknown"
+    try:
+        return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    except (subprocess.SubprocessError, OSError):
+        return "unknown"
 
 
 def _ap(o,p):

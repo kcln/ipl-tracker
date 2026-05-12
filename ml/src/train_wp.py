@@ -124,11 +124,12 @@ def train(version: int):
         raise RuntimeError(f"refusing to overwrite {model_path}")
 
     # Save the calibrator + a venue mapping for inference
-    venue_map = dict(enumerate(df["venue"].astype("category").cat.categories.tolist()))
+    venue_categories = df["venue"].astype("category").cat.categories.tolist()
     artifact = {
         "calibrator": cal,
         "feature_names": features,
-        "venue_categories": df["venue"].astype("category").cat.categories.tolist(),
+        "venue_categories": venue_categories,
+        "venue_index_to_name": dict(enumerate(venue_categories)),
     }
     _atomic_pickle(artifact, model_path)
 

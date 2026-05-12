@@ -8,15 +8,11 @@ Run:
 """
 from __future__ import annotations
 
-import io
 import json
 import os
 import pathlib
-import sys
-import tempfile
 import time
 import zipfile
-from typing import Any
 
 import pandas as pd
 import pyarrow as pa

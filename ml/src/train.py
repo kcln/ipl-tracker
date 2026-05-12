@@ -12,7 +12,6 @@ import os
 import pathlib
 import pickle
 import subprocess
-import sys
 
 import numpy as np
 import pandas as pd
@@ -26,7 +25,6 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 ML_ROOT = ROOT / "ml"
 HIST_DIR = ML_ROOT / "data" / "historical"
 MODELS_DIR = ML_ROOT / "data" / "models"
-PROGRESS_PATH = ML_ROOT / "PROGRESS.md"
 
 
 FEATURE_COLS = [
