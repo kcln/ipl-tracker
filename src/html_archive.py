@@ -14,12 +14,11 @@ from bs4 import BeautifulSoup
 
 from .state import IST, PT  # noqa: F401
 
-# Only ACTUAL match results get bolded in the web view:
-#   * the "X beat Y by Z" outcome line itself
-#   * the "Updated top 4: ..." standings (state after a match)
-# Predictions, previews, and current snapshots stay regular weight.
-_RESULT_LINE_RE  = re.compile(r'^([A-Z][A-Z0-9]+) beat ([A-Z][A-Z0-9]+) by (.+)$')
-_UPDATED_TOP4_RE = re.compile(r'^(Updated top 4:\s*)(.+)$', re.IGNORECASE)
+# Bold rules differ by message type — see _populate_pre for the matrix.
+_RESULT_LINE_RE   = re.compile(r'^([A-Z][A-Z0-9]+) beat ([A-Z][A-Z0-9]+) by (.+)$')
+_PREDICTION_RE    = re.compile(r'^(Prediction:\s*)([A-Z][A-Z0-9]+)( wins.*)$')
+_UPDATED_TOP4_RE  = re.compile(r'^(Updated top 4:\s*)(.+)$',          re.IGNORECASE)
+_PREDICTED_TOP4_RE = re.compile(r'^(Predicted final top 4:\s*)(.+)$', re.IGNORECASE)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -810,48 +809,67 @@ def _label_for(msg_type: str) -> str:
     return msg_type.replace("_", " ").title()
 
 
-def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str) -> None:
+def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = '') -> None:
     """Render the message body into a <pre> tag with these adjustments for
     the web archive view (the iMessage text stays plain):
 
       * Drop the trailing "Archive: <url>" line — redundant when you're
         already looking at the archive.
-      * Bold ONLY actual results: the "X beat Y by Z" outcome and the
-        "Updated top 4: ..." standings. Predictions, Current top 4,
-        Predicted final top 4, match previews — all stay regular weight.
+      * Apply bold rules per message type:
+          - morning      : Prediction winner + "Predicted final top 4"
+          - post_match_* : only the winning team in "X beat Y by Z"
+          - end_of_day   : winning team(s) in result lines + "Updated top 4"
     """
     lines = [ln for ln in body_text.split('\n') if not ln.lstrip().startswith('Archive:')]
     while lines and not lines[-1].strip():
         lines.pop()
 
+    is_morning    = (msg_type == 'morning')
+    is_post_match = msg_type.startswith('post_match')
+    is_recap      = (msg_type == 'end_of_day')
+
+    def _wrap_strong(text: str):
+        s = soup.new_tag('strong')
+        s.string = text
+        return s
+
     for i, line in enumerate(lines):
         if i > 0:
             pre_tag.append('\n')
 
-        # "DC beat PBKS by 3 Wickets" — actual match result
-        m = _RESULT_LINE_RE.match(line)
-        if m:
-            strong_winner = soup.new_tag('strong')
-            strong_winner.string = m.group(1)
-            pre_tag.append(strong_winner)
-            pre_tag.append(' beat ')
-            strong_loser = soup.new_tag('strong')
-            strong_loser.string = m.group(2)
-            pre_tag.append(strong_loser)
-            pre_tag.append(' by ' + m.group(3))
-            continue
+        # ── Morning brief: bold predicted winner ──────────────────
+        if is_morning:
+            m = _PREDICTION_RE.match(line)
+            if m:
+                pre_tag.append(m.group(1))
+                pre_tag.append(_wrap_strong(m.group(2)))
+                pre_tag.append(m.group(3))
+                continue
 
-        # "Updated top 4: RCB, SRH, GT, PBKS" — standings after a result
-        m = _UPDATED_TOP4_RE.match(line)
-        if m:
-            pre_tag.append(m.group(1))
-            strong = soup.new_tag('strong')
-            strong.string = m.group(2)
-            pre_tag.append(strong)
-            continue
+            # Bold "Predicted final top 4: ..." list
+            m = _PREDICTED_TOP4_RE.match(line)
+            if m:
+                pre_tag.append(m.group(1))
+                pre_tag.append(_wrap_strong(m.group(2)))
+                continue
 
-        # Everything else (Match preview, Prediction, Reason, Current top 4,
-        # Predicted final top 4, recap counts, etc.) — plain text
+        # ── Result line "X beat Y by Z" — bold only the winner (X) ──
+        if is_post_match or is_recap:
+            m = _RESULT_LINE_RE.match(line)
+            if m:
+                pre_tag.append(_wrap_strong(m.group(1)))
+                pre_tag.append(' beat ' + m.group(2) + ' by ' + m.group(3))
+                continue
+
+        # ── Day recap: bold "Updated top 4: ..." list ─────────────
+        if is_recap:
+            m = _UPDATED_TOP4_RE.match(line)
+            if m:
+                pre_tag.append(m.group(1))
+                pre_tag.append(_wrap_strong(m.group(2)))
+                continue
+
+        # Default: plain text
         pre_tag.append(line)
 
 
@@ -866,12 +884,31 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
 
     article = soup.new_tag("article", id=article_id, attrs={"data-type": msg_type})
 
+    # Multi-zone timestamp: "Label · 5:07am IST · 7:37pm ET · 6:37pm CT · 4:37pm PT"
+    try:
+        from zoneinfo import ZoneInfo
+        dt = datetime.fromisoformat(generated_at_iso)
+        ist = dt.astimezone(ZoneInfo("Asia/Kolkata"))
+        et  = dt.astimezone(ZoneInfo("America/New_York"))
+        ct  = dt.astimezone(ZoneInfo("America/Chicago"))
+        pt  = dt.astimezone(ZoneInfo("America/Los_Angeles"))
+
+        def _stamp(d, label):
+            return f"{d.strftime('%-I:%M %p').lower().replace(' ', '')} {label}"
+
+        ts_human = (
+            f"{_stamp(ist, 'IST')} · {_stamp(et, 'ET')} · "
+            f"{_stamp(ct, 'CT')} · {_stamp(pt, 'PT')}"
+        )
+    except (ValueError, ImportError):
+        ts_human = generated_at_iso
+
     time_tag = soup.new_tag("time", datetime=generated_at_iso)
-    time_tag.string = _label_for(msg_type)
+    time_tag.string = f"{_label_for(msg_type)} · {ts_human}"
     article.append(time_tag)
 
     pre = soup.new_tag("pre")
-    _populate_pre(soup, pre, body)
+    _populate_pre(soup, pre, body, msg_type=msg_type)
     article.append(pre)
 
     # Insert articles in chronological order within the day
