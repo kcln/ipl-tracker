@@ -253,6 +253,46 @@ def _parse_iplt20_match(m: dict) -> dict | None:
             elif wt_id and str(wt_id) == str(m.get("SecondBattingTeamID")):
                 winner = t2
             result_text = (m.get("Commentss") or "").strip() or None
+        # Richer fields for the predictor
+        home_team = None
+        ht_id = m.get("HomeTeamID")
+        if ht_id:
+            if str(ht_id) == str(m.get("FirstBattingTeamID")):
+                home_team = t1
+            elif str(ht_id) == str(m.get("SecondBattingTeamID")):
+                home_team = t2
+            else:
+                home_team = _normalize_team(m.get("HomeTeamName") or "")
+
+        toss_winner = None
+        toss_team = (m.get("TossTeam") or "").strip()
+        if toss_team:
+            toss_winner = _normalize_team(toss_team)
+        toss_decision = None
+        toss_text = (m.get("TossText") or "").lower()
+        if "field" in toss_text or "bowl" in toss_text:
+            toss_decision = "field"
+        elif "bat" in toss_text:
+            toss_decision = "bat"
+
+        def _to_int(v):
+            try:
+                s = str(v).strip()
+                return int(s) if s and s.lstrip("-").isdigit() else 0
+            except (ValueError, TypeError):
+                return 0
+
+        mom = None
+        if m.get("MOMPlayerId") or m.get("MOM"):
+            mom = {
+                "player_id": str(m.get("MOMPlayerId") or ""),
+                "name": (m.get("MOM") or "").strip(),
+                "runs":   _to_int(m.get("MOMRuns")),
+                "balls":  _to_int(m.get("MOMBalls")),
+                "wickets":_to_int(m.get("MOMWicket")),
+                "rc":     _to_int(m.get("MOMRC")),
+            }
+
         return {
             "id": mid,
             "teams": [_normalize_team(t1), _normalize_team(t2)],
@@ -261,6 +301,14 @@ def _parse_iplt20_match(m: dict) -> dict | None:
             "status": status,
             "result": result_text,
             "winner": winner,
+            "first_batting": _normalize_team(t1),
+            "second_batting": _normalize_team(t2),
+            "home_team": home_team,
+            "venue_id": str(m.get("GroundID") or ""),
+            "venue_name": (m.get("GroundName") or "").strip(),
+            "toss_winner": toss_winner,
+            "toss_decision": toss_decision,
+            "mom": mom,
         }
     except (KeyError, ValueError, TypeError) as e:
         _log(f"iplt20: skipping match: {e}")
@@ -286,6 +334,18 @@ def _standings_from_iplt20() -> list[dict] | None:
     out: list[dict] = []
     for r in rows:
         try:
+            # ForTeams/AgainstTeam look like "2026/195.1" — runs scored / overs
+            def _split_for(s):
+                if not s or "/" not in s:
+                    return 0.0, 0.0
+                try:
+                    runs, overs = s.split("/", 1)
+                    return float(runs), float(overs)
+                except (ValueError, TypeError):
+                    return 0.0, 0.0
+            for_runs, for_overs = _split_for(r.get("ForTeams"))
+            against_runs, against_overs = _split_for(r.get("AgainstTeam"))
+
             out.append({
                 "team": r.get("TeamCode") or _normalize_team(r.get("TeamName", "")),
                 "played": int(r.get("Matches", 0)),
@@ -293,9 +353,13 @@ def _standings_from_iplt20() -> list[dict] | None:
                 "lost": int(r.get("Loss", 0)),
                 "points": int(r.get("Points", 0)),
                 "nrr": float(r.get("NetRunRate", 0.0) or 0.0),
-                # Bonus: iplt20 gives last-5 form directly ("W,W,L,L,W")
-                "performance": r.get("Performance") or "",
+                "performance": r.get("Performance") or "",  # "W,W,L,L,W"
                 "order": int(r.get("OrderNo", 0) or 0),
+                "is_qualified": bool(r.get("IsQualified")),
+                "for_runs": for_runs,
+                "for_overs": for_overs,
+                "against_runs": against_runs,
+                "against_overs": against_overs,
             })
         except (ValueError, TypeError):
             continue

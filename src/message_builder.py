@@ -61,7 +61,8 @@ def morning_message(
     for i, m in enumerate(todays_matches, 1):
         t1, t2 = m["teams"]
         winner, reason = predictor.predict_winner(
-            t1, t2, standings, recent_matches, squads, all_teams
+            t1, t2, standings, recent_matches, squads, all_teams,
+            match=m, completed_matches=recent_matches,
         )
         lines.append(f"Match {i}: {t1} vs {t2}")
         lines.append(_fmt_times(m["date_ist"], m["scheduled_ist"]))
@@ -72,7 +73,10 @@ def morning_message(
     lines.append(_top4_line("Current top 4", predictor.current_top4(standings)))
     lines.append(_top4_line(
         "Predicted final top 4",
-        predictor.predict_final_top4(standings, remaining_fixtures, recent_matches, squads),
+        predictor.predict_final_top4(
+            standings, remaining_fixtures, recent_matches, squads,
+            completed_matches=recent_matches,
+        ),
     ))
     return "\n".join(lines).rstrip()
 
@@ -100,7 +104,10 @@ def post_match_message(
         _top4_line("Updated top 4", predictor.current_top4(standings)),
         _top4_line(
             "Predicted final top 4",
-            predictor.predict_final_top4(standings, remaining_fixtures, recent_matches, squads),
+            predictor.predict_final_top4(
+                standings, remaining_fixtures, recent_matches, squads,
+                completed_matches=recent_matches,
+            ),
         ),
     ]
     return "\n".join(lines)
@@ -160,7 +167,10 @@ def end_of_day_message(
     lines.append(_top4_line("Updated top 4", predictor.current_top4(standings)))
     lines.append(_top4_line(
         "Predicted final top 4",
-        predictor.predict_final_top4(standings, remaining_fixtures, recent_matches, squads),
+        predictor.predict_final_top4(
+            standings, remaining_fixtures, recent_matches, squads,
+            completed_matches=recent_matches,
+        ),
     ))
     lines.append("")
     lines.append(f"Archive: {archive_url}")

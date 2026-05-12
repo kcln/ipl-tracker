@@ -67,7 +67,8 @@ def _matches_for_date_pt(all_matches: list[dict], date_iso_pt: str) -> list[dict
 
 
 def _completed_match_lookup(all_matches: list[dict]) -> list[dict]:
-    """Flatten completed matches with a `winner` field for predictor input."""
+    """Flatten completed matches preserving fields the predictor uses
+    for head-to-head, venue, MOM, and home-advantage signals."""
     out = []
     for m in all_matches:
         if m.get("status") != "complete":
@@ -75,7 +76,18 @@ def _completed_match_lookup(all_matches: list[dict]) -> list[dict]:
         winner = m.get("winner") or m.get("actual_winner")
         if not winner:
             continue
-        out.append({"teams": m.get("teams", []), "winner": winner, "status": "complete"})
+        out.append({
+            "teams": m.get("teams", []),
+            "winner": winner,
+            "status": "complete",
+            "venue_id": m.get("venue_id", ""),
+            "venue_name": m.get("venue_name", ""),
+            "home_team": m.get("home_team"),
+            "first_batting": m.get("first_batting"),
+            "second_batting": m.get("second_batting"),
+            "mom": m.get("mom"),
+            "toss_winner": m.get("toss_winner"),
+        })
     return out
 
 
@@ -125,6 +137,7 @@ def _maybe_generate_post_match(
         predicted, _ = _p.predict_winner(
             match["teams"][0], match["teams"][1],
             standings, recent, squads, all_teams,
+            match=match, completed_matches=recent,
         )
         match_for_msg = dict(match)
         match_for_msg["predicted_winner"] = predicted
