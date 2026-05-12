@@ -219,6 +219,22 @@ def toss_message(
         f"Updated prediction: {winner} wins ({_pct(prob)})",
         f"Reason: {reason}",
     ]
+    # Parallel ML prediction (silent fallback if unavailable)
+    try:
+        from . import ml_predictor as _ml
+        _ml_pred = _ml.predict_post_toss(
+            t1, t2,
+            venue=match.get("venue_name") or match.get("venue", ""),
+            season=2026,
+            toss_winner=match.get("toss_winner") or "",
+            toss_decision=match.get("toss_decision") or "",
+            match_date=match.get("date_ist"),
+        )
+        _ml_line = _ml.format_ml_line(_ml_pred)
+        if _ml_line:
+            lines.append(_ml_line)
+    except Exception:
+        pass
     return "\n".join(lines)
 
 
@@ -258,6 +274,23 @@ def powerplay_1_message(
         f"Updated prediction: {winner} wins ({_pct(prob)})",
         f"Reason: {reason}",
     ]
+    # Parallel ML prediction
+    try:
+        from . import ml_predictor as _ml
+        _ml_pred = _ml.predict_post_pp1(
+            match["teams"][0], match["teams"][1],
+            venue=match.get("venue_name") or match.get("venue", ""),
+            season=2026,
+            toss_winner=match.get("toss_winner") or "",
+            toss_decision=match.get("toss_decision") or "",
+            pp1_runs=runs, pp1_wickets=wkts,
+            match_date=match.get("date_ist"),
+        )
+        _ml_line = _ml.format_ml_line(_ml_pred)
+        if _ml_line:
+            lines.append(_ml_line)
+    except Exception:
+        pass
     return "\n".join(lines)
 
 
@@ -288,6 +321,28 @@ def innings_break_message(
         f"Updated prediction: {winner} wins ({_pct(prob)})",
         f"Reason: {reason}",
     ]
+    # Parallel ML prediction — innings_break is the strongest mid-match model (v6, 72.9%)
+    try:
+        from . import ml_predictor as _ml
+        # Compute PP1 stats from match state for the feature vector
+        pp1 = match.get("inn1_pp") or {}
+        pp1_runs = pp1.get("runs", 0)
+        pp1_wkts = pp1.get("wkts", 0)
+        _ml_pred = _ml.predict_innings_break(
+            match["teams"][0], match["teams"][1],
+            venue=match.get("venue_name") or match.get("venue", ""),
+            season=2026,
+            toss_winner=match.get("toss_winner") or "",
+            toss_decision=match.get("toss_decision") or "",
+            pp1_runs=pp1_runs, pp1_wickets=pp1_wkts,
+            first_innings_total=runs, first_innings_wickets=wkts,
+            match_date=match.get("date_ist"),
+        )
+        _ml_line = _ml.format_ml_line(_ml_pred)
+        if _ml_line:
+            lines.append(_ml_line)
+    except Exception:
+        pass
     return "\n".join(lines)
 
 
@@ -327,6 +382,23 @@ def powerplay_2_message(
         f"Updated prediction: {winner} wins ({_pct(prob)})",
         f"Reason: {reason}",
     ]
+    # Parallel ML prediction — use post_pp1 model in chase mode (same shape)
+    try:
+        from . import ml_predictor as _ml
+        _ml_pred = _ml.predict_post_pp1(
+            match["teams"][0], match["teams"][1],
+            venue=match.get("venue_name") or match.get("venue", ""),
+            season=2026,
+            toss_winner=match.get("toss_winner") or "",
+            toss_decision=match.get("toss_decision") or "",
+            pp1_runs=runs, pp1_wickets=wkts,
+            match_date=match.get("date_ist"),
+        )
+        _ml_line = _ml.format_ml_line(_ml_pred)
+        if _ml_line:
+            lines.append(_ml_line)
+    except Exception:
+        pass
     return "\n".join(lines)
 
 
