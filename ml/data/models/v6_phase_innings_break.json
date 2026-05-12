@@ -1,0 +1,300 @@
+{
+  "version": 6,
+  "name": "phase_innings_break",
+  "phase": "phase_innings_break",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-12T22:56:35.603958+00:00",
+  "git_sha": "5dee227d478b6e52e34f05a86c8969c1767740a8",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "best_n_estimators": 100,
+  "cv_mean_neg_log_loss": -0.7525471742833094,
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70,
+  "validation_accuracy": 0.7323943661971831,
+  "validation_brier": 0.17968924659065505,
+  "validation_log_loss": 0.5244540730022064,
+  "test_accuracy": 0.7285714285714285,
+  "test_brier": 0.1951086190832012,
+  "test_log_loss": 0.738167717124907,
+  "feature_names": [
+    "team1_career_wr",
+    "team2_career_wr",
+    "team1_career_played",
+    "team2_career_played",
+    "team1_season_wr",
+    "team2_season_wr",
+    "team1_season_played",
+    "team2_season_played",
+    "team1_form5",
+    "team2_form5",
+    "team1_venue_wr",
+    "team2_venue_wr",
+    "venue_chase_rate",
+    "venue_played",
+    "team1_top5_pp_sr_mean",
+    "team1_top4_pp_econ_mean",
+    "team1_top5_middle_sr_mean",
+    "team1_top4_middle_econ_mean",
+    "team1_top5_death_sr_mean",
+    "team1_top4_death_econ_mean",
+    "team2_top5_pp_sr_mean",
+    "team2_top4_pp_econ_mean",
+    "team2_top5_middle_sr_mean",
+    "team2_top4_middle_econ_mean",
+    "team2_top5_death_sr_mean",
+    "team2_top4_death_econ_mean",
+    "venue_avg_1st_innings",
+    "venue_wickets_per_pp",
+    "venue_wickets_per_middle",
+    "venue_wickets_per_death",
+    "venue_pace_econ",
+    "venue_spin_econ",
+    "venue_match_count",
+    "team1_decay_form",
+    "team2_decay_form",
+    "team1_decay_form_diff",
+    "h2h_career_team1_winrate",
+    "h2h_last5_team1_winrate",
+    "venue_chase_rate_when_fielded",
+    "venue_chase_rate_when_batted",
+    "venue_total_matches",
+    "temp_c",
+    "humidity_pct",
+    "dewpoint_c",
+    "wind_kmh",
+    "precipitation_mm",
+    "toss_winner_is_team1",
+    "toss_decision_field",
+    "pp1_runs",
+    "pp1_wickets",
+    "first_innings_total",
+    "first_innings_wickets",
+    "innings_break_required_rr"
+  ],
+  "dropped_high_nan_features": [],
+  "feature_importance_gain_ranked": [
+    [
+      "first_innings_total",
+      631.8956942260265
+    ],
+    [
+      "team1_top4_pp_econ_mean",
+      341.9161469936371
+    ],
+    [
+      "venue_spin_econ",
+      288.2503513097763
+    ],
+    [
+      "team2_career_played",
+      253.58327390253544
+    ],
+    [
+      "wind_kmh",
+      231.15121805667877
+    ],
+    [
+      "venue_wickets_per_death",
+      224.68868005275726
+    ],
+    [
+      "team2_top5_pp_sr_mean",
+      213.32751941680908
+    ],
+    [
+      "team2_top4_death_econ_mean",
+      208.5857799053192
+    ],
+    [
+      "team1_career_played",
+      199.09067940711975
+    ],
+    [
+      "venue_pace_econ",
+      179.8490104675293
+    ],
+    [
+      "team2_decay_form",
+      178.44802868366241
+    ],
+    [
+      "team2_top5_middle_sr_mean",
+      177.21505634486675
+    ],
+    [
+      "team1_top4_death_econ_mean",
+      170.421688914299
+    ],
+    [
+      "team1_top5_pp_sr_mean",
+      153.92528080940247
+    ],
+    [
+      "team2_top4_middle_econ_mean",
+      149.66113078594208
+    ],
+    [
+      "dewpoint_c",
+      149.31154036521912
+    ],
+    [
+      "team2_top4_pp_econ_mean",
+      148.8982697725296
+    ],
+    [
+      "team2_top5_death_sr_mean",
+      145.21740925312042
+    ],
+    [
+      "toss_decision_field",
+      143.3976809978485
+    ],
+    [
+      "venue_avg_1st_innings",
+      139.7340109348297
+    ],
+    [
+      "venue_chase_rate_when_fielded",
+      138.96180045604706
+    ],
+    [
+      "team1_top4_middle_econ_mean",
+      138.73742854595184
+    ],
+    [
+      "temp_c",
+      132.2537897825241
+    ],
+    [
+      "team1_decay_form",
+      131.52464985847473
+    ],
+    [
+      "team1_career_wr",
+      128.20823499560356
+    ],
+    [
+      "h2h_last5_team1_winrate",
+      126.8645396232605
+    ],
+    [
+      "team1_season_wr",
+      126.82602000236511
+    ],
+    [
+      "team1_top5_death_sr_mean",
+      126.60302984714508
+    ],
+    [
+      "team1_decay_form_diff",
+      123.0536699295044
+    ],
+    [
+      "toss_winner_is_team1",
+      121.29046034812927
+    ],
+    [
+      "team2_career_wr",
+      120.94265297055244
+    ],
+    [
+      "team1_season_played",
+      114.04658043384552
+    ],
+    [
+      "h2h_career_team1_winrate",
+      112.58238971233368
+    ],
+    [
+      "team2_venue_wr",
+      100.78999918699265
+    ],
+    [
+      "venue_wickets_per_middle",
+      97.55100011825562
+    ],
+    [
+      "team1_top5_middle_sr_mean",
+      94.76266980171204
+    ],
+    [
+      "venue_chase_rate_when_batted",
+      91.7427191734314
+    ],
+    [
+      "venue_wickets_per_pp",
+      87.51625096797943
+    ],
+    [
+      "team1_venue_wr",
+      83.62631046772003
+    ],
+    [
+      "pp1_runs",
+      83.52298045158386
+    ],
+    [
+      "team2_season_wr",
+      76.30217981338501
+    ],
+    [
+      "venue_chase_rate",
+      52.797579288482666
+    ],
+    [
+      "humidity_pct",
+      47.93792009353638
+    ],
+    [
+      "team2_form5",
+      46.40772986412048
+    ],
+    [
+      "first_innings_wickets",
+      45.95272994041443
+    ],
+    [
+      "venue_played",
+      22.797940015792847
+    ],
+    [
+      "precipitation_mm",
+      18.33927023410797
+    ],
+    [
+      "pp1_wickets",
+      17.57139003276825
+    ],
+    [
+      "venue_match_count",
+      16.631219625473022
+    ],
+    [
+      "team2_season_played",
+      0.0
+    ],
+    [
+      "team1_form5",
+      0.0
+    ],
+    [
+      "venue_total_matches",
+      0.0
+    ],
+    [
+      "innings_break_required_rr",
+      0.0
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  },
+  "kill_threshold": 0.583,
+  "hit_kill_criterion": false
+}

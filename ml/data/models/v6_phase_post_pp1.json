@@ -1,0 +1,285 @@
+{
+  "version": 6,
+  "name": "phase_post_pp1",
+  "phase": "phase_post_pp1",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-12T22:56:31.966607+00:00",
+  "git_sha": "5dee227d478b6e52e34f05a86c8969c1767740a8",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "best_n_estimators": 100,
+  "cv_mean_neg_log_loss": -0.776198211451775,
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70,
+  "validation_accuracy": 0.5915492957746479,
+  "validation_brier": 0.21614331220136787,
+  "validation_log_loss": 0.6009119572005129,
+  "test_accuracy": 0.5714285714285714,
+  "test_brier": 0.32407939639183153,
+  "test_log_loss": 2.6374894135964517,
+  "feature_names": [
+    "team1_career_wr",
+    "team2_career_wr",
+    "team1_career_played",
+    "team2_career_played",
+    "team1_season_wr",
+    "team2_season_wr",
+    "team1_season_played",
+    "team2_season_played",
+    "team1_form5",
+    "team2_form5",
+    "team1_venue_wr",
+    "team2_venue_wr",
+    "venue_chase_rate",
+    "venue_played",
+    "team1_top5_pp_sr_mean",
+    "team1_top4_pp_econ_mean",
+    "team1_top5_middle_sr_mean",
+    "team1_top4_middle_econ_mean",
+    "team1_top5_death_sr_mean",
+    "team1_top4_death_econ_mean",
+    "team2_top5_pp_sr_mean",
+    "team2_top4_pp_econ_mean",
+    "team2_top5_middle_sr_mean",
+    "team2_top4_middle_econ_mean",
+    "team2_top5_death_sr_mean",
+    "team2_top4_death_econ_mean",
+    "venue_avg_1st_innings",
+    "venue_wickets_per_pp",
+    "venue_wickets_per_middle",
+    "venue_wickets_per_death",
+    "venue_pace_econ",
+    "venue_spin_econ",
+    "venue_match_count",
+    "team1_decay_form",
+    "team2_decay_form",
+    "team1_decay_form_diff",
+    "h2h_career_team1_winrate",
+    "h2h_last5_team1_winrate",
+    "venue_chase_rate_when_fielded",
+    "venue_chase_rate_when_batted",
+    "venue_total_matches",
+    "temp_c",
+    "humidity_pct",
+    "dewpoint_c",
+    "wind_kmh",
+    "precipitation_mm",
+    "toss_winner_is_team1",
+    "toss_decision_field",
+    "pp1_runs",
+    "pp1_wickets"
+  ],
+  "dropped_high_nan_features": [],
+  "feature_importance_gain_ranked": [
+    [
+      "team1_top4_pp_econ_mean",
+      310.10423970222473
+    ],
+    [
+      "pp1_runs",
+      307.150509595871
+    ],
+    [
+      "wind_kmh",
+      276.3541704416275
+    ],
+    [
+      "team2_top5_pp_sr_mean",
+      240.1204698085785
+    ],
+    [
+      "team1_top4_death_econ_mean",
+      236.91054034233093
+    ],
+    [
+      "venue_spin_econ",
+      233.30844843387604
+    ],
+    [
+      "team2_top4_death_econ_mean",
+      227.62658154964447
+    ],
+    [
+      "team2_top4_pp_econ_mean",
+      221.02708888053894
+    ],
+    [
+      "venue_pace_econ",
+      216.68373084068298
+    ],
+    [
+      "team2_decay_form",
+      206.71064138412476
+    ],
+    [
+      "venue_wickets_per_death",
+      204.2399399280548
+    ],
+    [
+      "venue_avg_1st_innings",
+      180.78257977962494
+    ],
+    [
+      "team1_top5_death_sr_mean",
+      180.60032153129578
+    ],
+    [
+      "h2h_last5_team1_winrate",
+      179.73174059391022
+    ],
+    [
+      "temp_c",
+      178.6162792444229
+    ],
+    [
+      "team2_top5_middle_sr_mean",
+      173.07272005081177
+    ],
+    [
+      "venue_wickets_per_middle",
+      170.51992905139923
+    ],
+    [
+      "team2_career_played",
+      169.91689896583557
+    ],
+    [
+      "team1_career_played",
+      159.2387490272522
+    ],
+    [
+      "team2_top4_middle_econ_mean",
+      155.27437901496887
+    ],
+    [
+      "team1_career_wr",
+      153.76043128967285
+    ],
+    [
+      "venue_chase_rate_when_fielded",
+      148.1092987060547
+    ],
+    [
+      "team2_top5_death_sr_mean",
+      140.4204899072647
+    ],
+    [
+      "team1_season_played",
+      130.29980039596558
+    ],
+    [
+      "venue_wickets_per_pp",
+      125.31650936603546
+    ],
+    [
+      "team1_venue_wr",
+      124.18850648403168
+    ],
+    [
+      "team2_season_wr",
+      123.95712041854858
+    ],
+    [
+      "team1_decay_form",
+      122.26995038986206
+    ],
+    [
+      "team1_season_wr",
+      115.1416597366333
+    ],
+    [
+      "venue_chase_rate_when_batted",
+      114.0426299571991
+    ],
+    [
+      "team1_top5_middle_sr_mean",
+      107.57028985023499
+    ],
+    [
+      "h2h_career_team1_winrate",
+      104.15154981613159
+    ],
+    [
+      "team1_top5_pp_sr_mean",
+      104.05549025535583
+    ],
+    [
+      "dewpoint_c",
+      103.1933491230011
+    ],
+    [
+      "team1_decay_form_diff",
+      99.09070992469788
+    ],
+    [
+      "team1_top4_middle_econ_mean",
+      98.86313986778259
+    ],
+    [
+      "team2_venue_wr",
+      85.46313047409058
+    ],
+    [
+      "team2_career_wr",
+      83.98892021179199
+    ],
+    [
+      "team2_season_played",
+      68.70544934272766
+    ],
+    [
+      "toss_decision_field",
+      58.158910512924194
+    ],
+    [
+      "humidity_pct",
+      57.98478937149048
+    ],
+    [
+      "venue_played",
+      56.33803987503052
+    ],
+    [
+      "venue_chase_rate",
+      38.499149441719055
+    ],
+    [
+      "pp1_wickets",
+      26.81177043914795
+    ],
+    [
+      "toss_winner_is_team1",
+      17.09173011779785
+    ],
+    [
+      "precipitation_mm",
+      9.254280090332031
+    ],
+    [
+      "team2_form5",
+      7.90267014503479
+    ],
+    [
+      "venue_match_count",
+      7.348589897155762
+    ],
+    [
+      "team1_form5",
+      5.85316002368927
+    ],
+    [
+      "venue_total_matches",
+      0.0
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  },
+  "kill_threshold": 0.583,
+  "hit_kill_criterion": false
+}
