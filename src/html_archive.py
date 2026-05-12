@@ -14,10 +14,12 @@ from bs4 import BeautifulSoup
 
 from .state import IST, PT  # noqa: F401
 
-# Team codes used by the predictor / message_builder — bolded in the web view
-TEAM_CODES = ('CSK', 'MI', 'RCB', 'KKR', 'DC', 'PBKS', 'RR', 'SRH', 'GT', 'LSG')
-_TEAM_RE = re.compile(r'\b(' + '|'.join(TEAM_CODES) + r')\b')
-_TOP4_RE = re.compile(r'^(.*top 4:\s*)(.+)$', re.IGNORECASE)
+# Only ACTUAL match results get bolded in the web view:
+#   * the "X beat Y by Z" outcome line itself
+#   * the "Updated top 4: ..." standings (state after a match)
+# Predictions, previews, and current snapshots stay regular weight.
+_RESULT_LINE_RE  = re.compile(r'^([A-Z][A-Z0-9]+) beat ([A-Z][A-Z0-9]+) by (.+)$')
+_UPDATED_TOP4_RE = re.compile(r'^(Updated top 4:\s*)(.+)$', re.IGNORECASE)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -814,8 +816,9 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str) -> None:
 
       * Drop the trailing "Archive: <url>" line — redundant when you're
         already looking at the archive.
-      * Bold team codes (CSK, MI, RCB, …) inline.
-      * Bold the team list after any "top 4:" prefix.
+      * Bold ONLY actual results: the "X beat Y by Z" outcome and the
+        "Updated top 4: ..." standings. Predictions, Current top 4,
+        Predicted final top 4, match previews — all stay regular weight.
     """
     lines = [ln for ln in body_text.split('\n') if not ln.lstrip().startswith('Archive:')]
     while lines and not lines[-1].strip():
@@ -825,8 +828,21 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str) -> None:
         if i > 0:
             pre_tag.append('\n')
 
-        # "Current top 4: RCB, SRH, GT, PBKS" — bold the comma-separated list
-        m = _TOP4_RE.match(line)
+        # "DC beat PBKS by 3 Wickets" — actual match result
+        m = _RESULT_LINE_RE.match(line)
+        if m:
+            strong_winner = soup.new_tag('strong')
+            strong_winner.string = m.group(1)
+            pre_tag.append(strong_winner)
+            pre_tag.append(' beat ')
+            strong_loser = soup.new_tag('strong')
+            strong_loser.string = m.group(2)
+            pre_tag.append(strong_loser)
+            pre_tag.append(' by ' + m.group(3))
+            continue
+
+        # "Updated top 4: RCB, SRH, GT, PBKS" — standings after a result
+        m = _UPDATED_TOP4_RE.match(line)
         if m:
             pre_tag.append(m.group(1))
             strong = soup.new_tag('strong')
@@ -834,17 +850,9 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str) -> None:
             pre_tag.append(strong)
             continue
 
-        # Otherwise bold any standalone team-code tokens in the line
-        pos = 0
-        for match in _TEAM_RE.finditer(line):
-            if match.start() > pos:
-                pre_tag.append(line[pos:match.start()])
-            strong = soup.new_tag('strong')
-            strong.string = match.group(0)
-            pre_tag.append(strong)
-            pos = match.end()
-        if pos < len(line):
-            pre_tag.append(line[pos:])
+        # Everything else (Match preview, Prediction, Reason, Current top 4,
+        # Predicted final top 4, recap counts, etc.) — plain text
+        pre_tag.append(line)
 
 
 def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: str) -> None:
