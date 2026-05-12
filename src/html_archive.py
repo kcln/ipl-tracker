@@ -450,9 +450,8 @@ SHELL = """<!doctype html>
 
   <!-- ── NAV ── -->
   <nav class="brand-nav" aria-label="Primary">
-    <a href="https://github.com/kcln" class="brand-logo" target="_blank" rel="noopener">
-      <span class="brand-mark"><img src="assets/lion-transparent.png" alt="Simham lion mark" width="36" height="36"></span>
-      <span class="brand-name">Lakshminarasimham</span>
+    <a href="https://github.com/kcln" class="brand-logo" target="_blank" rel="noopener" aria-label="KC Lakshminarasimham">
+      <span class="brand-mark"><img src="assets/lion-transparent.png" alt="Simham lion mark" width="40" height="40"></span>
     </a>
     <ul class="brand-nav-links">
       <li><a href="#match-log" class="active">Match log</a></li>
@@ -580,8 +579,8 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
             <label class="radio"><input type="radio" name="platform" value="Android"> Android</label>
           </div>
         </div>
-        <button class="btn btn-primary" type="submit">Send my number →</button>
-        <p class="form-fine">Submits via your email app — KC reviews each request before adding you. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
+        <button class="btn btn-primary" type="submit">Sign up →</button>
+        <p class="form-fine">Opens WhatsApp with your details pre-filled — you just hit send. KC reviews each request before adding you. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
       </form>
     </section>
 
@@ -627,7 +626,9 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
       });
     });
 
-    // Form → mailto
+    // Form → WhatsApp click-to-chat (no third-party service, no API key, $0)
+    // Opens WhatsApp on phone or WhatsApp Web with the message pre-typed —
+    // visitor just hits Send and KC gets a real WhatsApp notification.
     document.getElementById('signup-form').addEventListener('submit', function (ev) {
       ev.preventDefault();
       var name = (document.getElementById('su-name').value || '').trim();
@@ -642,24 +643,18 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
         if (!confirm('That doesn\\'t look like an E.164 phone number (e.g. +14155551234). Send anyway?')) return;
       }
 
-      var subject = 'IPL tracker — add me: ' + (name || phone);
-      var body = [
-        'Hi KC,',
+      var message = [
+        'Hi KC — please add me to the IPL 2026 tracker.',
         '',
-        'Please add me to the IPL 2026 tracker iMessage list.',
-        '',
-        'Name:     ' + (name || '(not given)'),
-        'Phone:    ' + phone,
-        'Platform: ' + platform,
-        '',
-        'Thanks!'
+        'Name: ' + (name || '(not given)'),
+        'Phone: ' + phone,
+        'Platform: ' + platform
       ].join('\\n');
 
-      var to = 'kcl.narasimham@gmail.com';
-      var href = 'mailto:' + to +
-                 '?subject=' + encodeURIComponent(subject) +
-                 '&body=' + encodeURIComponent(body);
-      window.location.href = href;
+      // KC's WhatsApp number (digits only, with country code, no +)
+      var waNumber = '18049287108';
+      var href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message);
+      window.open(href, '_blank', 'noopener');
     });
   </script>
 </body>
