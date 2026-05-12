@@ -610,6 +610,18 @@ def main() -> int:
         state.save(state_obj)
         return 0
 
+    # If today has any non-complete match, force-refresh the fixtures cache
+    # so we get the latest toss + innings state from iplt20. The default
+    # 24h cache hides mid-match updates (toss_winner, FirstBattingSummary,
+    # etc.) that we need for phase-message generation.
+    if any(m.get("status") != "complete" for m in todays):
+        try:
+            all_matches = data_fetcher.fetch_fixtures(force=True)
+            todays = _matches_for_date_pt(all_matches, today)
+            _log("forced fixtures refresh — live match(es) present today", "ok")
+        except Exception as e:
+            _log(f"fixtures force-refresh failed: {e}", "warn")
+
     # Refresh live match status (TTL 60s) for any not-yet-complete match
     for m in todays:
         if m.get("status") != "complete":
