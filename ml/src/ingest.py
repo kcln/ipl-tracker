@@ -4,10 +4,12 @@ Downloads ipl_json.zip, extracts, and builds matches / balls / players parquets
 with team-rename mapping.
 
 Run:
-    python -m ml.src.ingest
+    python -m ml.src.ingest          # uses cached zip if present
+    python -m ml.src.ingest --force  # re-downloads zip (used by the daily launchd refresh)
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import pathlib
@@ -231,7 +233,14 @@ def build_players_rollup(balls_df: pd.DataFrame, matches_df: pd.DataFrame) -> pd
 
 
 def main() -> None:
-    zip_path = download_zip()
+    ap = argparse.ArgumentParser(description="Cricsheet IPL ingestion")
+    ap.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-download ipl_json.zip even if the cached copy exists (used by daily refresh).",
+    )
+    args = ap.parse_args()
+    zip_path = download_zip(force=args.force)
     json_files = extract_zip(zip_path)
     matches_df, balls_df = build_parquets(json_files)
     build_players_rollup(balls_df, matches_df)
