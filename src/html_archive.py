@@ -861,8 +861,8 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
                 pre_tag.append(' beat ' + m.group(2) + ' by ' + m.group(3))
                 continue
 
-        # ── Day recap: bold "Updated top 4: ..." list ─────────────
-        if is_recap:
+        # ── Bold "Updated top 4: ..." list in both match-result and recap ──
+        if is_post_match or is_recap:
             m = _UPDATED_TOP4_RE.match(line)
             if m:
                 pre_tag.append(m.group(1))
