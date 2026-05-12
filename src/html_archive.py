@@ -384,10 +384,27 @@ SHELL = """<!doctype html>
 """
 
 
+_HERO_DEFAULT_REPLACEMENTS = {
+    # Visible fallbacks so the page never shows raw __HERO_X__ tokens to a
+    # visitor even between a SHELL rewrite and the next tracker hero-update.
+    "__HERO_MATCH__":       "—",
+    "__HERO_META__":        "IPL 2026",
+    "__HERO_WIN__":         "Match data loading…",
+    "__HERO_LEADER__":      "—",
+    "__HERO_LEADER_DESC__": "Standings loading…",
+    "__MATCH_COUNT__":      "IPL 2026",
+}
+
+
 def _ensure_index() -> BeautifulSoup:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     if not INDEX.exists():
-        INDEX.write_text(SHELL, encoding="utf-8")
+        # Pre-substitute raw SHELL placeholders with visible defaults so a
+        # first-deploy page never shows __HERO_X__ to the user.
+        seeded = SHELL
+        for k, v in _HERO_DEFAULT_REPLACEMENTS.items():
+            seeded = seeded.replace(k, v)
+        INDEX.write_text(seeded, encoding="utf-8")
     text = INDEX.read_text(encoding="utf-8")
     return BeautifulSoup(text, "html.parser")
 
