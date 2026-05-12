@@ -343,10 +343,12 @@ SIGNUP_SHEET_URL = (
 )
 
 
-def _sync_recipients_from_sheet() -> None:
+def _sync_recipients_from_sheet() -> list[str]:
     """Pull approved signup phone numbers from the Apps Script Sheet and merge
     them into recipients.txt. Best-effort — silent on network/auth failures
     so a brief network blip never blocks message generation.
+
+    Returns the list of phones newly added in this run (used for catch-up).
 
     Requires SHEET_SYNC_TOKEN env var (matches a constant in the Apps Script).
     """
@@ -355,7 +357,7 @@ def _sync_recipients_from_sheet() -> None:
 
     token = _os.environ.get("SHEET_SYNC_TOKEN", "").strip()
     if not token:
-        return  # sync disabled — recipients.txt manually managed
+        return []  # sync disabled — recipients.txt manually managed
 
     try:
         r = _requests.get(
@@ -366,15 +368,15 @@ def _sync_recipients_from_sheet() -> None:
         )
         if r.status_code != 200:
             _log(f"recipient sync HTTP {r.status_code}", "warn")
-            return
+            return []
         data = r.json()
     except (_requests.RequestException, ValueError) as e:
         _log(f"recipient sync failed: {e}", "warn")
-        return
+        return []
 
     if not data.get("ok"):
         _log(f"recipient sync rejected: {data.get('error')}", "warn")
-        return
+        return []
 
     raw_phones = data.get("recipients") or []
 
@@ -393,7 +395,7 @@ def _sync_recipients_from_sheet() -> None:
     sheet_phones = [_normalize(p) for p in raw_phones]
     sheet_phones = [p for p in sheet_phones if p]
     if not sheet_phones:
-        return
+        return []
 
     path = REPO_ROOT / "recipients.txt"
     existing: set[str] = set()
@@ -407,7 +409,7 @@ def _sync_recipients_from_sheet() -> None:
     opted_out = _read_phone_list(REPO_ROOT / "optout.txt")
     added = [p for p in sheet_phones if p and p not in existing and p not in opted_out]
     if not added:
-        return
+        return []
 
     # Append (preserves ordering and any header comments already in the file)
     with path.open("a", encoding="utf-8") as f:
@@ -417,6 +419,46 @@ def _sync_recipients_from_sheet() -> None:
         for p in added:
             f.write(p + "\n")
     _log(f"synced {len(added)} new recipient(s) from signup sheet", "ok")
+    return added
+
+
+# ─────────────────────────────────────────
+# Catch-up — send today's earlier messages to a newly-signed-up phone
+# ─────────────────────────────────────────
+
+def _catch_up_new_recipients(new_phones: list[str], day_entry: dict) -> int:
+    """For each brand-new recipient, send today's already-generated messages
+    in chronological order so they don't miss what fired earlier in the day.
+
+    Skips messages that haven't been delivered to anyone yet (those will go
+    out via the normal broadcast). Skips the catch-up if there's nothing to
+    catch up on. Returns the number of catch-up sends attempted.
+    """
+    if not new_phones:
+        return 0
+
+    earlier = [
+        m for m in day_entry.get("messages", [])
+        if m.get("delivered") and m.get("body")
+    ]
+    earlier.sort(key=lambda m: m.get("generated_at", ""))
+    if not earlier:
+        _log(f"catch-up: {len(new_phones)} new recipient(s) but no prior messages today")
+        return 0
+
+    total_sends = 0
+    for phone in new_phones:
+        _log(f"catch-up: sending {len(earlier)} message(s) to {phone}", "ok")
+        for msg in earlier:
+            ok = imessage_sender.send_to(msg["body"], phone)
+            total_sends += 1
+            if not ok:
+                _log(f"  catch-up send to {phone} failed at {msg['type']}", "warn")
+                break  # likely a delivery issue; stop spamming this phone
+            # Small pause between sends so iMessage doesn't bundle/throttle
+            import time as _time
+            _time.sleep(0.5)
+    return total_sends
 
 
 # ─────────────────────────────────────────
@@ -540,8 +582,9 @@ def main() -> int:
     _process_optout_commands()
 
     # Pull any new signups before generating messages so newcomers get
-    # whichever message is next due to fire.
-    _sync_recipients_from_sheet()
+    # whichever message is next due to fire. Hold onto the list so we can
+    # catch them up on earlier messages from today after the generators run.
+    new_signups = _sync_recipients_from_sheet()
 
     if _handle_season_end(state_obj):
         return 0
@@ -586,6 +629,12 @@ def main() -> int:
     _maybe_generate_in_match_phases(day_entry, today, todays, standings, recent, squads)
     _maybe_generate_post_match(day_entry, today, todays, standings, remaining, recent, squads)
     _maybe_generate_end_of_day(day_entry, today, todays, standings, remaining, recent, squads)
+
+    # Catch up brand-new signups on today's earlier messages BEFORE the broadcast,
+    # so they receive messages in chronological order:
+    #   1. catch-up (earlier delivered messages, chronological)
+    #   2. broadcast (the latest undelivered message, sent to everyone)
+    _catch_up_new_recipients(new_signups, day_entry)
 
     # Send only the newest undelivered message
     newest = state.latest_undelivered_message(day_entry)
