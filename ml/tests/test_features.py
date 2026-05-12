@@ -42,3 +42,31 @@ def test_target_distribution():
     rate = df["winner_is_team1"].mean()
     # team1 ordering is arbitrary, so the rate should be near 0.5 ± 0.1
     assert 0.4 <= rate <= 0.6, f"team1 win rate too imbalanced: {rate:.3f}"
+
+
+def test_wp_balls_remaining_monotonic():
+    p = HIST / "wp_features.parquet"
+    _skip_if_missing(p)
+    df = pd.read_parquet(p)
+    # within an innings of a single match, balls_remaining must strictly decrease
+    sample = df.head(50_000)
+    for (mid, inn), g in sample.groupby(["match_id", "innings"]):
+        diffs = g["balls_remaining"].diff().dropna()
+        assert (diffs <= 0).all(), f"balls_remaining not monotonic in match {mid} innings {inn}"
+
+
+def test_wp_wickets_remaining_non_increasing():
+    p = HIST / "wp_features.parquet"
+    _skip_if_missing(p)
+    df = pd.read_parquet(p).head(50_000)
+    for (mid, inn), g in df.groupby(["match_id", "innings"]):
+        diffs = g["wickets_remaining"].diff().dropna()
+        assert (diffs <= 0).all(), f"wickets_remaining increased in match {mid} innings {inn}"
+
+
+def test_wp_rrr_nan_in_first_innings():
+    p = HIST / "wp_features.parquet"
+    _skip_if_missing(p)
+    df = pd.read_parquet(p)
+    first_innings = df[df["innings"] == 1]
+    assert first_innings["required_run_rate"].isna().all(), "RRR must be NaN in 1st innings"

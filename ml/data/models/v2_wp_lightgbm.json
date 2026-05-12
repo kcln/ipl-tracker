@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "name": "wp_lightgbm",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-12T17:51:49.407924Z",
+  "git_sha": "7aa10dd24fd97480617ab8f40b3dfd5d0f9c2288",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "n_train": 239693,
+  "n_val": 17103,
+  "n_test": 16707,
+  "validation_accuracy": 0.7408641758755774,
+  "validation_brier": 0.17433890812654854,
+  "validation_log_loss": 0.5147789176298556,
+  "test_accuracy": 0.7161070210091578,
+  "test_brier": 0.19027346296277003,
+  "test_log_loss": 0.6542488835400466,
+  "feature_names": [
+    "innings",
+    "ball_no_in_innings",
+    "balls_remaining",
+    "wickets_remaining",
+    "current_score",
+    "current_run_rate",
+    "required_run_rate",
+    "target",
+    "last_30_balls_rr",
+    "batting_team_strength",
+    "bowling_team_strength",
+    "is_chase",
+    "venue_code"
+  ],
+  "feature_importance_gain_ranked": [
+    [
+      "required_run_rate",
+      370686.5091258102
+    ],
+    [
+      "batting_team_strength",
+      255932.76469392856
+    ],
+    [
+      "target",
+      253311.72094278102
+    ],
+    [
+      "bowling_team_strength",
+      242986.9763739481
+    ],
+    [
+      "venue_code",
+      166715.93537385078
+    ],
+    [
+      "current_run_rate",
+      109285.0215579148
+    ],
+    [
+      "wickets_remaining",
+      91588.53810673115
+    ],
+    [
+      "current_score",
+      70410.71679693877
+    ],
+    [
+      "last_30_balls_rr",
+      7425.307834480773
+    ],
+    [
+      "innings",
+      5910.410026550293
+    ],
+    [
+      "ball_no_in_innings",
+      4376.377842715274
+    ],
+    [
+      "balls_remaining",
+      28.727431116625667
+    ],
+    [
+      "is_chase",
+      0.0
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  }
+}

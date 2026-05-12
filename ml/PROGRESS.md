@@ -7,7 +7,7 @@ Branch: `ml-engine` · Started: 2026-05-12
 - [x] Phase -1: Infrastructure setup
 - [x] Phase 0: Data foundation + backtest harness + heuristic baseline
 - [x] Phase 1: v1 logistic regression with calibration (KILLED — see below)
-- [ ] Phase 2: Live win-probability model
+- [x] Phase 2: Live win-probability model (71.6% test, in target band)
 - [ ] Phase 3: Per-phase GBM models
 - [ ] Phase 4: Player-level features
 - [ ] Phase 5: Ensemble + documentation
@@ -38,6 +38,7 @@ Concerns to keep in mind:
 | Version | Name | Date | Train seasons | Test season | Acc | Brier | Notes |
 |---|---|---|---|---|---|---|---|
 | v1 | logistic + isotonic | 2026-05-12 | 2008–2023 | 2025 | 41.4% | 0.261 | 9 features, C=0.1. KILLED. |
+| v2 | wp_lightgbm + isotonic | 2026-05-12 | 2008–2023 | 2025 | 71.6% | 0.190 | per-delivery WP, 12 numeric + venue, n_train=239,693 |
 
 ## Test-set integrity log
 
@@ -46,6 +47,7 @@ Each row records the single time 2025 was touched for a given model version.
 | Version | Touched at (UTC) | Acc | Brier |
 |---|---|---|---|
 | v1_logistic | 2026-05-12 | 41.4% | 0.261 |
+| v2_wp_lightgbm | 2026-05-12 | 71.6% | 0.190 |
 
 ## Kill-criteria log
 
