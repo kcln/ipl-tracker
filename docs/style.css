@@ -1,10 +1,13 @@
 /*
  * KC Lakshminarasimham — Personal Brand System
- * Import this file into any project to apply the brand.
  *
- * Usage in HTML:
- *   <link rel="stylesheet" href="/path/to/brand.css">
- *   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+ * Editorial typography (Playfair Display Italic / Inter / JetBrains Mono)
+ * on Bauhaus structure (2px ink borders, 4px hard offset shadows, 0 radius,
+ * geometric primary blocks, mechanical translate-on-press feedback),
+ * carrying the cream + crimson + spectrum palette.
+ *
+ * Required font import — load in <head>:
+ *   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,400;1,700;1,900&display=swap" rel="stylesheet">
  */
 
 /* ─────────────────────────────────────────
@@ -12,55 +15,50 @@
 ───────────────────────────────────────── */
 :root {
   /* Background */
-  --bg:           #F5F1EB;   /* Warm cream — primary background */
-  --bg-card:      #FFFFFF;   /* Card / elevated surface */
-  --bg-hover:     #EDE9E2;   /* Hovered surface */
+  --bg:            #F5F1EB;   /* warm cream — primary background */
+  --bg-card:       #FFFFFF;   /* card / elevated surface */
+  --bg-hover:      #EDE9E2;
 
   /* Crimson — hero accent */
-  --crimson:      #E0001C;
-  --crimson-dark: #B8001A;
-  --crimson-soft: rgba(224, 0, 28, 0.10);
-  --crimson-glow: rgba(224, 0, 28, 0.30);
+  --crimson:       #E0001C;
+  --crimson-dark:  #B8001A;
+  --crimson-soft:  rgba(224, 0, 28, 0.10);
+  --crimson-glow:  rgba(224, 0, 28, 0.30);
 
   /* Spectrum — category / domain colors */
-  --indigo:       #4F46E5;
-  --indigo-light: #818CF8;
-  --indigo-soft:  rgba(79, 70, 229, 0.12);
+  --indigo:        #1E40AF;   /* navy — swapped from #4F46E5 (read too violet) */
+  --indigo-soft:   rgba(30, 64, 175, 0.12);
+  --teal:          #0F766E;   /* darkened from #0D9488 to meet WCAG AA on cream */
+  --teal-soft:     rgba(15, 118, 110, 0.12);
+  --amber:         #B45309;
+  --amber-soft:    rgba(180, 83, 9, 0.12);
+  --rose:          #BE185D;
+  --rose-soft:     rgba(190, 24, 93, 0.10);
 
-  --teal:         #0D9488;
-  --teal-light:   #2DD4BF;
-  --teal-soft:    rgba(13, 148, 136, 0.12);
-
-  --amber:        #B45309;
-  --amber-light:  #FCD34D;
-  --amber-soft:   rgba(180, 83, 9, 0.12);
-
-  --rose:         #BE185D;
-  --rose-light:   #F472B6;
-  --rose-soft:    rgba(190, 24, 93, 0.10);
-
-  /* Text */
-  --text:         #0F0F0F;   /* Primary text */
-  --text-muted:   rgba(15, 15, 15, 0.45);
-  --text-faint:   rgba(15, 15, 15, 0.25);
+  /* Text — alphas tuned for WCAG AA on cream */
+  --text:          #0F0F0F;
+  --text-muted:    rgba(15, 15, 15, 0.65);
+  --text-faint:    rgba(15, 15, 15, 0.40);
 
   /* Borders */
-  --border:       rgba(0, 0, 0, 0.08);
-  --border-strong:rgba(0, 0, 0, 0.14);
+  --border:        rgba(0, 0, 0, 0.10);
+  --border-strong: var(--text);
+  --border-width:  2px;       /* Bauhaus structural border */
 
   /* Typography */
-  --font-display: 'Raleway', sans-serif;
-  --font-body:    'Inter', sans-serif;
+  --font-hero:     'Playfair Display', 'Times New Roman', serif;
+  --font-body:     'Inter', system-ui, sans-serif;
+  --font-label:    'JetBrains Mono', 'Menlo', monospace;
 
   /* Type scale */
-  --text-xs:   10px;
-  --text-sm:   12px;
-  --text-base: 15px;
-  --text-md:   17px;
-  --text-lg:   24px;
-  --text-xl:   36px;
-  --text-2xl:  52px;
-  --text-3xl:  72px;
+  --text-xs:       11px;
+  --text-sm:       13px;
+  --text-base:     16px;
+  --text-md:       19px;
+  --text-lg:       26px;
+  --text-xl:       48px;
+  --text-2xl:      72px;
+  --text-3xl:      clamp(64px, 9vw, 128px);
 
   /* Spacing */
   --space-1:  4px;
@@ -73,18 +71,17 @@
   --space-8:  64px;
   --space-9:  96px;
 
-  /* Radius */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  12px;
-  --radius-xl:  16px;
-  --radius-full: 100px;
+  /* Radius — Bauhaus = 0 everywhere except pill-button exception */
+  --radius-sm:     0;
+  --radius-md:     0;
+  --radius-lg:     0;
+  --radius-pill:   9999px;
 
-  /* Shadows */
-  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
-  --shadow-md:  0 4px 20px rgba(0,0,0,0.08);
-  --shadow-lg:  0 12px 48px rgba(0,0,0,0.10);
-  --shadow-crimson: 0 6px 28px rgba(224,0,28,0.3);
+  /* Shadows — hard offset, no blur */
+  --shadow:        4px 4px 0 0 var(--text);
+  --shadow-crimson:4px 4px 0 0 var(--crimson);
+  --shadow-hover:  6px 6px 0 0 var(--text);
+  --shadow-chip:   3px 3px 0 0 var(--text);
 }
 
 /* ─────────────────────────────────────────
@@ -99,241 +96,372 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   font-weight: 400;
-  line-height: 1.5;
+  font-size: var(--text-base);
+  line-height: 1.55;
+  overflow-x: hidden;
 }
+
+a { color: inherit; text-decoration: none; }
 
 /* ─────────────────────────────────────────
-   TYPOGRAPHY
+   TYPOGRAPHY UTILITIES
 ───────────────────────────────────────── */
 .brand-display {
-  font-family: var(--font-display);
+  font-family: var(--font-hero);
+  font-style: italic;
   font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+  line-height: 0.96;
   color: var(--text);
 }
+.brand-display em { font-style: italic; color: var(--crimson); font-weight: 900; }
 
 .brand-heading {
-  font-family: var(--font-display);
-  font-weight: 800;
+  font-family: var(--font-hero);
+  font-style: italic;
+  font-weight: 700;
+  font-size: var(--text-xl);
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.04;
   color: var(--text);
 }
+.brand-heading em { font-style: italic; color: var(--crimson); font-weight: 900; }
 
 .brand-label {
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-size: var(--text-xs);
-  font-weight: 700;
-  letter-spacing: 0.35em;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--crimson);
 }
 
 .brand-body {
   font-family: var(--font-body);
-  font-weight: 300;
-  line-height: 1.7;
+  font-weight: 400;
+  font-size: var(--text-base);
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
-/* Crimson highlight — wrap a word in this */
 .brand-crimson { color: var(--crimson); }
 
-/* Eyebrow line — sits above a heading */
+/* Eyebrow — JetBrains Mono in a small Bauhaus block */
 .brand-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  background: var(--bg);
+  padding: 6px 14px;
+  border: var(--border-width) solid var(--text);
+}
+
+/* Section label — for "Areas of Focus", "Selected Work", "About" */
+.brand-section-label {
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: var(--space-6);
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: var(--text-xs);
-  font-weight: 700;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--crimson);
-  margin-bottom: var(--space-5);
 }
-.brand-eyebrow::before {
+.brand-section-label::before {
   content: '';
   width: 28px;
-  height: 1px;
+  height: 2px;
   background: var(--crimson);
-  flex-shrink: 0;
+}
+
+/* Drop cap — float a giant italic crimson first letter into body copy */
+.brand-dropcap::first-letter {
+  font-family: var(--font-hero);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 72px;
+  float: left;
+  line-height: 0.85;
+  padding-right: 14px;
+  padding-top: 8px;
+  color: var(--crimson);
 }
 
 /* ─────────────────────────────────────────
-   BUTTONS
+   BUTTONS — Bauhaus block w/ mechanical press
 ───────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: var(--text-sm);
-  letter-spacing: 0.08em;
+  gap: 10px;
+  min-height: 48px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  border: none;
+  padding: 14px 28px;
+  border: var(--border-width) solid var(--text);
   cursor: pointer;
-  border-radius: var(--radius-full);
-  padding: 12px 28px;
-  transition: opacity 0.15s, box-shadow 0.15s;
+  transition: transform 0.08s, box-shadow 0.08s;
   text-decoration: none;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
 }
-.btn:hover { opacity: 0.88; }
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 0 var(--text); }
+.btn:active { transform: translate(2px, 2px); box-shadow: none; }
+.btn:focus-visible { outline: 2px solid var(--crimson); outline-offset: 4px; }
 
 .btn-primary {
   background: var(--crimson);
   color: #fff;
-  box-shadow: var(--shadow-crimson);
 }
-.btn-primary:hover { box-shadow: 0 8px 36px rgba(224,0,28,0.4); }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--text-muted);
-  padding-left: 0;
-  padding-right: 0;
-  border-radius: 0;
-  letter-spacing: 0.04em;
-  font-weight: 500;
-  text-transform: none;
+  background: var(--bg);
+  color: var(--text);
 }
-.btn-ghost::after { content: ' →'; }
 
 .btn-outline {
   background: transparent;
   color: var(--crimson);
-  border: 1px solid var(--crimson-glow);
+  border-color: var(--crimson);
 }
-.btn-outline:hover { background: var(--crimson-soft); }
 
 /* ─────────────────────────────────────────
-   CHIPS / TAGS
+   CHIPS — solid Bauhaus blocks w/ ink border
 ───────────────────────────────────────── */
 .chip {
   display: inline-block;
-  padding: 5px 16px;
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  border: var(--border-width) solid var(--text);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  background: var(--bg-card);
+  color: var(--text);
+  box-shadow: var(--shadow-chip);
 }
-
-.chip-indigo { background: var(--indigo-soft); color: var(--indigo); border: 1px solid rgba(79,70,229,0.22); }
-.chip-teal   { background: var(--teal-soft);   color: var(--teal);   border: 1px solid rgba(13,148,136,0.22); }
-.chip-amber  { background: var(--amber-soft);  color: var(--amber);  border: 1px solid rgba(180,83,9,0.22); }
-.chip-rose   { background: var(--rose-soft);   color: var(--rose);   border: 1px solid rgba(190,24,93,0.20); }
-.chip-crimson{ background: var(--crimson-soft);color: var(--crimson);border: 1px solid rgba(224,0,28,0.20); }
-.chip-neutral{ background: rgba(0,0,0,0.05);   color: var(--text-muted); border: 1px solid var(--border); }
+.chip-indigo  { background: var(--indigo);  color: #fff; }
+.chip-teal    { background: var(--teal);    color: #fff; }
+.chip-amber   { background: var(--amber);   color: #fff; }
+.chip-rose    { background: var(--rose);    color: #fff; }
+.chip-crimson { background: var(--crimson); color: #fff; }
+.chip-neutral { background: var(--bg-card); color: var(--text); }
 
 /* ─────────────────────────────────────────
-   CARDS
+   CARDS — 2px border, 4px offset shadow, mechanical press
 ───────────────────────────────────────── */
 .card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-sm);
+  border: var(--border-width) solid var(--text);
+  box-shadow: var(--shadow);
+  padding: 28px 24px 24px;
+  transition: transform 0.08s, box-shadow 0.08s;
+  cursor: pointer;
+  position: relative;
 }
-.card:hover { box-shadow: var(--shadow-md); }
+.card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+.card:active { transform: translate(2px, 2px); box-shadow: none; }
+.card:focus-visible { outline: 2px solid var(--crimson); outline-offset: 4px; }
 
-.card-featured {
-  border-color: rgba(224,0,28,0.2);
-  box-shadow: 0 4px 24px rgba(224,0,28,0.08);
+.card-featured { box-shadow: var(--shadow-crimson); }
+.card-featured:hover { box-shadow: 6px 6px 0 0 var(--crimson); }
+
+.card-tag {
+  display: inline-block;
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1.5px solid var(--text);
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  color: var(--text);
 }
+.card-tag.tag-indigo  { background: var(--indigo);  color: #fff; }
+.card-tag.tag-teal    { background: var(--teal);    color: #fff; }
+.card-tag.tag-amber   { background: var(--amber);   color: #fff; }
+.card-tag.tag-rose    { background: var(--rose);    color: #fff; }
+.card-tag.tag-crimson { background: var(--crimson); color: #fff; }
 
 .card-title {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: var(--text-base);
+  font-family: var(--font-hero);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
   color: var(--text);
-  margin-bottom: var(--space-1);
 }
 
 .card-body {
-  font-size: var(--text-sm);
-  font-weight: 400;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--text-muted);
-  margin-bottom: var(--space-3);
+  margin-bottom: 18px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--text);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
 }
 
 /* ─────────────────────────────────────────
-   NAV
+   NAV — 2px ink bottom border, Bauhaus-framed lion mark
 ───────────────────────────────────────── */
 .brand-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 48px;
+  border-bottom: var(--border-width) solid var(--text);
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
 }
+.brand-logo:focus-visible { outline: 2px solid var(--crimson); outline-offset: 4px; }
 
 .brand-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-md);
-  background: var(--crimson);
-  box-shadow: 0 0 18px rgba(224,0,28,0.35);
+  width: 44px;
+  height: 44px;
+  background: var(--bg-card);
+  border: var(--border-width) solid var(--text);
+  box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 900;
-  color: #fff;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-name {
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: 800;
+  font-family: var(--font-hero);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
   color: var(--text);
 }
 
 .brand-nav-links {
   display: flex;
-  gap: 32px;
+  gap: 36px;
   list-style: none;
-}
-
-.brand-nav-links a {
-  font-size: var(--text-sm);
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.15s;
 }
-.brand-nav-links a:hover,
+.brand-nav-links a {
+  color: var(--text-muted);
+  padding: 4px 0;
+  position: relative;
+  text-decoration: none;
+}
+.brand-nav-links a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 4px; }
+.brand-nav-links a:hover { color: var(--text); }
 .brand-nav-links a.active { color: var(--text); }
+.brand-nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 2px;
+  background: var(--crimson);
+}
 
 /* ─────────────────────────────────────────
    DIVIDERS
 ───────────────────────────────────────── */
 .brand-divider {
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-width) solid var(--text);
   margin: var(--space-7) 0;
 }
 
 /* ─────────────────────────────────────────
-   SECTION LABEL (small uppercase above sections)
+   BAUHAUS GEOMETRIC PROPS — use as decorative shapes
 ───────────────────────────────────────── */
-.brand-section-label {
-  font-size: var(--text-xs);
-  font-weight: 700;
-  letter-spacing: 0.35em;
+.brand-shape {
+  position: absolute;
+  border: var(--border-width) solid var(--text);
+  box-shadow: var(--shadow);
+  z-index: 0;
+}
+.brand-shape-circle { border-radius: 50%; }
+.brand-shape-triangle {
+  width: 0; height: 0;
+  border: none;
+  box-shadow: none;
+  filter: drop-shadow(4px 4px 0 var(--text));
+}
+
+/* ─────────────────────────────────────────
+   SKIP LINK
+───────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 12px 20px;
+  background: var(--crimson);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: var(--space-5);
+  text-decoration: none;
+  z-index: 100;
+  border: var(--border-width) solid var(--text);
+}
+.skip-link:focus { left: 16px; top: 16px; }
+
+/* ─────────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
