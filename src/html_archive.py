@@ -250,7 +250,7 @@ SHELL = """<!doctype html>
         <div class="signup-pitch-inner">
           <div class="kicker">Get the texts</div>
           <h2>Match-day updates, on your phone.</h2>
-          <p>Predictions before play. Results as they happen. A clean recap at night. Free, no ads, opt out anytime.</p>
+          <p>Predictions before play. Powerplay and innings update. Final recap after match.</p>
           <div class="stats">
             <div><strong>~7</strong>messages / match day</div>
             <div><strong>1-tap</strong>opt out</div>
