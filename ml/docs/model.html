@@ -94,6 +94,15 @@ canvas { max-width: 100%; }
     <code>predict.py</code> now routes to the appropriate stage model.
   </p>
 
+  <h2>v4 player-features LightGBM</h2>
+  <div class="card">
+    <p><b>Val 2024:</b> 54.9% · <b>Test 2025:</b> 40.0% · <b>Brier:</b> 0.293</p>
+    <p class="note">
+      26 features: 14 pre-match base + 12 player aggregates (top-5 batter career strike rate, top-4 bowler career economy, qualification counts).
+      Player features dominate feature importance (top 4 by gain are all player-derived) but val accuracy dropped 2.8% vs v3 pre-match and test dropped well below v3. Diagnosis: with only 1,005 training matches, 26 features overfit. Reserved for the v5 ensemble.
+    </p>
+  </div>
+
   <h2>v1 logistic regression — <span class="warn">killed</span></h2>
   <div class="card">
     <p><b>2024 val:</b> 46.5% · <b>2025 test:</b> 41.4% · <b>Brier:</b> 0.261</p>

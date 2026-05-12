@@ -9,7 +9,7 @@ Branch: `ml-engine` · Started: 2026-05-12
 - [x] Phase 1: v1 logistic regression with calibration (KILLED — see below)
 - [x] Phase 2: Live win-probability model (71.6% test, in target band)
 - [x] Phase 3: Per-phase GBM models
-- [ ] Phase 4: Player-level features
+- [x] Phase 4: Player-level features (added signal but did not improve val accuracy)
 - [ ] Phase 5: Ensemble + documentation
 
 ## Dataset
@@ -43,6 +43,7 @@ Concerns to keep in mind:
 | v3 | phase_post_toss (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 41.4% | 0.269 | 11 features incl. toss; toss adds no signal here |
 | v3 | phase_post_pp1 (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 67.1% | 0.208 | 13 features incl. PP1 runs/wkts; **in target band** |
 | v3 | phase_innings_break (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 64.3% | 0.205 | 16 features incl. first innings total + RRR |
+| v4 | player_gbm (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 40.0% | 0.293 | 14 base + 12 player aggregates. Player features dominate gain rankings but val acc dropped 2.8% vs v3_pre_match — overfits on n_train=1005. |
 
 ## Test-set integrity log
 
@@ -56,6 +57,7 @@ Each row records the single time 2025 was touched for a given model version.
 | v3_phase_post_toss | 2026-05-12 | 41.4% | 0.269 |
 | v3_phase_post_pp1 | 2026-05-12 | 67.1% | 0.208 |
 | v3_phase_innings_break | 2026-05-12 | 64.3% | 0.205 |
+| v4_player_gbm | 2026-05-12 | 40.0% | 0.293 |
 
 ## Kill-criteria log
 
@@ -65,6 +67,7 @@ Phases that hit kill criteria and what was done.
 |---|---|---|
 | 0 | 2025 heuristic accuracy 54.3% < 60% floor | Documented, continued. |
 | 1 | v1 val accuracy 46.5% < heuristic + 2% (58.3%) | Documented, did not integrate, continued. |
+| 4 | v4 val 54.9% < v3_pre_match 57.7%; test 40.0% | Documented; player features add high-gain but high-variance signal. Likely useful in ensemble. |
 
 ### Phase 1 post-mortem
 - v1 logistic test accuracy 41.4% — worse than always-team2 baseline (52.9%).

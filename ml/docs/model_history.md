@@ -10,3 +10,4 @@ Append one row per model version, newest at bottom.
 | v3 | phase_post_toss (LightGBM+iso) | 2026-05-12 | 2008–2023 | 56.3% | 41.4% | 0.269 | Adding toss decision didn't help; documented. |
 | v3 | phase_post_pp1 (LightGBM+iso) | 2026-05-12 | 2008–2023 | 64.8% | 67.1% | 0.208 | Powerplay-1 info lifts to target band. |
 | v3 | phase_innings_break (LightGBM+iso) | 2026-05-12 | 2008–2023 | 71.8% | 64.3% | 0.205 | First-innings total + RRR is the strongest in-match pre-2nd-innings signal. |
+| v4 | player_gbm (LightGBM+iso) | 2026-05-12 | 2008–2023 | 54.9% | 40.0% | 0.293 | 14 base + 12 player aggregates (top-5 batter SR, top-4 bowler economy). Player features dominate gain but overfit the small training set; not integrated standalone but reserved for ensemble. |

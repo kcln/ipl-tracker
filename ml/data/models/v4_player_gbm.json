@@ -1,0 +1,163 @@
+{
+  "version": 4,
+  "name": "player_gbm",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-12T17:58:13.967121Z",
+  "git_sha": "6698ae897beaba6ea0d057f13fa55d1b0eb31fdb",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "best_n_estimators": 100,
+  "cv_mean_neg_log_loss": -0.7563791201427167,
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70,
+  "validation_accuracy": 0.5492957746478874,
+  "validation_brier": 0.23716744913928017,
+  "validation_log_loss": 0.6592714713900233,
+  "test_accuracy": 0.4,
+  "test_brier": 0.2926174742021168,
+  "test_log_loss": 1.4355499090552086,
+  "feature_names": [
+    "team1_career_wr",
+    "team2_career_wr",
+    "team1_career_played",
+    "team2_career_played",
+    "team1_season_wr",
+    "team2_season_wr",
+    "team1_season_played",
+    "team2_season_played",
+    "team1_form5",
+    "team2_form5",
+    "team1_venue_wr",
+    "team2_venue_wr",
+    "venue_chase_rate",
+    "venue_played",
+    "team1_top5_batter_sr_mean",
+    "team1_top5_batter_sr_max",
+    "team1_n_batters_qual",
+    "team1_top4_bowler_econ_mean",
+    "team1_top4_bowler_econ_min",
+    "team1_n_bowlers_qual",
+    "team2_top5_batter_sr_mean",
+    "team2_top5_batter_sr_max",
+    "team2_n_batters_qual",
+    "team2_top4_bowler_econ_mean",
+    "team2_top4_bowler_econ_min",
+    "team2_n_bowlers_qual"
+  ],
+  "feature_importance_gain_ranked": [
+    [
+      "team2_top5_batter_sr_max",
+      500.3967542052269
+    ],
+    [
+      "team2_top4_bowler_econ_mean",
+      424.152450799942
+    ],
+    [
+      "team2_top5_batter_sr_mean",
+      394.0866709947586
+    ],
+    [
+      "team2_top4_bowler_econ_min",
+      308.43873846530914
+    ],
+    [
+      "team1_top5_batter_sr_max",
+      291.6819097995758
+    ],
+    [
+      "team1_top4_bowler_econ_min",
+      274.8135404586792
+    ],
+    [
+      "team1_career_wr",
+      266.88279116153717
+    ],
+    [
+      "team1_top4_bowler_econ_mean",
+      255.75066113471985
+    ],
+    [
+      "team1_season_played",
+      250.89795970916748
+    ],
+    [
+      "team2_career_wr",
+      250.60674232244492
+    ],
+    [
+      "team1_top5_batter_sr_mean",
+      233.15345084667206
+    ],
+    [
+      "venue_played",
+      207.58342945575714
+    ],
+    [
+      "team1_season_wr",
+      188.8725402355194
+    ],
+    [
+      "team2_career_played",
+      171.59906947612762
+    ],
+    [
+      "venue_chase_rate",
+      166.1335892677307
+    ],
+    [
+      "team1_venue_wr",
+      148.9880415201187
+    ],
+    [
+      "team1_career_played",
+      134.6995508670807
+    ],
+    [
+      "team1_n_bowlers_qual",
+      133.0941092967987
+    ],
+    [
+      "team1_n_batters_qual",
+      128.4548909664154
+    ],
+    [
+      "team2_n_batters_qual",
+      125.24380934238434
+    ],
+    [
+      "team2_season_wr",
+      94.20069026947021
+    ],
+    [
+      "team2_season_played",
+      83.61468923091888
+    ],
+    [
+      "team2_n_bowlers_qual",
+      82.44301009178162
+    ],
+    [
+      "team2_venue_wr",
+      51.97754979133606
+    ],
+    [
+      "team2_form5",
+      41.329349994659424
+    ],
+    [
+      "team1_form5",
+      9.815710067749023
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  },
+  "base_feature_count": 14,
+  "player_feature_count": 12
+}
