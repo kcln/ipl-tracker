@@ -20,3 +20,7 @@ ml/.venv/
 ml/__pycache__/
 ml/**/__pycache__/
 ml/**/.pytest_cache/
+
+# v6 — local-only caches
+ml/data/historical/v6/raw/
+ml/.tools-venv/
