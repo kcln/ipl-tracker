@@ -96,6 +96,15 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; 
     inputs, so the comparison is apples-to-apples.
   </p>
 
+  <h2>v1 logistic regression — <span class="warn">killed</span></h2>
+  <div class="card">
+    <p><b>2024 val:</b> 46.5% · <b>2025 test:</b> 41.4% · <b>Brier:</b> 0.261</p>
+    <p class="muted">Falls below kill criterion (val &lt; heuristic + 2%). Predicted probabilities cluster
+      tightly at 0.5 (std ≈ 0.035) — features are nearly uninformative on cricsheet-only inputs. Not integrated.
+      See <code>ml/PROGRESS.md</code> for post-mortem.</p>
+    <img src="calibration_v1.png" alt="v1 logistic reliability diagram" style="max-width:100%;border:1px solid #eee;border-radius:8px;">
+  </div>
+
   <h2>Version history</h2>
   <p class="muted">See <code>ml/docs/model_history.md</code>.</p>
 

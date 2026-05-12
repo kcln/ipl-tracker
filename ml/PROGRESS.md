@@ -6,7 +6,7 @@ Branch: `ml-engine` · Started: 2026-05-12
 
 - [x] Phase -1: Infrastructure setup
 - [x] Phase 0: Data foundation + backtest harness + heuristic baseline
-- [ ] Phase 1: v1 logistic regression with calibration
+- [x] Phase 1: v1 logistic regression with calibration (KILLED — see below)
 - [ ] Phase 2: Live win-probability model
 - [ ] Phase 3: Per-phase GBM models
 - [ ] Phase 4: Player-level features
@@ -37,6 +37,7 @@ Concerns to keep in mind:
 
 | Version | Name | Date | Train seasons | Test season | Acc | Brier | Notes |
 |---|---|---|---|---|---|---|---|
+| v1 | logistic + isotonic | 2026-05-12 | 2008–2023 | 2025 | 41.4% | 0.261 | 9 features, C=0.1. KILLED. |
 
 ## Test-set integrity log
 
@@ -44,6 +45,7 @@ Each row records the single time 2025 was touched for a given model version.
 
 | Version | Touched at (UTC) | Acc | Brier |
 |---|---|---|---|
+| v1_logistic | 2026-05-12 | 41.4% | 0.261 |
 
 ## Kill-criteria log
 
@@ -51,3 +53,14 @@ Phases that hit kill criteria and what was done.
 
 | Phase | Issue | Action |
 |---|---|---|
+| 0 | 2025 heuristic accuracy 54.3% < 60% floor | Documented, continued. |
+| 1 | v1 val accuracy 46.5% < heuristic + 2% (58.3%) | Documented, did not integrate, continued. |
+
+### Phase 1 post-mortem
+- v1 logistic test accuracy 41.4% — worse than always-team2 baseline (52.9%).
+- Predicted probability std on test = 0.035; features are nearly uninformative on cricsheet-only inputs.
+- Likely causes:
+  1. No feature scaling — `qualified_flag_diff` is integer counts, others are in [-1, 1]; the optimiser hit overflow warnings on early CV folds.
+  2. `venue_chase_rate` returns 0 always (placeholder; cricsheet matches.parquet has `win_by_wickets` but my state only stored winners).
+  3. The single most predictive heuristic signals (squad ranks, home_team) are unavailable from cricsheet alone.
+- For Phase 3 (per-phase GBMs) I'll add `StandardScaler` and richer features that read `win_by_wickets` from matches.parquet directly.

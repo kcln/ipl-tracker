@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "name": "logistic",
+  "model_type": "logistic_regression_isotonic",
+  "created_at_utc": "2026-05-12T17:47:28.306916Z",
+  "git_sha": "b818a9fe66ddf91fb296d2d03909ea4ebda8578e",
+  "sklearn_version": "1.5.2",
+  "training_seasons": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2021,
+    2022,
+    2023
+  ],
+  "validation_season": 2024,
+  "test_season": 2025,
+  "best_C": 0.1,
+  "cv_mean_neg_log_loss": -0.6989013653937063,
+  "validation_accuracy": 0.4647887323943662,
+  "validation_brier": 0.25263035121040384,
+  "validation_log_loss": 0.6981656086896765,
+  "test_accuracy": 0.4142857142857143,
+  "test_brier": 0.2612821305550266,
+  "test_log_loss": 0.7158246228505362,
+  "feature_names": [
+    "form_last5_diff",
+    "season_nrr_diff",
+    "squad_strength_diff",
+    "home_advantage_diff",
+    "h2h_season_diff",
+    "venue_chase_rate",
+    "pom_recency_diff",
+    "qualified_flag_diff",
+    "strength_of_schedule_diff"
+  ],
+  "coefficients": {
+    "form_last5_diff": -0.03819148605969795,
+    "season_nrr_diff": 0.03533578523101124,
+    "squad_strength_diff": 0.38314228185056914,
+    "home_advantage_diff": 0.005869237888210982,
+    "h2h_season_diff": 0.0043346556788166546,
+    "venue_chase_rate": 0.0,
+    "pom_recency_diff": -0.13366054481600267,
+    "qualified_flag_diff": -0.045941539904587124,
+    "strength_of_schedule_diff": 0.030164675116992785
+  },
+  "intercept": 0.04571734866747868,
+  "feature_importance_ranked": [
+    [
+      "squad_strength_diff",
+      0.38314228185056914
+    ],
+    [
+      "pom_recency_diff",
+      0.13366054481600267
+    ],
+    [
+      "qualified_flag_diff",
+      0.045941539904587124
+    ],
+    [
+      "form_last5_diff",
+      0.03819148605969795
+    ],
+    [
+      "season_nrr_diff",
+      0.03533578523101124
+    ],
+    [
+      "strength_of_schedule_diff",
+      0.030164675116992785
+    ],
+    [
+      "home_advantage_diff",
+      0.005869237888210982
+    ],
+    [
+      "h2h_season_diff",
+      0.0043346556788166546
+    ],
+    [
+      "venue_chase_rate",
+      0.0
+    ]
+  ],
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70
+}
