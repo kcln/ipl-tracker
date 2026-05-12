@@ -311,7 +311,22 @@ def _sync_recipients_from_sheet() -> None:
         _log(f"recipient sync rejected: {data.get('error')}", "warn")
         return
 
-    sheet_phones = data.get("recipients") or []
+    raw_phones = data.get("recipients") or []
+
+    # Google Sheets strips the leading + from E.164 numbers because they look
+    # numeric. Restore it for any all-digit value that's 10–15 chars.
+    def _normalize(p):
+        p = str(p or "").strip()
+        if not p:
+            return ""
+        if p.startswith("+"):
+            return p
+        if p.isdigit() and 10 <= len(p) <= 15:
+            return "+" + p
+        return p
+
+    sheet_phones = [_normalize(p) for p in raw_phones]
+    sheet_phones = [p for p in sheet_phones if p]
     if not sheet_phones:
         return
 
