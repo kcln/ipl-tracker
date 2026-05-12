@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bento · IPL 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #F5F5F7;
+    --card:         #FFFFFF;
+    --card-2:       #FAFAFB;
+    --ink:          #1D1D1F;
+    --ink-2:        #424246;
+    --ink-soft:     rgba(29,29,31,0.62);
+    --ink-faint:    rgba(29,29,31,0.40);
+    --hair:         rgba(29,29,31,0.10);
+    --hair-soft:    rgba(29,29,31,0.06);
+    --rose:         #E11D48;
+    --rose-soft:    rgba(225,29,72,0.08);
+    --blue:         #2563EB;
+    --blue-soft:    rgba(37,99,235,0.08);
+    --emerald:      #059669;
+    --emerald-soft: rgba(5,150,105,0.08);
+    --radius-lg:    24px;
+    --radius-md:    16px;
+    --radius-sm:    10px;
+    --shadow-sm:    0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:    0 1px 2px rgba(0,0,0,0.03), 0 8px 24px -8px rgba(0,0,0,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .ab {
+    background: var(--ink); color: var(--bg);
+    text-align: center; padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .ab a { color: var(--rose); margin: 0 6px; padding: 1px 8px; border-radius: 4px; }
+  .ab a:hover { background: rgba(255,255,255,0.10); }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── NAV ── */
+  nav.bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0;
+  }
+  nav .mark {
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: -0.01em;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  nav .mark::before {
+    content: ''; width: 24px; height: 24px;
+    background: linear-gradient(135deg, var(--rose), var(--blue));
+    border-radius: 8px;
+  }
+  nav .live {
+    font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px;
+    color: var(--ink);
+    padding: 9px 16px;
+    background: var(--card);
+    border-radius: 100px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(225,29,72,0.6); } 50% { box-shadow: 0 0 0 6px rgba(225,29,72,0); } }
+  nav .live:hover { background: var(--ink); color: var(--card); }
+  nav .live:hover .dot { background: var(--rose); }
+
+  /* ── HERO BENTO ── */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .h-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--hair-soft);
+  }
+  .h-card.dark {
+    background: var(--ink); color: var(--card);
+  }
+  .h-card.rose {
+    background: linear-gradient(135deg, var(--rose) 0%, #BE123C 100%);
+    color: var(--card);
+  }
+  .h-card.blue {
+    background: linear-gradient(135deg, var(--blue) 0%, #1D4ED8 100%);
+    color: var(--card);
+  }
+  .h-card .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 18px;
+  }
+  .h-card.dark .kicker, .h-card.rose .kicker, .h-card.blue .kicker { color: rgba(255,255,255,0.72); }
+  .h-card h1 {
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.0; letter-spacing: -0.025em;
+  }
+  .h-card h1 .grad {
+    background: linear-gradient(135deg, var(--rose), var(--blue));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .h-card .lead {
+    margin-top: 18px;
+    color: var(--ink-soft);
+    font-size: 16px; line-height: 1.6;
+    max-width: 52ch;
+  }
+
+  /* Score cell */
+  .score {
+    display: grid; grid-template-rows: auto 1fr auto;
+    gap: 8px;
+    height: 100%;
+  }
+  .score .team-line {
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: 28px; letter-spacing: -0.02em; line-height: 1.05;
+    margin-top: 8px;
+  }
+  .score .team-line .vs { color: rgba(255,255,255,0.55); margin: 0 6px; font-weight: 400; }
+  .score .result {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase;
+    color: rgba(255,255,255,0.84); margin-top: auto;
+  }
+  .score .result .win { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0; text-transform: none; display: block; margin-top: 4px; color: var(--card); }
+
+  /* Stat cell */
+  .stat .v {
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: 56px; letter-spacing: -0.03em; line-height: 1;
+    margin: 10px 0 6px;
+  }
+  .stat .v .small { font-size: 28px; color: var(--ink-faint); margin-left: 2px; }
+  .stat .desc {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  }
+
+  /* ── MATCH LOG ── */
+  .section-head {
+    margin: 56px 0 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-head h2 {
+    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.018em;
+  }
+  .section-head .count {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  details.day {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--hair-soft);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  details.day:hover { box-shadow: var(--shadow-md); }
+  details.day > summary {
+    list-style: none; cursor: pointer;
+    padding: 22px 28px;
+    display: grid; grid-template-columns: 1fr auto; gap: 16px;
+    align-items: center;
+  }
+  details.day > summary::-webkit-details-marker { display: none; }
+  .day-head {
+    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 19px;
+    letter-spacing: -0.015em; line-height: 1.2;
+  }
+  .day-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.20em; text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+  details.day > summary .toggle {
+    width: 32px; height: 32px;
+    background: var(--bg);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-soft);
+    font-family: 'JetBrains Mono', monospace; font-size: 16px;
+    transition: transform 0.25s, background 0.15s, color 0.15s;
+  }
+  details.day[open] > summary .toggle { transform: rotate(45deg); background: var(--rose); color: var(--card); }
+
+  .day-body { padding: 0 28px 24px; }
+  article {
+    padding: 18px 0;
+    border-top: 1px solid var(--hair-soft);
+    display: grid; grid-template-columns: 140px 1fr; gap: 22px;
+    align-items: start;
+  }
+  article:first-of-type { border-top: 1px solid var(--hair); }
+  article .meta {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  article .meta .tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 100px;
+    color: var(--ink); background: var(--bg);
+  }
+  article .meta .tag.morning { color: var(--blue); background: var(--blue-soft); }
+  article .meta .tag.result  { color: var(--rose); background: var(--rose-soft); }
+  article .meta .tag.recap   { color: var(--emerald); background: var(--emerald-soft); }
+  article .meta .when {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  article .body {
+    font-family: 'Work Sans', sans-serif; font-size: 14.5px; line-height: 1.7;
+    color: var(--ink-2);
+    white-space: pre-wrap;
+  }
+  article .body strong { font-weight: 600; color: var(--ink); }
+
+  /* ── SIGNUP (Bento) ── */
+  .signup-grid {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 16px;
+  }
+  .signup-pitch {
+    background: var(--ink); color: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    position: relative; overflow: hidden;
+  }
+  .signup-pitch::before {
+    content: '';
+    position: absolute; bottom: -50%; right: -30%; width: 160%; height: 200%;
+    background: radial-gradient(circle, rgba(225,29,72,0.40) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .signup-pitch-inner { position: relative; }
+  .signup-pitch .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 18px;
+  }
+  .signup-pitch h2 {
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 4vw, 42px); line-height: 1.05; letter-spacing: -0.022em;
+  }
+  .signup-pitch p {
+    margin-top: 16px;
+    color: rgba(255,255,255,0.72);
+    font-size: 15px; line-height: 1.6;
+  }
+  .signup-pitch .stats {
+    margin-top: 28px;
+    display: flex; gap: 28px; flex-wrap: wrap;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+  }
+  .signup-pitch .stats div {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .signup-pitch .stats strong {
+    display: block;
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px;
+    letter-spacing: -0.012em; color: var(--card);
+    margin-bottom: 4px;
+  }
+
+  .signup-form-box {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--hair-soft);
+  }
+  form { display: grid; gap: 18px; }
+  form label {
+    font-family: 'Work Sans', sans-serif; font-weight: 600;
+    font-size: 12px; letter-spacing: 0.04em;
+    color: var(--ink); margin-bottom: 8px; display: block;
+  }
+  input[type="text"], input[type="tel"] {
+    width: 100%; font-family: 'Work Sans', sans-serif; font-size: 16px; font-weight: 500;
+    background: var(--bg); color: var(--ink);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    outline: none;
+    transition: all 0.15s;
+  }
+  input::placeholder { color: var(--ink-faint); }
+  input:focus { background: var(--card); border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+
+  .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .platform label.radio {
+    cursor: pointer; text-align: center;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--ink-soft);
+    margin-bottom: 0;
+    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px;
+    letter-spacing: 0; text-transform: none;
+    border: 1px solid transparent;
+    transition: all 0.12s;
+  }
+  .platform label.radio:has(input:checked) {
+    background: var(--ink); color: var(--card);
+  }
+  .platform input[type="radio"] { display: none; }
+
+  button.send {
+    justify-self: stretch;
+    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px;
+    background: var(--ink); color: var(--card);
+    padding: 16px 24px;
+    border: 0; border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all 0.15s;
+  }
+  button.send::after {
+    content: '→'; font-size: 18px;
+    transition: transform 0.2s;
+  }
+  button.send:hover { background: var(--rose); }
+  button.send:hover::after { transform: translateX(4px); }
+
+  .fine {
+    margin-top: 14px;
+    font-size: 12px; color: var(--ink-faint); line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer.foot {
+    margin: 64px 0 56px;
+    padding: 24px 28px;
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--hair-soft);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+  }
+  footer .made {
+    font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.005em;
+  }
+  footer .made a {
+    background: linear-gradient(120deg, var(--rose-soft), var(--blue-soft));
+    padding: 3px 10px; border-radius: 100px;
+    font-weight: 600;
+  }
+  footer .links {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 800px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .signup-grid { grid-template-columns: 1fr; }
+    article { grid-template-columns: 1fr; gap: 10px; }
+  }
+  @media (max-width: 540px) {
+    .wrap { padding: 0 18px; }
+    .h-card { padding: 24px; }
+    .h-card h1 { font-size: 40px; }
+    details.day > summary { padding: 18px 20px; }
+    .day-body { padding: 0 20px 20px; }
+    .signup-pitch, .signup-form-box { padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ab">
+  Preview · <a href="./bento.html?v=4">Bento</a> <a href="./court.html?v=4">Court</a>
+</div>
+
+<div class="wrap">
+
+  <nav class="bar">
+    <span class="mark">Lakshminarasimham</span>
+    <a class="live" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719"><span class="dot"></span> Live scores →</a>
+  </nav>
+
+  <!-- ── HERO BENTO ── -->
+  <section class="hero-grid">
+    <div class="h-card" style="grid-row: span 2;">
+      <div class="kicker">IPL 2026 · Daily tracker</div>
+      <h1>Every match.<br>Every <span class="grad">prediction.</span></h1>
+      <p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Texted daily to your phone.</p>
+    </div>
+    <div class="h-card dark">
+      <div class="score">
+        <div class="kicker">Most recent</div>
+        <div class="team-line">PBKS <span class="vs">vs</span> DC</div>
+        <div class="result">
+          May 11 · HPCA Stadium
+          <span class="win">DC won by 3 wickets</span>
+        </div>
+      </div>
+    </div>
+    <div class="h-card stat">
+      <div class="kicker">Leader</div>
+      <div class="v" style="color: var(--rose);">RCB</div>
+      <div class="desc">14 pts · NRR +1.103 · Won 7 of last 11</div>
+    </div>
+  </section>
+
+  <!-- ── MATCH LOG ── -->
+  <div class="section-head">
+    <h2>Match log</h2>
+    <span class="count">Day 55 of 74</span>
+  </div>
+
+  <details class="day" open>
+    <summary>
+      <div>
+        <div class="day-head">Monday, May 11 — Punjab Kings vs Delhi Capitals</div>
+        <div class="day-sub">Match 55 · HPCA Stadium · Dharamshala</div>
+      </div>
+      <span class="toggle">+</span>
+    </summary>
+    <div class="day-body">
+
+      <article>
+        <div class="meta">
+          <span class="tag morning">Morning brief</span>
+          <span class="when">5:07 am IST</span>
+        </div>
+        <div class="body">IPL 2026 - Monday, May 11
+
+Today's matches:
+
+Match 1: PBKS vs DC
+7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT
+Prediction: <strong>PBKS</strong> wins
+Reason: PBKS have home advantage at HPCA Stadium
+
+Current top 4: RCB, SRH, GT, PBKS
+Predicted final top 4: <strong>SRH, RCB, GT, RR</strong></div>
+      </article>
+
+      <article>
+        <div class="meta">
+          <span class="tag result">Match result</span>
+          <span class="when">11:42 pm IST</span>
+        </div>
+        <div class="body"><strong>DC</strong> beat PBKS by 3 Wickets
+
+Pre-match prediction: incorrect
+
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: SRH, RCB, GT, RR</div>
+      </article>
+
+      <article>
+        <div class="meta">
+          <span class="tag recap">Day recap</span>
+          <span class="when">12:00 am IST</span>
+        </div>
+        <div class="body">IPL 2026 - Monday, May 11 - Day recap
+
+<strong>DC</strong> beat PBKS by 3 Wickets
+
+Predictions today: 0 of 1 correct
+
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: SRH, RCB, GT, RR</div>
+      </article>
+
+    </div>
+  </details>
+
+  <!-- ── SIGNUP ── -->
+  <section class="signup-grid">
+    <div class="signup-pitch">
+      <div class="signup-pitch-inner">
+        <div class="kicker">Get the texts</div>
+        <h2>Match-day updates, on your phone.</h2>
+        <p>Predictions before play. Results as they happen. A clean recap at night. Free, no ads, opt out anytime.</p>
+        <div class="stats">
+          <div><strong>~3</strong>texts / match day</div>
+          <div><strong>$0</strong>forever</div>
+          <div><strong>1-tap</strong>opt out</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signup-form-box">
+      <form>
+        <div>
+          <label>Name</label>
+          <input type="text" placeholder="Priya Kumar">
+        </div>
+        <div>
+          <label>Phone (with country code)</label>
+          <input type="tel" placeholder="+14155551234">
+        </div>
+        <div>
+          <label>Platform</label>
+          <div class="platform">
+            <label class="radio"><input type="radio" name="p" checked> iPhone</label>
+            <label class="radio"><input type="radio" name="p"> Android</label>
+          </div>
+        </div>
+        <button class="send" type="button">Sign up</button>
+        <p class="fine">Each request is reviewed before texts start. Format: <code>+14155551234</code></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="foot">
+    <span class="made">Built by <a href="https://github.com/kcln/ipl-tracker">KC Lakshminarasimham</a></span>
+    <span class="links">iplt20.com · ESPN Cricinfo</span>
+  </footer>
+
+</div>
+</body>
+</html>
