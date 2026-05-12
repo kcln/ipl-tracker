@@ -94,6 +94,15 @@ def _send_one(body: str, recipient: str) -> bool:
     return True
 
 
+def send_to(body: str, phone: str) -> bool:
+    """Send to a single specific phone, bypassing recipients.txt entirely.
+    Used for STOP/START confirmation messages."""
+    if not phone or not body or not body.strip():
+        return False
+    _ensure_messages_running()
+    return _send_one(body, phone)
+
+
 def send(body: str) -> bool:
     """Send `body` to every recipient in IMESSAGE_RECIPIENT.
 

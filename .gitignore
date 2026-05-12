@@ -5,3 +5,7 @@ __pycache__/
 data/_cache/
 # Recipient list — personal info, kept out of the public repo
 recipients.txt
+# Opt-out list — same reason
+optout.txt
+# STOP/START cursor — tracks last-processed iMessage rowid
+data/messages_cursor.json

@@ -263,7 +263,7 @@ SHELL = """<!doctype html>
             <input id="su-website" name="website" type="text" tabindex="-1" autocomplete="off">
           </div>
           <button class="send" id="signup-submit" type="submit">Sign up</button>
-          <p class="fine" id="signup-fine">Each request is reviewed before texts start. Format: <code>+14155551234</code></p>
+          <p class="fine" id="signup-fine">Each request is reviewed before texts start. Reply <code>STOP</code> anytime to leave, <code>START</code> to rejoin. Format: <code>+14155551234</code></p>
         </form>
         <div class="signup-state" id="signup-state" hidden role="status" aria-live="polite"></div>
       </div>

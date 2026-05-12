@@ -339,7 +339,9 @@ def _sync_recipients_from_sheet() -> None:
             if line:
                 existing.add(line)
 
-    added = [p for p in sheet_phones if p and p not in existing]
+    # Skip phones that previously opted out — they must START to rejoin
+    opted_out = _read_phone_list(REPO_ROOT / "optout.txt")
+    added = [p for p in sheet_phones if p and p not in existing and p not in opted_out]
     if not added:
         return
 
@@ -354,6 +356,112 @@ def _sync_recipients_from_sheet() -> None:
 
 
 # ─────────────────────────────────────────
+# STOP / START opt-out handling
+# ─────────────────────────────────────────
+
+def _read_phone_list(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    out: set[str] = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.split("#", 1)[0].strip()
+        if line:
+            out.add(line)
+    return out
+
+
+def _write_phone_list(path: Path, phones: list[str], header_comment: str | None = None) -> None:
+    """Atomically rewrite a phone list file."""
+    tmp = path.with_suffix(".tmp")
+    with tmp.open("w", encoding="utf-8") as f:
+        if header_comment:
+            f.write(header_comment.rstrip() + "\n\n")
+        for p in phones:
+            f.write(p + "\n")
+    tmp.replace(path)
+
+
+def _process_optout_commands() -> None:
+    """Read STOP / START commands from chat.db and apply them."""
+    try:
+        if __package__ in (None, ""):
+            from src import messages_reader  # type: ignore
+        else:
+            from . import messages_reader
+    except Exception as e:
+        _log(f"messages_reader import failed: {e}", "warn")
+        return
+
+    recipients_path = REPO_ROOT / "recipients.txt"
+    optout_path = REPO_ROOT / "optout.txt"
+
+    actives = _read_phone_list(recipients_path)
+    opted = _read_phone_list(optout_path)
+    eligible = actives | opted
+    if not eligible:
+        return
+
+    commands = messages_reader.poll(eligible)
+    if not commands:
+        return
+
+    # De-duplicate by phone — last command wins
+    final: dict[str, str] = {}
+    for c in commands:
+        final[c["phone"]] = c["command"]
+
+    changes_made = False
+    for phone, command in final.items():
+        if command == "stop":
+            if phone in actives:
+                actives.discard(phone)
+                opted.add(phone)
+                changes_made = True
+                _log(f"STOP from {phone} — removed from recipients", "ok")
+                _send_confirmation(phone, "stop")
+            elif phone in opted:
+                _log(f"STOP from {phone} — already opted out, ignoring")
+        elif command == "start":
+            if phone in opted:
+                opted.discard(phone)
+                actives.add(phone)
+                changes_made = True
+                _log(f"START from {phone} — restored to recipients", "ok")
+                _send_confirmation(phone, "start")
+            elif phone in actives:
+                _log(f"START from {phone} — already active, ignoring")
+
+    if changes_made:
+        _write_phone_list(
+            recipients_path,
+            sorted(actives),
+            header_comment=(
+                "# iMessage recipients for IPL tracker. One per line.\n"
+                "# Phones: +14155551234 (E.164, with country code).\n"
+                "# Lines starting with # are comments. Edit anytime — picked up next run."
+            ),
+        )
+        _write_phone_list(
+            optout_path,
+            sorted(opted),
+            header_comment="# Opted-out recipients. STOP via iMessage adds them here; START removes.",
+        )
+
+
+def _send_confirmation(phone: str, kind: str) -> None:
+    """Send a short confirmation iMessage to the recipient after STOP/START."""
+    if kind == "stop":
+        body = "You're off the IPL tracker list. Reply START anytime to rejoin."
+    elif kind == "start":
+        body = "Welcome back to the IPL tracker. Match-day texts will resume on the next match."
+    else:
+        return
+    ok = imessage_sender.send_to(body, phone)
+    if not ok:
+        _log(f"confirmation send to {phone} failed", "warn")
+
+
+# ─────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────
 
@@ -362,6 +470,10 @@ def main() -> int:
     partial = False
 
     state_obj = state.load()
+
+    # Process inbound STOP / START commands first so opt-outs land before
+    # any new sync re-adds them.
+    _process_optout_commands()
 
     # Pull any new signups before generating messages so newcomers get
     # whichever message is next due to fire.
