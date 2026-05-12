@@ -68,6 +68,20 @@ def morning_message(
         lines.append(_fmt_times(m["date_ist"], m["scheduled_ist"]))
         lines.append(f"Prediction: {winner} wins")
         lines.append(f"Reason: {reason}")
+        # Parallel ML prediction (silent fallback if unavailable)
+        try:
+            from . import ml_predictor as _ml
+            _ml_pred = _ml.predict_pre_match(
+                t1, t2,
+                venue=m.get("venue_name") or m.get("venue", ""),
+                season=2026,
+                match_date=m.get("date_ist"),
+            )
+            _ml_line = _ml.format_ml_line(_ml_pred)
+            if _ml_line:
+                lines.append(_ml_line)
+        except Exception:
+            pass
         lines.append("")
 
     lines.append(_top4_line("Current top 4", predictor.current_top4(standings)))
