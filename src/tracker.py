@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, date
@@ -424,11 +425,80 @@ def main() -> int:
 
     state.save(state_obj)
 
+    # Fill the hero cards (Most recent / Leader) from live data
+    _update_hero(all_matches, standings)
+
     if not _git_push_if_changes():
         partial = True
 
     _log("tracker run complete", "ok")
     return 2 if partial else 0
+
+
+def _update_hero(all_matches: list[dict], standings: list[dict]) -> None:
+    """Replace __HERO_*__ placeholders in docs/index.html with current data."""
+    index = REPO_ROOT / "docs" / "index.html"
+    if not index.exists():
+        return
+    try:
+        html = index.read_text(encoding="utf-8")
+    except OSError:
+        return
+
+    # Most recent completed match
+    completed = [m for m in all_matches if m.get("status") == "complete" and m.get("winner")]
+    completed.sort(key=lambda m: (m.get("date_ist", ""), m.get("scheduled_ist", "")), reverse=True)
+    most_recent = completed[0] if completed else None
+
+    if most_recent:
+        teams = most_recent.get("teams", ["", ""])
+        winner = most_recent.get("winner")
+        loser = teams[1] if winner == teams[0] else teams[0]
+        team_line = f'{teams[0]} <span class="vs">vs</span> {teams[1]}'
+        venue = most_recent.get("venue_name", "")
+        date = most_recent.get("date_ist", "")
+        try:
+            from datetime import datetime as _dt
+            date_disp = _dt.strptime(date, "%Y-%m-%d").strftime("%b %-d")
+        except (ValueError, TypeError):
+            date_disp = date
+        meta_line = f"{date_disp}" + (f" · {venue}" if venue else "")
+        # Extract just "X by Y" from the result text
+        result_txt = most_recent.get("result") or ""
+        margin_match = re.search(r" by (.+?)$", result_txt, re.IGNORECASE)
+        margin = margin_match.group(1).strip() if margin_match else result_txt
+        win_line = f"{winner} won by {margin}" if margin else f"{winner} won"
+    else:
+        team_line = "Season opens soon"
+        meta_line = "IPL 2026"
+        win_line = "First match coming"
+
+    # Leader (top of standings)
+    if standings:
+        leader = standings[0]
+        leader_team = leader.get("team", "—")
+        wins = leader.get("won", 0)
+        played = leader.get("played", 0)
+        pts = leader.get("points", 0)
+        nrr = leader.get("nrr", 0.0)
+        leader_desc = f"{pts} pts · NRR {nrr:+.3f} · {wins} of {played} won"
+    else:
+        leader_team = "—"
+        leader_desc = "Standings pending"
+
+    repls = {
+        "__HERO_MATCH__":       team_line,
+        "__HERO_META__":        meta_line,
+        "__HERO_WIN__":         win_line,
+        "__HERO_LEADER__":      leader_team,
+        "__HERO_LEADER_DESC__": leader_desc,
+        "__MATCH_COUNT__":      f"Day {len(completed)} of 74",
+    }
+    new_html = html
+    for k, v in repls.items():
+        new_html = new_html.replace(k, v)
+    if new_html != html:
+        index.write_text(new_html, encoding="utf-8")
 
 
 if __name__ == "__main__":

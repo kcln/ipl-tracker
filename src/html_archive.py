@@ -31,622 +31,252 @@ SHELL = """<!doctype html>
   <meta charset="utf-8">
   <title>IPL 2026 — Daily tracker · KC Lakshminarasimham</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F5F1EB">
+  <meta name="theme-color" content="#F8F5F1">
   <meta name="description" content="A machine-curated IPL 2026 tracker — predictions in the morning, results after each match, a recap at night. Texted daily.">
   <meta property="og:title" content="IPL 2026 · Daily tracker">
   <meta property="og:description" content="Predictions in the morning, results after each match, a recap at night. Texted daily.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,400;1,700;1,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Page-specific layout — typography, colors, components all come from brand.css */
-    body { padding: 0; }
+    :root {
+      --bg:           #F8F5F1;
+      --card:         #FFFFFF;
+      --card-2:       #FAF8F5;
+      --brown:        #3F2A26;
+      --brown-2:      #5A3E37;
+      --brown-soft:   rgba(63,42,38,0.08);
+      --brown-hair:   rgba(63,42,38,0.14);
+      --ink:          #1F1612;
+      --ink-2:        #3D2E27;
+      --ink-soft:     rgba(31,22,18,0.62);
+      --ink-faint:    rgba(31,22,18,0.40);
+      --hair:         rgba(31,22,18,0.10);
+      --hair-soft:    rgba(31,22,18,0.06);
+      --p-50:  #FAF5FF;  --p-100: #F3E8FF;  --p-200: #E9D5FF;
+      --p-300: #D8B4FE;  --p-400: #C084FC;  --p-500: #A855F7;
+      --p-600: #9333EA;  --p-700: #7E22CE;  --p-800: #6B21A8;  --p-900: #581C87;
+      --radius-lg: 24px;  --radius-md: 16px;  --radius-sm: 10px;
+      --shadow-sm: 0 1px 2px rgba(31,22,18,0.05);
+      --shadow-md: 0 1px 2px rgba(31,22,18,0.04), 0 8px 24px -8px rgba(31,22,18,0.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Work Sans', system-ui, sans-serif; font-weight: 400; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
 
-    /* ── HERO (mirrors kcl-brand) ── */
-    .hero {
-      position: relative;
-      padding: 88px 64px 96px;
-      max-width: 1200px;
-      margin: 0 auto;
-      overflow: visible;
-    }
-    .hero-shape-red   { width: 200px; height: 200px; top: 60px; left: 40px;       background: var(--crimson); }
-    .hero-shape-navy  { width: 130px; height: 130px; top: 50px; right: 80px;      background: var(--indigo); }
-    .hero-shape-amber { width: 80px;  height: 80px;  bottom: 40px; right: 220px;  background: var(--amber); }
-    .hero-shape-rose  { border-left: 56px solid transparent; border-right: 56px solid transparent; border-bottom: 92px solid var(--rose); bottom: 80px; left: 280px; }
-    .hero-inner { position: relative; z-index: 2; }
-    .hero-h1 {
-      font-family: var(--font-hero);
-      font-style: italic;
-      font-weight: 700;
-      font-size: var(--text-3xl);
-      line-height: 0.96;
-      letter-spacing: -0.025em;
-      max-width: 880px;
-      margin: var(--space-6) 0;
-    }
-    .hero-h1 em {
-      font-style: italic;
-      color: var(--crimson);
-      font-weight: 900;
-      position: relative;
-    }
-    .hero-h1 em::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: 8px;
-      height: 10px;
-      background: var(--crimson);
-      opacity: 0.18;
-      z-index: -1;
-    }
-    .hero-sub {
-      font-family: var(--font-body);
-      font-size: var(--text-md);
-      font-weight: 400;
-      line-height: 1.55;
-      color: var(--text-muted);
-      max-width: 620px;
-      background: var(--bg);
-      padding: 14px 20px;
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow);
-      margin-bottom: var(--space-7);
-    }
-    .hero-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-    /* ── Generic section wrapper ── */
-    .section {
-      padding: 64px 64px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    nav.bar { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
+    nav .mark { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: 12px; }
+    nav .mark::before { content: ''; width: 24px; height: 24px; background: linear-gradient(135deg, var(--p-400), var(--p-800)); border-radius: 8px; }
+    nav .live { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink); padding: 9px 16px; background: var(--card); border-radius: 100px; box-shadow: var(--shadow-sm); transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+    nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--p-600); animation: pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(147,51,234,0.6); } 50% { box-shadow: 0 0 0 6px rgba(147,51,234,0); } }
+    nav .live:hover { background: var(--brown); color: var(--card); }
+    nav .live:hover .dot { background: var(--p-400); }
 
-    /* ── Day archive sections (uses brand card aesthetic) ── */
-    main#days { margin-bottom: 0; }
-    details {
-      background: var(--bg-card);
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow);
-      padding: 24px 28px;
-      margin-bottom: 24px;
-    }
-    details:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-hover); transition: transform 0.08s, box-shadow 0.08s; }
-    details > summary {
-      font-family: var(--font-hero);
-      font-style: italic;
-      font-weight: 700;
-      font-size: 26px;
-      letter-spacing: -0.015em;
-      line-height: 1.1;
-      cursor: pointer;
-      list-style: none;
-      display: flex; align-items: center; justify-content: space-between;
-      color: var(--text);
-    }
-    details > summary::after {
-      content: '+';
-      font-family: var(--font-label);
-      font-weight: 500;
-      font-size: 18px;
-      color: var(--text);
-      width: 30px; height: 30px;
-      display: inline-flex; align-items: center; justify-content: center;
-      border: 2px solid var(--text);
-      flex-shrink: 0;
-      background: var(--bg);
-    }
-    details[open] > summary::after { content: '−'; background: var(--crimson); color: #fff; border-color: var(--crimson); }
-    summary::-webkit-details-marker { display: none; }
-    article {
-      border-top: 1px solid var(--border);
-      margin-top: 20px;
-      padding-top: 20px;
-    }
-    article time {
-      display: block;
-      font-family: var(--font-label);
-      font-size: var(--text-xs);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--crimson);
-      font-weight: 500;
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-    article pre {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: var(--text-sm);
-      line-height: 1.75;
-      color: var(--text);
-      white-space: pre-wrap; word-wrap: break-word;
-      background: transparent; border: 0; padding: 0; margin: 0;
-    }
-    article pre strong {
-      font-weight: 700;
-      color: var(--text);
-    }
+    .hero-grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 16px; margin-top: 8px; }
+    .h-card { background: var(--card); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); }
+    .h-card.dark { background: var(--brown); color: var(--card); }
+    .h-card .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 18px; }
+    .h-card.dark .kicker { color: rgba(255,255,255,0.72); }
+    .h-card h1 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(40px, 5.5vw, 64px); line-height: 1.0; letter-spacing: -0.025em; }
+    .h-card h1 .grad { background: linear-gradient(135deg, var(--p-400), var(--p-800)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .h-card .lead { margin-top: 18px; color: var(--ink-soft); font-size: 16px; line-height: 1.6; max-width: 52ch; }
 
-    /* ── Signup section ── */
-    section.signup h2 {
-      font-family: var(--font-hero);
-      font-style: italic;
-      font-weight: 700;
-      font-size: clamp(40px, 6vw, 68px);
-      letter-spacing: -0.022em;
-      line-height: 1.02;
-      margin-bottom: 20px;
-    }
-    section.signup h2 em { font-style: italic; color: var(--crimson); font-weight: 900; }
-    section.signup .lead {
-      font-family: var(--font-body);
-      font-size: var(--text-md);
-      color: var(--text-muted);
-      max-width: 56ch;
-      line-height: 1.65;
-      margin-bottom: 36px;
-    }
+    .score { display: grid; grid-template-rows: auto 1fr auto; gap: 8px; height: 100%; }
+    .score .team-line { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; line-height: 1.05; margin-top: 8px; }
+    .score .team-line .vs { color: rgba(255,255,255,0.55); margin: 0 6px; font-weight: 400; }
+    .score .result { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase; color: rgba(255,255,255,0.84); margin-top: auto; }
+    .score .result .win { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0; text-transform: none; display: block; margin-top: 4px; color: var(--card); }
 
-    /* ── Platform-tab preview ── */
-    .preview-box {
-      background: var(--bg-card);
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow);
-      padding: 0;
-      margin-bottom: 48px;
-    }
-    .preview-tabs { display: flex; border-bottom: 2px solid var(--text); }
-    .preview-tab {
-      flex: 1;
-      font-family: var(--font-label);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      padding: 16px 14px;
-      background: var(--bg-card);
-      color: var(--text-muted);
-      border: 0;
-      border-right: 2px solid var(--text);
-      cursor: pointer;
-      transition: background 0.12s, color 0.12s;
-    }
-    .preview-tab:last-child { border-right: 0; }
-    .preview-tab[aria-selected="true"] { background: var(--text); color: var(--bg); }
-    .preview-tab:hover:not([aria-selected="true"]) { background: var(--bg-hover); color: var(--text); }
-    .preview-pane { padding: 32px 28px; display: none; }
-    .preview-pane[data-active="true"] { display: block; }
+    .stat .v { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 56px; letter-spacing: -0.03em; line-height: 1; margin: 10px 0 6px; color: var(--p-700); }
+    .stat .desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 
-    /* iOS bubble */
-    .ios-frame {
-      background: #fff; border: 1px solid rgba(0,0,0,0.08);
-      max-width: 360px; margin: 0 auto;
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-    }
-    .ios-header {
-      background: linear-gradient(to bottom, #f9f9f9, #efefef);
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      padding: 14px 12px 12px;
-      text-align: center;
-      position: relative;
-    }
-    .ios-header .ios-back { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #007aff; font-size: 17px; line-height: 1; }
-    .ios-header .ios-name { font-size: 13px; font-weight: 600; color: #000; }
-    .ios-header .ios-status { font-size: 11px; color: rgba(0,0,0,0.5); margin-top: 2px; }
-    .ios-body { padding: 18px 14px 22px; background: #fff; min-height: 280px; }
-    .ios-time { text-align: center; font-size: 11px; color: rgba(0,0,0,0.45); font-weight: 500; margin: 4px 0 12px; }
-    .ios-time strong { font-weight: 600; color: rgba(0,0,0,0.7); }
-    .ios-bubble {
-      max-width: 80%; background: #007aff; color: #fff;
-      padding: 8px 12px; border-radius: 18px;
-      font-size: 14px; line-height: 1.4;
-      white-space: pre-wrap; word-wrap: break-word;
-    }
+    .section-head { margin: 56px 0 18px; display: flex; align-items: center; justify-content: space-between; }
+    .section-head h2 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.018em; }
+    .section-head .count { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); }
 
-    /* Android bubble */
-    .and-frame {
-      background: #fff; border: 1px solid rgba(0,0,0,0.08);
-      max-width: 360px; margin: 0 auto;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .and-header { background: #fff; border-bottom: 1px solid rgba(0,0,0,0.08); padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
-    .and-header .and-back { color: #444; font-size: 20px; line-height: 1; }
-    .and-header .and-avatar { width: 32px; height: 32px; background: #1a73e8; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
-    .and-header .and-meta { display: flex; flex-direction: column; }
-    .and-header .and-name { font-size: 14px; font-weight: 500; color: #202124; }
-    .and-header .and-status { font-size: 11px; color: rgba(0,0,0,0.55); }
-    .and-body { padding: 16px 12px 22px; background: #fff; min-height: 280px; }
-    .and-day { text-align: center; font-size: 11px; color: rgba(0,0,0,0.55); font-weight: 500; margin: 4px 0 14px; }
-    .and-bubble {
-      max-width: 80%; background: #e2e2e2; color: #1f1f1f;
-      padding: 10px 14px; border-radius: 18px 18px 18px 4px;
-      font-size: 14px; line-height: 1.45;
-      white-space: pre-wrap; word-wrap: break-word;
-      margin-right: auto;
-    }
-    .and-tag { font-size: 10px; color: rgba(0,0,0,0.45); letter-spacing: 0.02em; margin-top: 6px; text-transform: uppercase; }
+    main#days { display: block; }
 
-    /* ── Form (Bauhaus inputs) ── */
-    form.signup-form { display: grid; gap: 22px; max-width: 560px; }
-    form.signup-form label {
-      display: block;
-      font-family: var(--font-label);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-    form.signup-form input[type="text"],
-    form.signup-form input[type="tel"] {
-      width: 100%;
-      font-family: var(--font-body);
-      font-size: var(--text-base);
-      font-weight: 500;
-      padding: 14px 16px;
-      background: var(--bg-card);
-      color: var(--text);
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow-chip);
-      transition: transform 0.12s, box-shadow 0.12s;
-    }
-    form.signup-form input:focus {
-      outline: 0;
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow);
-      border-color: var(--crimson);
-    }
-    .platform-radios { display: flex; gap: 14px; }
-    .platform-radios label.radio {
-      flex: 1;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: var(--text-sm);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 14px;
-      background: var(--bg-card);
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow-chip);
-      color: var(--text);
-      transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
-      user-select: none;
-      margin-bottom: 0;
-    }
-    .platform-radios label.radio:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: var(--shadow);
-    }
-    .platform-radios input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-    .platform-radios label.radio:has(input:checked) {
-      background: var(--text);
-      color: var(--bg);
-      transform: translate(2px, 2px);
-      box-shadow: 0 0 0 0 var(--text);
-    }
-    .form-fine {
-      font-size: var(--text-sm);
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-top: 8px;
-      max-width: 56ch;
-    }
-    .form-fine code {
-      font-family: var(--font-label);
-      font-size: 12px;
-      background: var(--bg-hover);
-      padding: 2px 6px;
-      border: 1px solid var(--border);
-    }
+    details.day { background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); box-shadow: var(--shadow-sm); margin-bottom: 14px; overflow: hidden; transition: box-shadow 0.2s; }
+    details.day:hover { box-shadow: var(--shadow-md); }
+    details.day > summary { list-style: none; cursor: pointer; padding: 22px 28px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+    details.day > summary::-webkit-details-marker { display: none; }
+    .day-head { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: -0.015em; line-height: 1.2; }
+    .day-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--ink-faint); margin-top: 6px; }
+    details.day > summary .toggle { width: 32px; height: 32px; background: var(--bg); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: 'JetBrains Mono', monospace; font-size: 16px; transition: transform 0.25s, background 0.15s, color 0.15s; }
+    details.day[open] > summary .toggle { transform: rotate(45deg); background: var(--p-700); color: var(--card); }
 
-    /* Honeypot — off-screen so humans never see/tab to it */
-    .honey {
-      position: absolute !important;
-      left: -10000px !important;
-      width: 1px; height: 1px;
-      overflow: hidden;
-    }
+    .day-body { padding: 0 28px 24px; }
+    article { padding: 18px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 160px 1fr; gap: 22px; align-items: start; }
+    article:first-of-type { border-top: 1px solid var(--hair); }
+    article .meta { display: flex; flex-direction: column; gap: 8px; }
+    article .meta .tag { display: inline-block; align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
+    article .meta .tag.morning { color: var(--p-700); background: var(--p-100); }
+    article .meta .tag.result  { color: var(--card);  background: var(--p-700); }
+    article .meta .tag.recap   { color: var(--card);  background: var(--brown); }
+    article .meta .when { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); line-height: 1.7; }
+    article .meta .when span { display: block; }
+    article .body { font-family: 'Work Sans', sans-serif; font-size: 14.5px; line-height: 1.7; color: var(--ink-2); white-space: pre-wrap; }
+    article .body strong { font-weight: 700; color: var(--p-800); }
 
-    /* Inline success / error / cap state */
-    .signup-state {
-      margin-top: 8px;
-      padding: 22px 26px;
-      background: var(--bg-card);
-      border: var(--border-width) solid var(--text);
-      box-shadow: var(--shadow);
-      font-family: var(--font-body);
-      font-size: var(--text-base);
-      line-height: 1.55;
-      color: var(--text);
-    }
-    .signup-state.success { border-color: var(--teal); box-shadow: 4px 4px 0 0 var(--teal); }
-    .signup-state.error   { border-color: var(--crimson); box-shadow: 4px 4px 0 0 var(--crimson); }
-    .signup-state .state-label {
-      display: block;
-      font-family: var(--font-label);
-      font-size: var(--text-xs);
-      font-weight: 700;   /* bolder per request */
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .signup-state.success .state-label { color: var(--teal); }
-    .signup-state.error   .state-label { color: var(--crimson); }
-    .signup-state .state-headline {
-      font-family: var(--font-hero);
-      font-style: italic;
-      font-weight: 900;   /* bolder per request — full Playfair black */
-      font-size: 32px;
-      letter-spacing: -0.018em;
-      line-height: 1.06;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .signup-state.success .state-headline { color: var(--teal); }
-    .signup-state.error   .state-headline { color: var(--crimson); }
-    .signup-state.success .state-headline em { color: var(--teal); font-style: italic; font-weight: 900; }
-    .signup-state.error   .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
-    .signup-state .state-body {
-      color: var(--text-muted);
-      font-size: var(--text-sm);
-      line-height: 1.6;
-    }
-    .signup-state button.try-again {
-      margin-top: 14px;
-      font-family: var(--font-label);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text);
-      background: var(--bg);
-      border: 2px solid var(--text);
-      padding: 8px 14px;
-      cursor: pointer;
-      transition: background 0.12s;
-    }
-    .signup-state button.try-again:hover { background: var(--bg-hover); }
+    .signup-grid { margin-top: 56px; display: grid; grid-template-columns: 5fr 7fr; gap: 16px; }
+    .signup-pitch { background: var(--brown); color: var(--card); border-radius: var(--radius-lg); padding: 36px 32px; position: relative; overflow: hidden; }
+    .signup-pitch::before { content: ''; position: absolute; bottom: -50%; right: -30%; width: 160%; height: 200%; background: radial-gradient(circle, rgba(168,85,247,0.40) 0%, transparent 60%); pointer-events: none; }
+    .signup-pitch-inner { position: relative; }
+    .signup-pitch .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-300); margin-bottom: 18px; }
+    .signup-pitch h2 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; letter-spacing: -0.022em; }
+    .signup-pitch p { margin-top: 16px; color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.6; }
+    .signup-pitch .stats { margin-top: 28px; display: flex; gap: 28px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.10); }
+    .signup-pitch .stats div { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+    .signup-pitch .stats strong { display: block; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.012em; color: var(--card); margin-bottom: 4px; }
 
-    /* ── Footer (mirrors kcl-brand) ── */
-    .footer {
-      margin-top: var(--space-7);
-      padding: 36px 64px;
-      border-top: var(--border-width) solid var(--text);
-      max-width: 1200px;
-      margin-left: auto; margin-right: auto;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 18px;
-      font-family: var(--font-label);
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .footer-name {
-      font-family: var(--font-hero);
-      font-style: italic;
-      font-weight: 700;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-      text-transform: none;
-      color: var(--text);
-    }
-    .footer-name a {
-      color: var(--text);
-      border-bottom: 2px solid var(--crimson);
-      padding-bottom: 1px;
-      transition: color 0.12s;
-    }
-    .footer-name a:hover { color: var(--crimson); }
-    .footer-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .footer-links a {
-      color: var(--crimson);
-      border-bottom: 1px solid var(--crimson);
-      text-transform: none;
-      letter-spacing: 0.02em;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .footer-sep { color: var(--text-faint); }
+    .signup-form-box { background: var(--card); border-radius: var(--radius-lg); padding: 36px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); }
+    form { display: grid; gap: 18px; }
+    form label { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; color: var(--ink); margin-bottom: 8px; display: block; }
+    input[type="text"], input[type="tel"] { width: 100%; font-family: 'Work Sans', sans-serif; font-size: 16px; font-weight: 500; background: var(--bg); color: var(--ink); border: 1px solid transparent; border-radius: var(--radius-sm); padding: 14px 16px; outline: none; transition: all 0.15s; }
+    input::placeholder { color: var(--ink-faint); }
+    input:focus { background: var(--card); border-color: var(--p-600); box-shadow: 0 0 0 4px var(--p-100); }
 
-    @media (max-width: 768px) {
-      .brand-nav { padding: 16px 20px; }
-      .brand-nav-links { display: none; }
-      .hero { padding: 48px 20px 72px; }
-      .hero-shape-red { width: 130px; height: 130px; top: 30px; left: -30px; }
-      .hero-shape-navy { width: 80px; height: 80px; top: 20px; right: -20px; }
-      .hero-shape-amber, .hero-shape-rose { display: none; }
-      .section { padding: 48px 20px; }
-      .footer { padding: 24px 20px; }
-      details > summary { font-size: 22px; }
-      .live-source .live-logo { max-height: 30px; }
-    }
+    .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .platform label.radio { cursor: pointer; text-align: center; padding: 14px; border-radius: var(--radius-sm); background: var(--bg); color: var(--ink-soft); margin-bottom: 0; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0; text-transform: none; border: 1px solid transparent; transition: all 0.12s; }
+    .platform label.radio:has(input:checked) { background: var(--brown); color: var(--card); }
+    .platform input[type="radio"] { display: none; }
 
+    /* Honeypot — off-screen */
+    .honey { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+
+    button.send { justify-self: stretch; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; background: var(--brown); color: var(--card); padding: 16px 24px; border: 0; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.15s; }
+    button.send::after { content: '→'; font-size: 18px; transition: transform 0.2s; }
+    button.send:hover { background: var(--p-700); }
+    button.send:hover::after { transform: translateX(4px); }
+    button.send:disabled { opacity: 0.6; cursor: wait; }
+
+    .fine { margin-top: 14px; font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
+    .fine code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+    /* Inline success / error state */
+    .signup-state { padding: 28px 32px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); box-shadow: var(--shadow-md); }
+    .signup-state .state-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px; }
+    .signup-state .state-headline { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.018em; line-height: 1.08; margin-bottom: 8px; }
+    .signup-state .state-body { color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
+    .signup-state.success .state-label, .signup-state.success .state-headline { color: var(--p-700); }
+    .signup-state.success .state-headline em { color: var(--p-800); font-style: italic; font-weight: 900; }
+    .signup-state.error   .state-label, .signup-state.error   .state-headline { color: var(--brown); }
+    .signup-state.error   .state-headline em { color: var(--brown-2); font-style: italic; font-weight: 900; }
+    .signup-state button.try-again { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); background: var(--bg); border: 1px solid var(--hair); border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer; transition: background 0.12s; }
+    .signup-state button.try-again:hover { background: var(--p-100); }
+
+    footer.foot { margin: 64px 0 56px; padding: 24px 28px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    footer .made { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+    footer .made a { background: linear-gradient(120deg, var(--p-100), var(--p-200)); color: var(--p-800); padding: 3px 10px; border-radius: 100px; font-weight: 600; }
+    footer .links { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+
+    @media (max-width: 800px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .signup-grid { grid-template-columns: 1fr; }
+      article { grid-template-columns: 1fr; gap: 10px; }
+    }
+    @media (max-width: 540px) {
+      .wrap { padding: 0 18px; }
+      .h-card { padding: 24px; }
+      .h-card h1 { font-size: 40px; }
+      details.day > summary { padding: 18px 20px; }
+      .day-body { padding: 0 20px 20px; }
+      .signup-pitch, .signup-form-box { padding: 28px 24px; }
+    }
   </style>
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="wrap">
 
-  <!-- ── NAV ── -->
-  <nav class="brand-nav" aria-label="Primary">
-    <a href="https://github.com/kcln" class="brand-logo" target="_blank" rel="noopener" aria-label="KC Lakshminarasimham">
-      <span class="brand-mark"><img src="assets/lion-transparent.png" alt="Simham lion mark" width="40" height="40"></span>
-    </a>
-    <ul class="brand-nav-links">
-      <li><a href="#match-log" class="active">Match log</a></li>
-      <li><a href="#signup">Get the texts</a></li>
-      <li><a href="https://github.com/kcln/ipl-tracker" target="_blank" rel="noopener">Source</a></li>
-    </ul>
-    <a href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" class="btn btn-primary" target="_blank" rel="noopener">Live Scores →</a>
-  </nav>
+    <nav class="bar">
+      <span class="mark">Lakshminarasimham</span>
+      <a class="live" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" target="_blank" rel="noopener"><span class="dot"></span> Live scores →</a>
+    </nav>
 
-  <main id="main">
-
-    <!-- ── HERO ── -->
-    <section class="hero">
-      <div class="brand-shape hero-shape-red"></div>
-      <div class="brand-shape brand-shape-circle hero-shape-navy"></div>
-      <div class="brand-shape hero-shape-amber"></div>
-      <div class="brand-shape brand-shape-triangle hero-shape-rose"></div>
-
-      <div class="hero-inner">
-        <div class="brand-eyebrow">IPL 2026 · Daily tracker</div>
-        <h1 class="hero-h1">Every match.<br>Every <em>prediction.</em></h1>
-        <p class="hero-sub">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Texted daily. Public archive below.</p>
-        <div class="hero-actions">
-          <a href="#signup" class="btn btn-primary">Get the texts</a>
-          <a href="#match-log" class="btn btn-ghost">Browse the archive →</a>
+    <section class="hero-grid">
+      <div class="h-card" style="grid-row: span 2;">
+        <div class="kicker">IPL 2026 · Daily tracker</div>
+        <h1>Every match.<br>Every <span class="grad">prediction.</span></h1>
+        <p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Texted daily to your phone.</p>
+      </div>
+      <div class="h-card dark">
+        <div class="score">
+          <div class="kicker">Most recent</div>
+          <div class="team-line" id="hero-match">__HERO_MATCH__</div>
+          <div class="result">
+            <span id="hero-meta">__HERO_META__</span>
+            <span class="win" id="hero-win">__HERO_WIN__</span>
+          </div>
         </div>
+      </div>
+      <div class="h-card stat">
+        <div class="kicker">Leader</div>
+        <div class="v" id="hero-leader">__HERO_LEADER__</div>
+        <div class="desc" id="hero-leader-desc">__HERO_LEADER_DESC__</div>
       </div>
     </section>
 
-    <!-- ── MATCH LOG ── -->
-    <section class="section" id="match-log">
-      <div class="brand-section-label">Match log</div>
-      <div id="days"></div>
-    </section>
+    <div class="section-head">
+      <h2>Match log</h2>
+      <span class="count" id="match-count">__MATCH_COUNT__</span>
+    </div>
 
-    <!-- ── SIGNUP ── -->
-    <section class="section signup" id="signup">
-      <div class="brand-section-label">Get the texts</div>
-      <h2>Want the daily updates on <em>your phone?</em></h2>
-      <p class="lead">Drop your number below and pick your platform. I'll add you to the next morning's batch — predictions before play, results after every match, day recap at night.</p>
+    <main id="days"></main>
 
-      <div class="preview-box" id="preview-box">
-        <div class="preview-tabs" role="tablist" aria-label="Message preview platform">
-          <button class="preview-tab" role="tab" aria-selected="true" data-target="ios-pane">iPhone (iMessage)</button>
-          <button class="preview-tab" role="tab" aria-selected="false" data-target="and-pane">Android (SMS)</button>
-        </div>
-
-        <div class="preview-pane" id="ios-pane" data-active="true" role="tabpanel">
-          <div class="ios-frame">
-            <div class="ios-header">
-              <span class="ios-back">‹</span>
-              <div class="ios-name">IPL Tracker</div>
-              <div class="ios-status">iMessage</div>
-            </div>
-            <div class="ios-body">
-              <div class="ios-time"><strong>Today</strong> 11:42 PM</div>
-              <div class="ios-bubble">IPL 2026 - Monday, May 11 - Day recap
-
-DC beat PBKS by 3 Wickets
-
-Predictions today: 0 of 1 correct
-
-Updated top 4: RCB, SRH, GT, PBKS
-Predicted final top 4: SRH, RCB, GT, RR
-
-Archive: https://kcln.github.io/ipl-tracker/</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="preview-pane" id="and-pane" role="tabpanel">
-          <div class="and-frame">
-            <div class="and-header">
-              <span class="and-back">←</span>
-              <div class="and-avatar">I</div>
-              <div class="and-meta">
-                <span class="and-name">IPL Tracker</span>
-                <span class="and-status">SMS · just now</span>
-              </div>
-            </div>
-            <div class="and-body">
-              <div class="and-day">Today, 11:42 PM</div>
-              <div class="and-bubble">IPL 2026 - Monday, May 11 - Day recap
-
-DC beat PBKS by 3 Wickets
-
-Predictions today: 0 of 1 correct
-
-Updated top 4: RCB, SRH, GT, PBKS
-Predicted final top 4: SRH, RCB, GT, RR
-
-Archive: https://kcln.github.io/ipl-tracker/</div>
-              <div class="and-tag">via SMS · forwarded from iMessage</div>
-            </div>
+    <section class="signup-grid" id="signup">
+      <div class="signup-pitch">
+        <div class="signup-pitch-inner">
+          <div class="kicker">Get the texts</div>
+          <h2>Match-day updates, on your phone.</h2>
+          <p>Predictions before play. Results as they happen. A clean recap at night. Free, no ads, opt out anytime.</p>
+          <div class="stats">
+            <div><strong>~3</strong>texts / match day</div>
+            <div><strong>1-tap</strong>opt out</div>
           </div>
         </div>
       </div>
 
-      <form class="signup-form" id="signup-form" novalidate>
-        <div>
-          <label for="su-name">Name</label>
-          <input id="su-name" name="name" type="text" autocomplete="name" placeholder="e.g. Priya Kumar">
-        </div>
-        <div>
-          <label for="su-phone">Phone (with country code)</label>
-          <input id="su-phone" name="phone" type="tel" autocomplete="tel" placeholder="+14155551234" required>
-        </div>
-        <div>
-          <label>Platform</label>
-          <div class="platform-radios">
-            <label class="radio"><input type="radio" name="platform" value="iPhone" checked> iPhone</label>
-            <label class="radio"><input type="radio" name="platform" value="Android"> Android</label>
+      <div class="signup-form-box">
+        <form id="signup-form" novalidate>
+          <div>
+            <label for="su-name">Name</label>
+            <input id="su-name" name="name" type="text" autocomplete="name" placeholder="Priya Kumar">
           </div>
-        </div>
-        <!-- Honeypot — bots fill, humans don't see this -->
-        <div class="honey" aria-hidden="true">
-          <label for="su-website">Website (leave blank)</label>
-          <input id="su-website" name="website" type="text" tabindex="-1" autocomplete="off">
-        </div>
-        <button class="btn btn-primary" id="signup-submit" type="submit">Sign up →</button>
-        <p class="form-fine" id="signup-fine">Each request is reviewed before texts start. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
-      </form>
-      <!-- Success / error / cap states (toggled by JS) -->
-      <div class="signup-state" id="signup-state" hidden role="status" aria-live="polite"></div>
+          <div>
+            <label for="su-phone">Phone (with country code)</label>
+            <input id="su-phone" name="phone" type="tel" autocomplete="tel" placeholder="+14155551234" required>
+          </div>
+          <div>
+            <label>Platform</label>
+            <div class="platform">
+              <label class="radio"><input type="radio" name="platform" value="iPhone" checked> iPhone</label>
+              <label class="radio"><input type="radio" name="platform" value="Android"> Android</label>
+            </div>
+          </div>
+          <div class="honey" aria-hidden="true">
+            <label for="su-website">Website</label>
+            <input id="su-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <button class="send" id="signup-submit" type="submit">Sign up</button>
+          <p class="fine" id="signup-fine">Each request is reviewed before texts start. Format: <code>+14155551234</code></p>
+        </form>
+        <div class="signup-state" id="signup-state" hidden role="status" aria-live="polite"></div>
+      </div>
     </section>
 
-  </main>
+    <footer class="foot">
+      <span class="made">Built by <a href="https://github.com/kcln/ipl-tracker" target="_blank" rel="noopener">KC Lakshminarasimham</a></span>
+      <span class="links">iplt20.com · ESPN Cricinfo</span>
+    </footer>
 
-  <!-- ── FOOTER ── -->
-  <footer class="footer">
-    <span class="footer-name">Built by <a href="https://github.com/kcln/ipl-tracker" target="_blank" rel="noopener">KC Lakshminarasimham</a></span>
-    <span class="footer-links">
-      <a href="https://github.com/kcln/ipl-tracker" target="_blank" rel="noopener">Source on GitHub</a>
-      <span class="footer-sep">·</span>
-      <a href="https://www.iplt20.com/" target="_blank" rel="noopener">iplt20.com</a>
-      <span class="footer-sep">·</span>
-      <a href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" target="_blank" rel="noopener">ESPN Cricinfo</a>
-    </span>
-  </footer>
+  </div>
 
   <script>
-    // Platform tabs
-    document.querySelectorAll('.preview-tab').forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        document.querySelectorAll('.preview-tab').forEach(function (t) {
-          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-        });
-        document.querySelectorAll('.preview-pane').forEach(function (p) {
-          p.setAttribute('data-active', p.id === tab.dataset.target ? 'true' : 'false');
-        });
-      });
-    });
-
-    // Sync platform radios with the preview tabs (and vice versa)
-    document.querySelectorAll('input[name="platform"]').forEach(function (radio) {
-      radio.addEventListener('change', function () {
-        var target = radio.value === 'iPhone' ? 'ios-pane' : 'and-pane';
-        document.querySelector('.preview-tab[data-target="' + target + '"]').click();
-      });
-    });
-    document.querySelectorAll('.preview-tab').forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var val = tab.dataset.target === 'ios-pane' ? 'iPhone' : 'Android';
-        var radio = document.querySelector('input[name="platform"][value="' + val + '"]');
-        if (radio && !radio.checked) radio.checked = true;
-      });
-    });
-
-    // Form → Google Apps Script ($0, KC-owned Sheet log, 100/day cap, IP rate-limit, honeypot)
     var SIGNUP_URL = 'https://script.google.com/macros/s/AKfycbx8wwSgBEPz-SMMTtsi2sEt9xzAUWgDBAtN7Wdg94wJb8VLT-Q5dctZDO0rl_1s4yV6/exec';
 
     var formEl   = document.getElementById('signup-form');
@@ -667,37 +297,34 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
         stateEl.hidden = true;
         formEl.hidden = false;
         submitEl.disabled = false;
-        submitEl.textContent = 'Sign up →';
+        submitEl.textContent = 'Sign up';
       });
     }
 
-    // Page-load preflight — disable form if daily cap is full
     fetch(SIGNUP_URL, { method: 'GET' })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.full) {
-          showState('error',
-            'Full for today',
+          showState('error', 'Full for today',
             'Sign-ups are <em>full</em> for today.',
-            'Come back after midnight Pacific time — capacity resets daily. Your spot will be there.',
+            'Come back after midnight Pacific time — capacity resets daily.',
             false);
         }
       })
-      .catch(function () { /* silently ignore — form still works */ });
+      .catch(function () {});
 
-    // Visitor IP — best-effort via ipify (no PII, just rate-limit material)
     var visitorIP = '';
     fetch('https://api.ipify.org?format=json')
       .then(function (r) { return r.json(); })
       .then(function (d) { visitorIP = (d && d.ip) || ''; })
-      .catch(function () { /* ignore — Apps Script just skips the per-IP check */ });
+      .catch(function () {});
 
     formEl.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var name     = (document.getElementById('su-name').value || '').trim();
       var phone    = (document.getElementById('su-phone').value || '').trim();
       var platform = (document.querySelector('input[name="platform"]:checked') || {}).value || 'iPhone';
-      var website  = (document.getElementById('su-website').value || '').trim();   // honeypot
+      var website  = (document.getElementById('su-website').value || '').trim();
 
       if (!phone) {
         showState('error', 'Missing phone', 'We need your <em>phone number</em>.',
@@ -716,7 +343,6 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
         website: website, ip: visitorIP, ua: navigator.userAgent
       });
 
-      // text/plain to avoid the CORS preflight Apps Script doesn't handle
       fetch(SIGNUP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -726,10 +352,9 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
         .then(function (r) { return r.json(); })
         .then(function (data) {
           if (data && data.ok) {
-            showState('success',
-              "You\\'re in",
-              "You\\'re <em>on the list.</em>",
-              "Match-day texts will start arriving on " + (phone) + " before the next match. Spread the word if you like it.",
+            showState('success', "You're in",
+              "You're <em>on the list.</em>",
+              "Match-day texts will start arriving on " + phone + " before the next match. Spread the word if you like it.",
               false);
           } else if (data && data.error === 'daily_cap') {
             showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
@@ -883,39 +508,51 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
         existing.decompose()
 
     article = soup.new_tag("article", id=article_id, attrs={"data-type": msg_type})
+    article["data-generated"] = generated_at_iso
 
-    # Multi-zone timestamp: "Label · 5:07am IST · 7:37pm ET · 6:37pm CT · 4:37pm PT"
+    # Meta column — colored tag + multi-zone time stack
+    meta = soup.new_tag("div", attrs={"class": "meta"})
+
+    tag_class_map = {
+        "morning": "morning",
+        "end_of_day": "recap",
+    }
+    tag_cls = tag_class_map.get(msg_type, "result" if msg_type.startswith("post_match") else "morning")
+    tag = soup.new_tag("span", attrs={"class": f"tag {tag_cls}"})
+    tag.string = _label_for(msg_type)
+    meta.append(tag)
+
+    when = soup.new_tag("span", attrs={"class": "when"})
     try:
         from zoneinfo import ZoneInfo
         dt = datetime.fromisoformat(generated_at_iso)
-        ist = dt.astimezone(ZoneInfo("Asia/Kolkata"))
-        et  = dt.astimezone(ZoneInfo("America/New_York"))
-        ct  = dt.astimezone(ZoneInfo("America/Chicago"))
-        pt  = dt.astimezone(ZoneInfo("America/Los_Angeles"))
-
-        def _stamp(d, label):
-            return f"{d.strftime('%-I:%M %p').lower().replace(' ', '')} {label}"
-
-        ts_human = (
-            f"{_stamp(ist, 'IST')} · {_stamp(et, 'ET')} · "
-            f"{_stamp(ct, 'CT')} · {_stamp(pt, 'PT')}"
-        )
+        zones = [
+            ("IST", dt.astimezone(ZoneInfo("Asia/Kolkata"))),
+            ("ET",  dt.astimezone(ZoneInfo("America/New_York"))),
+            ("CT",  dt.astimezone(ZoneInfo("America/Chicago"))),
+            ("PT",  dt.astimezone(ZoneInfo("America/Los_Angeles"))),
+        ]
+        for label, d in zones:
+            line = soup.new_tag("span")
+            line.string = f"{d.strftime('%-I:%M %p').lower().replace(' ', '')} {label}"
+            when.append(line)
     except (ValueError, ImportError):
-        ts_human = generated_at_iso
+        when.string = generated_at_iso
+    meta.append(when)
+    article.append(meta)
 
-    time_tag = soup.new_tag("time", datetime=generated_at_iso)
-    time_tag.string = f"{_label_for(msg_type)} · {ts_human}"
-    article.append(time_tag)
-
-    pre = soup.new_tag("pre")
-    _populate_pre(soup, pre, body, msg_type=msg_type)
-    article.append(pre)
+    # Body — div with white-space: pre-wrap (replaces old <pre>)
+    body_div = soup.new_tag("div", attrs={"class": "body"})
+    _populate_pre(soup, body_div, body, msg_type=msg_type)
+    article.append(body_div)
 
     # Insert articles in chronological order within the day
     inserted = False
     for sibling in details.find_all("article", recursive=False):
-        sib_time = sibling.find("time")
-        sib_iso = sib_time.get("datetime", "") if sib_time else ""
+        sib_iso = sibling.get("data-generated", "")
+        if not sib_iso:
+            sib_time = sibling.find("time")
+            sib_iso = sib_time.get("datetime", "") if sib_time else ""
         if generated_at_iso < sib_iso:
             sibling.insert_before(article)
             inserted = True
