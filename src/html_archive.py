@@ -547,19 +547,6 @@ SHELL = """<!doctype html>
       </div>
     </section>
 
-    <!-- ── LIVE NOW (ESPN Cricinfo) ── -->
-    <section class="section">
-      <div class="brand-section-label">Live now</div>
-      <a class="live-source" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" target="_blank" rel="noopener noreferrer">
-        <span class="live-label">Live scoreboard</span>
-        <span class="live-row">
-          <img class="live-logo" src="assets/espncricinfo-logo.png" alt="ESPN Cricinfo" width="500" height="66">
-          <span class="live-arrow" aria-hidden="true">→</span>
-        </span>
-        <span class="live-sub">Open the official IPL 2026 series page for ball-by-ball, scorecards, and commentary.</span>
-      </a>
-    </section>
-
     <!-- ── MATCH LOG ── -->
     <section class="section" id="match-log">
       <div class="brand-section-label">Match log</div>
@@ -651,7 +638,7 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
           <input id="su-website" name="website" type="text" tabindex="-1" autocomplete="off">
         </div>
         <button class="btn btn-primary" id="signup-submit" type="submit">Sign up →</button>
-        <p class="form-fine" id="signup-fine">Submitting adds you to KC's signup list. KC reviews each request before texting. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
+        <p class="form-fine" id="signup-fine">Each request is reviewed before texts start. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
       </form>
       <!-- Success / error / cap states (toggled by JS) -->
       <div class="signup-state" id="signup-state" hidden role="status" aria-live="polite"></div>
@@ -782,7 +769,7 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
             showState('success',
               "You\\'re in",
               "You\\'re <em>on the list.</em>",
-              "KC will text you on " + (phone) + " before the next match. Spread the word if you like it.",
+              "Match-day texts will start arriving on " + (phone) + " before the next match. Spread the word if you like it.",
               false);
           } else if (data && data.error === 'daily_cap') {
             showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',

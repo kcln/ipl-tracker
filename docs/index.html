@@ -522,18 +522,6 @@
 </div>
 </div>
 </section>
-<!-- ── LIVE NOW (ESPN Cricinfo) ── -->
-<section class="section">
-<div class="brand-section-label">Live now</div>
-<a class="live-source" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" rel="noopener noreferrer" target="_blank">
-<span class="live-label">Live scoreboard</span>
-<span class="live-row">
-<img alt="ESPN Cricinfo" class="live-logo" height="66" src="assets/espncricinfo-logo.png" width="500"/>
-<span aria-hidden="true" class="live-arrow">→</span>
-</span>
-<span class="live-sub">Open the official IPL 2026 series page for ball-by-ball, scorecards, and commentary.</span>
-</a>
-</section>
 <!-- ── MATCH LOG ── -->
 <section class="section" id="match-log">
 <div class="brand-section-label">Match log</div>
@@ -644,7 +632,7 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
 <input autocomplete="off" id="su-website" name="website" tabindex="-1" type="text"/>
 </div>
 <button class="btn btn-primary" id="signup-submit" type="submit">Sign up →</button>
-<p class="form-fine" id="signup-fine">Submitting adds you to KC's signup list. KC reviews each request before texting. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
+<p class="form-fine" id="signup-fine">Each request is reviewed before texts start. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
 </form>
 <!-- Success / error / cap states (toggled by JS) -->
 <div aria-live="polite" class="signup-state" hidden="" id="signup-state" role="status"></div>
@@ -772,7 +760,7 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
             showState('success',
               "You\'re in",
               "You\'re <em>on the list.</em>",
-              "KC will text you on " + (phone) + " before the next match. Spread the word if you like it.",
+              "Match-day texts will start arriving on " + (phone) + " before the next match. Spread the word if you like it.",
               false);
           } else if (data && data.error === 'daily_cap') {
             showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
