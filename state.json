@@ -92,6 +92,12 @@
           "delivered_at": "2026-05-12T00:36:22.428846-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "test_debouncer",
+          "body": "synthetic event to trigger commit",
+          "generated_at": "2026-05-12T00:00:00-07:00",
+          "delivered": true
         }
       ]
     }
