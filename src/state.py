@@ -18,6 +18,10 @@ IST = ZoneInfo("Asia/Kolkata")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 STATE_PATH = REPO_ROOT / "state.json"
+# last_run lives in a separate gitignored file so heartbeat updates from
+# no-op tracker runs don't dirty state.json (and therefore don't produce
+# empty commits / spurious Pages rebuilds).
+LAST_RUN_PATH = REPO_ROOT / "data" / "last_run.txt"
 
 
 def now_pt() -> datetime:
@@ -30,18 +34,25 @@ def today_pt_iso() -> str:
 
 def load() -> dict[str, Any]:
     if not STATE_PATH.exists():
-        return {"last_run": None, "days": {}}
+        return {"days": {}}
     try:
         with STATE_PATH.open("r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+        # Strip any legacy last_run field on read so it never re-enters state.json
+        data.pop("last_run", None)
+        return data
     except (json.JSONDecodeError, OSError):
         # Corrupted state — start fresh rather than crashing the launchd job.
-        return {"last_run": None, "days": {}}
+        return {"days": {}}
 
 
 def save(state: dict[str, Any]) -> None:
-    """Atomic write: tmp file in same dir, then rename."""
-    state["last_run"] = now_pt().isoformat()
+    """Atomic write of state.json (without heartbeat timestamp) + the
+    last_run heartbeat to a separate gitignored file. Splitting these keeps
+    no-op tracker runs from producing committable diffs."""
+    # Defensive: strip any last_run that snuck into the dict
+    state.pop("last_run", None)
+
     STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp_path = tempfile.mkstemp(dir=str(STATE_PATH.parent), prefix=".state-", suffix=".json")
     try:
@@ -55,6 +66,15 @@ def save(state: dict[str, Any]) -> None:
         except OSError:
             pass
         raise
+
+    # Write heartbeat to gitignored file (atomic, no failure-back-into-state)
+    try:
+        LAST_RUN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        tmp_hb = LAST_RUN_PATH.with_suffix(".tmp")
+        tmp_hb.write_text(now_pt().isoformat() + "\n", encoding="utf-8")
+        tmp_hb.replace(LAST_RUN_PATH)
+    except OSError:
+        pass  # heartbeat is informational, don't fail the run
 
 
 def day(state: dict, date_iso: str) -> dict:

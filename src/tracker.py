@@ -712,17 +712,36 @@ def _update_hero(all_matches: list[dict], standings: list[dict]) -> None:
         leader_team = "—"
         leader_desc = "Standings pending"
 
-    repls = {
-        "__HERO_MATCH__":       team_line,
-        "__HERO_META__":        meta_line,
-        "__HERO_WIN__":         win_line,
-        "__HERO_LEADER__":      leader_team,
-        "__HERO_LEADER_DESC__": leader_desc,
-        "__MATCH_COUNT__":      f"Day {len(completed)} of 74",
-    }
-    new_html = html
-    for k, v in repls.items():
-        new_html = new_html.replace(k, v)
+    # Use BeautifulSoup to update by element ID so this works whether the
+    # HTML still has raw __HERO_X__ placeholders (first run) or already-
+    # substituted values from a previous run (every subsequent run).
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+
+    def _set(el_id: str, html_content: str):
+        el = soup.find(id=el_id)
+        if el is None:
+            return
+        el.clear()
+        # team_line contains <span class="vs">vs</span> markup; parse as fragment
+        if "<" in html_content:
+            for child in BeautifulSoup(html_content, "html.parser").contents:
+                el.append(child)
+        else:
+            el.string = html_content
+
+    _set("hero-match",       team_line)
+    _set("hero-meta",        meta_line)
+    _set("hero-win",         win_line)
+    _set("hero-leader",      leader_team)
+    _set("hero-leader-desc", leader_desc)
+
+    count_el = soup.find(id="match-count")
+    if count_el is not None:
+        count_el.clear()
+        count_el.string = f"Day {len(completed)} of 74"
+
+    new_html = str(soup)
     if new_html != html:
         index.write_text(new_html, encoding="utf-8")
 

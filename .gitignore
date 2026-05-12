@@ -9,3 +9,5 @@ recipients.txt
 optout.txt
 # STOP/START cursor — tracks last-processed iMessage rowid
 data/messages_cursor.json
+# Heartbeat — tracks when the tracker last ran (every cycle); not real data
+data/last_run.txt

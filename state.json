@@ -1,96 +1,14 @@
 {
-  "last_run": "2026-05-12T00:45:03.026013-07:00",
   "days": {
-    "2026-05-11": {
-      "matches": [
-        {
-          "id": "2495",
-          "teams": [
-            "PBKS",
-            "DC"
-          ],
-          "scheduled_ist": "19:30",
-          "status": "complete",
-          "result": "Delhi Capitals Won by 3  Wickets",
-          "predicted_winner": "PBKS",
-          "actual_winner": "DC"
-        }
-      ],
-      "messages": [
-        {
-          "type": "morning",
-          "body": "IPL 2026 - Monday, May 11\n\nToday's matches:\n\nMatch 1: PBKS vs DC\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: PBKS wins\nReason: PBKS have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T00:00:30-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T00:00:30-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "toss_1",
-          "body": "PBKS vs DC \u2014 Toss\n\nToss: DC won and chose to field.\n\nUpdated prediction: PBKS wins (70%)\nReason: DC won the toss and chose to field",
-          "generated_at": "2026-05-11T06:30:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T06:30:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "powerplay_1_1",
-          "body": "PBKS vs DC \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nPBKS first innings: 210/5 in 20.0 overs.",
-          "generated_at": "2026-05-11T07:35:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T07:35:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "innings_break_1",
-          "body": "PBKS vs DC \u2014 Innings break\n\nPBKS finished 210/5 in 20.0 overs.\nDC need 211 to win.\n\nUpdated prediction: PBKS wins (68%)\nReason: target 211, RRR 10.55 \u00b7 200+ totals are rarely chased",
-          "generated_at": "2026-05-11T08:38:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T08:38:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "powerplay_2_1",
-          "body": "PBKS vs DC \u2014 Powerplay 2\n\nLive chase powerplay snapshot not captured.\nDC chase: 216/7 in 19.0 overs (target 211).",
-          "generated_at": "2026-05-11T09:13:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T09:13:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "post_match_1",
-          "body": "DC beat PBKS by 3 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T09:35:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T09:35:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "end_of_day",
-          "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\n\nPredictions today: 0 of 1 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
-          "generated_at": "2026-05-11T23:58:00-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T23:58:00-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        }
-      ]
-    },
     "2026-05-12": {
       "matches": [],
       "messages": [
         {
           "type": "morning",
           "body": "IPL 2026 - Tuesday, May 12\n\nToday's matches:\n\nMatch 1: GT vs SRH\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: GT wins\nReason: GT have home advantage at Narendra Modi Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-12T00:36:22.154420-07:00",
+          "generated_at": "2026-05-12T00:45:30.239274-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-12T00:36:22.428846-07:00",
+          "delivered_at": "2026-05-12T00:45:30.481982-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
