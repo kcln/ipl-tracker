@@ -220,6 +220,18 @@ def powerplay_1_message(
     overs = inn1.get("overs", 6.0)
     batting = match.get("first_batting") or match["teams"][0]
     bowling = match.get("second_batting") or match["teams"][1]
+
+    # Backfill case: tracker first saw the match already complete, so the
+    # only inn1 data we have is the FINAL innings score, not the PP snapshot.
+    if overs > 10:
+        lines = [
+            f"{batting} vs {bowling} — Powerplay 1",
+            "",
+            f"Live powerplay snapshot not captured.",
+            f"{batting} first innings: {runs}/{wkts} in {overs} overs.",
+        ]
+        return "\n".join(lines)
+
     winner, prob, reason = predictor.predict_after_powerplay(
         batting, bowling, runs, wkts, innings_num=1, target=None,
         standings=standings, completed_matches=completed_matches,
@@ -279,6 +291,16 @@ def powerplay_2_message(
     runs = inn2.get("runs", 0)
     wkts = inn2.get("wkts", 0)
     overs = inn2.get("overs", 6.0)
+
+    if overs > 10:
+        lines = [
+            f"{defending} vs {chasing} — Powerplay 2",
+            "",
+            f"Live chase powerplay snapshot not captured.",
+            f"{chasing} chase: {runs}/{wkts} in {overs} overs (target {target}).",
+        ]
+        return "\n".join(lines)
+
     winner, prob, reason = predictor.predict_after_powerplay(
         chasing, defending, runs, wkts, innings_num=2, target=target,
         standings=standings, completed_matches=completed_matches,

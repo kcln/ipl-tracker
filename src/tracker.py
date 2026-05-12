@@ -125,12 +125,8 @@ def _maybe_generate_in_match_phases(
     generated = 0
     for idx, match in enumerate(todays, 1):
         st = match.get("status")
-        # Only emit phase messages for matches in progress. If a match is
-        # already complete by the time we first see it, skip phases entirely
-        # — only the morning brief / post-match / day-recap apply. This
-        # prevents 4-phase backfills for matches finished hours ago.
-        if st != "live":
-            continue
+        if st not in ("live", "complete"):
+            continue  # not started yet
 
         # Toss — fires as soon as TossTeam appears
         if match.get("toss_winner"):

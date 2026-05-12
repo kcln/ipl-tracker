@@ -20,27 +20,63 @@
         {
           "type": "morning",
           "body": "IPL 2026 - Monday, May 11\n\nToday's matches:\n\nMatch 1: PBKS vs DC\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: PBKS wins\nReason: PBKS have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T23:29:44.857531-07:00",
-          "delivered": false,
-          "delivered_at": null,
-          "delivery_skipped": true,
-          "skipped_reason": "newer message available"
+          "generated_at": "2026-05-11T00:00:30-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T00:00:30-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "PBKS vs DC \u2014 Toss\n\nToss: DC won and chose to field.\n\nUpdated prediction: PBKS wins (70%)\nReason: DC won the toss and chose to field",
+          "generated_at": "2026-05-11T06:30:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T06:30:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "PBKS vs DC \u2014 Powerplay 1\n\nPBKS: 0/0 after 6.0 overs.\n\nUpdated prediction: DC wins (80%)\nReason: 0/0 after PP \u2014 below par (50) at this stage",
+          "generated_at": "2026-05-11T07:35:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T07:35:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "PBKS vs DC \u2014 Innings break\n\nPBKS finished 0/0 in 20.0 overs.\nDC need 1 to win.\n\nUpdated prediction: DC wins (62%)\nReason: target 1, RRR 0.05 \u00b7 a sub-140 total is usually chased",
+          "generated_at": "2026-05-11T08:38:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T08:38:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "PBKS vs DC \u2014 Powerplay 2\n\nDC: 0/0 after 6.0 overs, chasing 1.\n\nUpdated prediction: PBKS wins (51%)\nReason: 0/0 chasing 1 \u2014 RRR 0.1 vs CRR 0.0",
+          "generated_at": "2026-05-11T09:13:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T09:13:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         },
         {
           "type": "post_match_1",
           "body": "DC beat PBKS by 3 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
-          "generated_at": "2026-05-11T23:29:46.245061-07:00",
-          "delivered": false,
-          "delivered_at": null,
-          "delivery_skipped": true,
-          "skipped_reason": "newer message available"
+          "generated_at": "2026-05-11T09:35:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T09:35:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         },
         {
           "type": "end_of_day",
           "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\n\nPredictions today: 0 of 1 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
-          "generated_at": "2026-05-11T23:29:47.574959-07:00",
+          "generated_at": "2026-05-11T23:58:00-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-11T23:29:47.876538-07:00",
+          "delivered_at": "2026-05-11T23:58:00-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
