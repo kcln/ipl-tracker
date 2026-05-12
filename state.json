@@ -37,7 +37,7 @@
         },
         {
           "type": "powerplay_1_1",
-          "body": "PBKS vs DC \u2014 Powerplay 1\n\nPBKS: 0/0 after 6.0 overs.\n\nUpdated prediction: DC wins (80%)\nReason: 0/0 after PP \u2014 below par (50) at this stage",
+          "body": "PBKS vs DC \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nPBKS first innings: 210/5 in 20.0 overs.",
           "generated_at": "2026-05-11T07:35:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T07:35:00-07:00",
@@ -46,7 +46,7 @@
         },
         {
           "type": "innings_break_1",
-          "body": "PBKS vs DC \u2014 Innings break\n\nPBKS finished 0/0 in 20.0 overs.\nDC need 1 to win.\n\nUpdated prediction: DC wins (62%)\nReason: target 1, RRR 0.05 \u00b7 a sub-140 total is usually chased",
+          "body": "PBKS vs DC \u2014 Innings break\n\nPBKS finished 210/5 in 20.0 overs.\nDC need 211 to win.\n\nUpdated prediction: PBKS wins (68%)\nReason: target 211, RRR 10.55 \u00b7 200+ totals are rarely chased",
           "generated_at": "2026-05-11T08:38:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T08:38:00-07:00",
@@ -55,7 +55,7 @@
         },
         {
           "type": "powerplay_2_1",
-          "body": "PBKS vs DC \u2014 Powerplay 2\n\nDC: 0/0 after 6.0 overs, chasing 1.\n\nUpdated prediction: PBKS wins (51%)\nReason: 0/0 chasing 1 \u2014 RRR 0.1 vs CRR 0.0",
+          "body": "PBKS vs DC \u2014 Powerplay 2\n\nLive chase powerplay snapshot not captured.\nDC chase: 216/7 in 19.0 overs (target 211).",
           "generated_at": "2026-05-11T09:13:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T09:13:00-07:00",

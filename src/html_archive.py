@@ -15,10 +15,15 @@ from bs4 import BeautifulSoup
 from .state import IST, PT  # noqa: F401
 
 # Bold rules differ by message type — see _populate_pre for the matrix.
-_RESULT_LINE_RE   = re.compile(r'^([A-Z][A-Z0-9]+) beat ([A-Z][A-Z0-9]+) by (.+)$')
-_PREDICTION_RE    = re.compile(r'^(Prediction:\s*)([A-Z][A-Z0-9]+)( wins.*)$')
-_UPDATED_TOP4_RE  = re.compile(r'^(Updated top 4:\s*)(.+)$',          re.IGNORECASE)
-_PREDICTED_TOP4_RE = re.compile(r'^(Predicted final top 4:\s*)(.+)$', re.IGNORECASE)
+_RESULT_LINE_RE      = re.compile(r'^([A-Z][A-Z0-9]+) beat ([A-Z][A-Z0-9]+) by (.+)$')
+_PREDICTION_RE       = re.compile(r'^(Prediction:\s*)([A-Z][A-Z0-9]+)( wins.*)$')
+_UPDATED_TOP4_RE     = re.compile(r'^(Updated top 4:\s*)(.+)$',          re.IGNORECASE)
+_PREDICTED_TOP4_RE   = re.compile(r'^(Predicted final top 4:\s*)(.+)$', re.IGNORECASE)
+# Phase-message specific
+_UPDATED_PRED_RE     = re.compile(r'^(Updated prediction:\s*)([A-Z][A-Z0-9]+)( wins.*)$')
+_PP_SCORE_RE         = re.compile(r'^([A-Z][A-Z0-9]+): (\d+/\d+) after ([\d.]+) overs')
+_INNINGS_FINAL_RE    = re.compile(r'^([A-Z][A-Z0-9]+) finished (\d+/\d+) in ([\d.]+) overs\.?$')
+_INNINGS_TARGET_RE   = re.compile(r'^([A-Z][A-Z0-9]+) need (\d+) to win\.?$')
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -463,6 +468,10 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
     is_morning    = (msg_type == 'morning')
     is_post_match = msg_type.startswith('post_match')
     is_recap      = (msg_type == 'end_of_day')
+    is_toss       = msg_type.startswith('toss_')
+    is_pp         = msg_type.startswith('powerplay_')
+    is_break      = msg_type.startswith('innings_break_')
+    is_phase      = is_toss or is_pp or is_break
 
     def _wrap_strong(text: str):
         s = soup.new_tag('strong')
@@ -503,6 +512,46 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
             if m:
                 pre_tag.append(m.group(1))
                 pre_tag.append(_wrap_strong(m.group(2)))
+                continue
+
+        # ── Phase messages: bold predicted winner in "Updated prediction" ──
+        if is_phase:
+            m = _UPDATED_PRED_RE.match(line)
+            if m:
+                pre_tag.append(m.group(1))
+                pre_tag.append(_wrap_strong(m.group(2)))
+                pre_tag.append(m.group(3))
+                continue
+
+        # ── Powerplay: bold the "X/Y" score in "Team: X/Y after Z overs" ──
+        if is_pp:
+            m = _PP_SCORE_RE.match(line)
+            if m:
+                team, score, overs = m.group(1), m.group(2), m.group(3)
+                # Keep the rest of the line intact (could include " chasing N")
+                tail = line[m.end():]
+                pre_tag.append(f"{team}: ")
+                pre_tag.append(_wrap_strong(score))
+                pre_tag.append(f" after {overs} overs")
+                pre_tag.append(tail)
+                continue
+
+        # ── Innings break: bold the finished score "X/Y" ──
+        if is_break:
+            m = _INNINGS_FINAL_RE.match(line)
+            if m:
+                team, score, overs = m.group(1), m.group(2), m.group(3)
+                pre_tag.append(f"{team} finished ")
+                pre_tag.append(_wrap_strong(score))
+                pre_tag.append(f" in {overs} overs.")
+                continue
+            # Innings break: bold the target "N" in "Team need N to win"
+            m = _INNINGS_TARGET_RE.match(line)
+            if m:
+                team, target = m.group(1), m.group(2)
+                pre_tag.append(f"{team} need ")
+                pre_tag.append(_wrap_strong(target))
+                pre_tag.append(" to win.")
                 continue
 
         # Default: plain text
