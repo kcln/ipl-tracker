@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-05-11T23:56:47.254192-07:00",
+  "last_run": "2026-05-12T00:04:37.978802-07:00",
   "days": {
     "2026-05-11": {
       "matches": [
@@ -77,6 +77,20 @@
           "generated_at": "2026-05-11T23:58:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T23:58:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ]
+    },
+    "2026-05-12": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Tuesday, May 12\n\nToday's matches:\n\nMatch 1: GT vs SRH\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: GT wins\nReason: GT have home advantage at Narendra Modi Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
+          "generated_at": "2026-05-12T00:04:36.773478-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T00:04:37.978756-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
