@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-05-11T23:52:24.311610-07:00",
+  "last_run": "2026-05-11T23:56:47.254192-07:00",
   "days": {
     "2026-05-11": {
       "matches": [
@@ -41,15 +41,6 @@
           "generated_at": "2026-05-11T23:29:47.574959-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T23:29:47.876538-07:00",
-          "delivery_skipped": false,
-          "skipped_reason": null
-        },
-        {
-          "type": "toss_1",
-          "body": "PBKS vs DC \u2014 Toss\n\nToss: DC won and chose to field.\n\nUpdated prediction: PBKS wins (70%)\nReason: DC won the toss and chose to field",
-          "generated_at": "2026-05-11T23:49:10.495699-07:00",
-          "delivered": true,
-          "delivered_at": "2026-05-11T23:49:19.772628-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
