@@ -386,6 +386,72 @@ SHELL = """<!doctype html>
       border: 1px solid var(--border);
     }
 
+    /* Honeypot — off-screen so humans never see/tab to it */
+    .honey {
+      position: absolute !important;
+      left: -10000px !important;
+      width: 1px; height: 1px;
+      overflow: hidden;
+    }
+
+    /* Inline success / error / cap state */
+    .signup-state {
+      margin-top: 8px;
+      padding: 22px 26px;
+      background: var(--bg-card);
+      border: var(--border-width) solid var(--text);
+      box-shadow: var(--shadow);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .signup-state.success { border-color: var(--teal); box-shadow: 4px 4px 0 0 var(--teal); }
+    .signup-state.error   { border-color: var(--crimson); box-shadow: 4px 4px 0 0 var(--crimson); }
+    .signup-state .state-label {
+      display: block;
+      font-family: var(--font-label);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .signup-state.success .state-label { color: var(--teal); }
+    .signup-state.error   .state-label { color: var(--crimson); }
+    .signup-state .state-headline {
+      font-family: var(--font-hero);
+      font-style: italic;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .signup-state.success .state-headline em { color: var(--teal); font-style: italic; font-weight: 900; }
+    .signup-state.error   .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
+    .signup-state .state-body {
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      line-height: 1.6;
+    }
+    .signup-state button.try-again {
+      margin-top: 14px;
+      font-family: var(--font-label);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--bg);
+      border: 2px solid var(--text);
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .signup-state button.try-again:hover { background: var(--bg-hover); }
+
     /* ── Footer (mirrors kcl-brand) ── */
     .footer {
       margin-top: var(--space-7);
@@ -579,9 +645,16 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
             <label class="radio"><input type="radio" name="platform" value="Android"> Android</label>
           </div>
         </div>
-        <button class="btn btn-primary" type="submit">Sign up →</button>
-        <p class="form-fine">Opens WhatsApp with your details pre-filled — you just hit send. KC reviews each request before adding you. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
+        <!-- Honeypot — bots fill, humans don't see this -->
+        <div class="honey" aria-hidden="true">
+          <label for="su-website">Website (leave blank)</label>
+          <input id="su-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn btn-primary" id="signup-submit" type="submit">Sign up →</button>
+        <p class="form-fine" id="signup-fine">Submitting adds you to KC's signup list. KC reviews each request before texting. Phone format: <code>+14155551234</code> (country code, no spaces or dashes).</p>
       </form>
+      <!-- Success / error / cap states (toggled by JS) -->
+      <div class="signup-state" id="signup-state" hidden role="status" aria-live="polite"></div>
     </section>
 
   </main>
@@ -626,35 +699,106 @@ Archive: https://kcln.github.io/ipl-tracker/</div>
       });
     });
 
-    // Form → WhatsApp click-to-chat (no third-party service, no API key, $0)
-    // Opens WhatsApp on phone or WhatsApp Web with the message pre-typed —
-    // visitor just hits Send and KC gets a real WhatsApp notification.
-    document.getElementById('signup-form').addEventListener('submit', function (ev) {
+    // Form → Google Apps Script ($0, KC-owned Sheet log, 100/day cap, IP rate-limit, honeypot)
+    var SIGNUP_URL = 'https://script.google.com/macros/s/AKfycbx8wwSgBEPz-SMMTtsi2sEt9xzAUWgDBAtN7Wdg94wJb8VLT-Q5dctZDO0rl_1s4yV6/exec';
+
+    var formEl   = document.getElementById('signup-form');
+    var stateEl  = document.getElementById('signup-state');
+    var submitEl = document.getElementById('signup-submit');
+
+    function showState(kind, label, headline, body, withRetry) {
+      formEl.hidden = (kind === 'success' || kind === 'capped');
+      stateEl.hidden = false;
+      stateEl.className = 'signup-state ' + kind;
+      stateEl.innerHTML =
+        '<span class="state-label">' + label + '</span>' +
+        '<div class="state-headline">' + headline + '</div>' +
+        '<div class="state-body">' + body + '</div>' +
+        (withRetry ? '<button type="button" class="try-again">Try again</button>' : '');
+      var retry = stateEl.querySelector('.try-again');
+      if (retry) retry.addEventListener('click', function () {
+        stateEl.hidden = true;
+        formEl.hidden = false;
+        submitEl.disabled = false;
+        submitEl.textContent = 'Sign up →';
+      });
+    }
+
+    // Page-load preflight — disable form if daily cap is full
+    fetch(SIGNUP_URL, { method: 'GET' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.full) {
+          showState('error',
+            'Full for today',
+            'Sign-ups are <em>full</em> for today.',
+            'Come back after midnight Pacific time — capacity resets daily. Your spot will be there.',
+            false);
+        }
+      })
+      .catch(function () { /* silently ignore — form still works */ });
+
+    // Visitor IP — best-effort via ipify (no PII, just rate-limit material)
+    var visitorIP = '';
+    fetch('https://api.ipify.org?format=json')
+      .then(function (r) { return r.json(); })
+      .then(function (d) { visitorIP = (d && d.ip) || ''; })
+      .catch(function () { /* ignore — Apps Script just skips the per-IP check */ });
+
+    formEl.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      var name = (document.getElementById('su-name').value || '').trim();
-      var phone = (document.getElementById('su-phone').value || '').trim();
+      var name     = (document.getElementById('su-name').value || '').trim();
+      var phone    = (document.getElementById('su-phone').value || '').trim();
       var platform = (document.querySelector('input[name="platform"]:checked') || {}).value || 'iPhone';
+      var website  = (document.getElementById('su-website').value || '').trim();   // honeypot
 
       if (!phone) {
-        alert('Please enter a phone number.');
+        showState('error', 'Missing phone', 'We need your <em>phone number</em>.',
+          'Add it above (with country code, e.g. <code>+14155551234</code>) and try again.', true);
         return;
       }
       if (!/^\\+\\d{8,15}$/.test(phone)) {
-        if (!confirm('That doesn\\'t look like an E.164 phone number (e.g. +14155551234). Send anyway?')) return;
+        if (!confirm("That doesn\\'t look like an E.164 phone number (e.g. +14155551234). Send anyway?")) return;
       }
 
-      var message = [
-        'Hi KC — please add me to the IPL 2026 tracker.',
-        '',
-        'Name: ' + (name || '(not given)'),
-        'Phone: ' + phone,
-        'Platform: ' + platform
-      ].join('\\n');
+      submitEl.disabled = true;
+      submitEl.textContent = 'Sending…';
 
-      // KC's WhatsApp number (digits only, with country code, no +)
-      var waNumber = '18049287108';
-      var href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(message);
-      window.open(href, '_blank', 'noopener');
+      var payload = JSON.stringify({
+        name: name, phone: phone, platform: platform,
+        website: website, ip: visitorIP, ua: navigator.userAgent
+      });
+
+      // text/plain to avoid the CORS preflight Apps Script doesn't handle
+      fetch(SIGNUP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: payload,
+        redirect: 'follow'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.ok) {
+            showState('success',
+              "You\\'re in",
+              "You\\'re <em>on the list.</em>",
+              "KC will text you on " + (phone) + " before the next match. Spread the word if you like it.",
+              false);
+          } else if (data && data.error === 'daily_cap') {
+            showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
+              data.message || 'Try again after midnight Pacific time.', false);
+          } else if (data && data.error === 'rate_limit') {
+            showState('error', 'Slow down', 'Too many <em>tries</em>.',
+              data.message || 'Wait an hour and try again.', true);
+          } else {
+            showState('error', 'Something broke', 'We could not <em>save</em> that.',
+              (data && data.message) || 'Try again in a minute. If it keeps failing, email kcl.narasimham@gmail.com.', true);
+          }
+        })
+        .catch(function () {
+          showState('error', 'Network error', 'Could not <em>reach</em> the server.',
+            'Check your connection and try again.', true);
+        });
     });
   </script>
 </body>
