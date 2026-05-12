@@ -177,6 +177,123 @@ def end_of_day_message(
     return "\n".join(lines)
 
 
+def _pct(p: float) -> str:
+    return f"{int(round(p * 100))}%"
+
+
+def toss_message(
+    match: dict,
+    standings: list[dict],
+    recent_matches: list[dict],
+    squads: dict,
+    completed_matches: list[dict],
+) -> str:
+    """Fires once the toss is known. Adjusted prediction with toss bias."""
+    t1, t2 = match["teams"]
+    all_teams = [r["team"] for r in standings] or list(set(match["teams"]))
+    winner, prob, reason = predictor.predict_after_toss(
+        t1, t2, standings, recent_matches, squads, all_teams,
+        match=match, completed_matches=completed_matches,
+    )
+    toss_winner = match.get("toss_winner") or "?"
+    toss_decision = match.get("toss_decision") or "?"
+    lines = [
+        f"{t1} vs {t2} — Toss",
+        "",
+        f"Toss: {toss_winner} won and chose to {toss_decision}.",
+        "",
+        f"Updated prediction: {winner} wins ({_pct(prob)})",
+        f"Reason: {reason}",
+    ]
+    return "\n".join(lines)
+
+
+def powerplay_1_message(
+    match: dict,
+    standings: list[dict],
+    completed_matches: list[dict],
+) -> str:
+    """Fires after innings-1 powerplay (over 6.0)."""
+    inn1 = match.get("inn1") or {}
+    runs = inn1.get("runs", 0)
+    wkts = inn1.get("wkts", 0)
+    overs = inn1.get("overs", 6.0)
+    batting = match.get("first_batting") or match["teams"][0]
+    bowling = match.get("second_batting") or match["teams"][1]
+    winner, prob, reason = predictor.predict_after_powerplay(
+        batting, bowling, runs, wkts, innings_num=1, target=None,
+        standings=standings, completed_matches=completed_matches,
+    )
+    lines = [
+        f"{batting} vs {bowling} — Powerplay 1",
+        "",
+        f"{batting}: {runs}/{wkts} after {overs} overs.",
+        "",
+        f"Updated prediction: {winner} wins ({_pct(prob)})",
+        f"Reason: {reason}",
+    ]
+    return "\n".join(lines)
+
+
+def innings_break_message(
+    match: dict,
+    standings: list[dict],
+    completed_matches: list[dict],
+) -> str:
+    """Fires when innings 1 ends — target set, chase prediction."""
+    inn1 = match.get("inn1") or {}
+    runs = inn1.get("runs", 0)
+    wkts = inn1.get("wkts", 0)
+    overs = inn1.get("overs", 20.0)
+    batting = match.get("first_batting") or match["teams"][0]
+    chasing = match.get("second_batting") or match["teams"][1]
+    target = match.get("revised_target") or (runs + 1)
+    winner, prob, reason = predictor.predict_chase(
+        chasing, batting, target, runs, wkts,
+        completed_matches=completed_matches,
+        venue_id=match.get("venue_id"),
+    )
+    lines = [
+        f"{batting} vs {chasing} — Innings break",
+        "",
+        f"{batting} finished {runs}/{wkts} in {overs} overs.",
+        f"{chasing} need {target} to win.",
+        "",
+        f"Updated prediction: {winner} wins ({_pct(prob)})",
+        f"Reason: {reason}",
+    ]
+    return "\n".join(lines)
+
+
+def powerplay_2_message(
+    match: dict,
+    standings: list[dict],
+    completed_matches: list[dict],
+) -> str:
+    """Fires after innings-2 powerplay (over 6.0 of the chase)."""
+    inn1 = match.get("inn1") or {}
+    inn2 = match.get("inn2") or {}
+    chasing = match.get("second_batting") or match["teams"][1]
+    defending = match.get("first_batting") or match["teams"][0]
+    target = match.get("revised_target") or (inn1.get("runs", 0) + 1)
+    runs = inn2.get("runs", 0)
+    wkts = inn2.get("wkts", 0)
+    overs = inn2.get("overs", 6.0)
+    winner, prob, reason = predictor.predict_after_powerplay(
+        chasing, defending, runs, wkts, innings_num=2, target=target,
+        standings=standings, completed_matches=completed_matches,
+    )
+    lines = [
+        f"{defending} vs {chasing} — Powerplay 2",
+        "",
+        f"{chasing}: {runs}/{wkts} after {overs} overs, chasing {target}.",
+        "",
+        f"Updated prediction: {winner} wins ({_pct(prob)})",
+        f"Reason: {reason}",
+    ]
+    return "\n".join(lines)
+
+
 def season_recap_message(standings: list[dict], archive_url: str) -> str:
     top4 = predictor.current_top4(standings)
     lines = [

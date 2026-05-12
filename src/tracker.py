@@ -115,6 +115,70 @@ def _maybe_generate_morning(
     return True
 
 
+def _maybe_generate_in_match_phases(
+    day_entry: dict, date_iso: str,
+    todays: list[dict], standings: list[dict],
+    recent: list[dict], squads: dict,
+) -> int:
+    """For each live match, emit toss / powerplay_1 / innings_break / powerplay_2
+    messages when the milestone is newly crossed (idempotent — once per match)."""
+    generated = 0
+    for idx, match in enumerate(todays, 1):
+        st = match.get("status")
+        if st not in ("live", "complete"):
+            continue  # not started yet
+
+        # Toss — fires as soon as TossTeam appears
+        if match.get("toss_winner"):
+            key = f"toss_{idx}"
+            if not state.find_message(day_entry, key):
+                body = message_builder.toss_message(match, standings, recent, squads, recent)
+                msg = state.add_or_update_message(day_entry, key, body)
+                html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+                generated += 1
+                _log(f"generated {key}: {match['teams']}", "ok")
+
+        inn1 = match.get("inn1") or {}
+        inn2 = match.get("inn2") or {}
+
+        # Powerplay 1 — innings 1 has crossed 6 overs (or first innings complete)
+        if inn1.get("overs", 0) >= 6.0:
+            key = f"powerplay_1_{idx}"
+            if not state.find_message(day_entry, key):
+                body = message_builder.powerplay_1_message(match, standings, recent)
+                msg = state.add_or_update_message(day_entry, key, body)
+                html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+                generated += 1
+                _log(f"generated {key}: {match['teams']}", "ok")
+
+        # Innings break — first innings reached 20 overs OR current_innings flipped to 2
+        innings_done = (
+            inn1.get("overs", 0) >= 19.99
+            or match.get("current_innings") == 2
+            or (inn2 and inn2.get("runs") is not None)
+        )
+        if innings_done:
+            key = f"innings_break_{idx}"
+            if not state.find_message(day_entry, key):
+                body = message_builder.innings_break_message(match, standings, recent)
+                msg = state.add_or_update_message(day_entry, key, body)
+                html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+                generated += 1
+                _log(f"generated {key}: {match['teams']}", "ok")
+
+        # Powerplay 2 — chase has crossed 6 overs
+        if inn2.get("overs", 0) >= 6.0:
+            key = f"powerplay_2_{idx}"
+            if not state.find_message(day_entry, key):
+                body = message_builder.powerplay_2_message(match, standings, recent)
+                msg = state.add_or_update_message(day_entry, key, body)
+                html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+                generated += 1
+                _log(f"generated {key}: {match['teams']}", "ok")
+
+    return generated
+
+
 def _maybe_generate_post_match(
     day_entry: dict, date_iso: str,
     todays: list[dict], standings: list[dict],
@@ -519,6 +583,7 @@ def main() -> int:
 
     # Generate any messages that should exist
     _maybe_generate_morning(day_entry, today, todays, standings, remaining, recent, squads)
+    _maybe_generate_in_match_phases(day_entry, today, todays, standings, recent, squads)
     _maybe_generate_post_match(day_entry, today, todays, standings, remaining, recent, squads)
     _maybe_generate_end_of_day(day_entry, today, todays, standings, remaining, recent, squads)
 

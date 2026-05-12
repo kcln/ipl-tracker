@@ -357,3 +357,160 @@ def current_top4(standings: list[dict]) -> list[str]:
     """Snapshot top-4 from real standings (NRR tiebreak only — no sim)."""
     ranked = sorted(standings, key=lambda r: (r.get("points", 0), r.get("nrr", 0.0)), reverse=True)
     return [r["team"] for r in ranked[:4]]
+
+
+# ──────────────────────────────────────────────────────────────
+# In-match predictors: toss, powerplay 1, innings break, powerplay 2
+# Each returns (win_prob_for_team_a, headline_reason)
+# ──────────────────────────────────────────────────────────────
+
+def predict_after_toss(
+    team_a: str, team_b: str,
+    standings: list[dict], recent_matches: list[dict],
+    squads: dict, all_teams: list[str],
+    match: dict,
+    completed_matches: list[dict],
+) -> tuple[str, float, str]:
+    """After the toss is known, blend the pre-match probability with a
+    toss-winner / venue-chase bias. Returns (predicted_winner, prob, reason).
+
+    Toss matters because at chase-friendly venues the toss winner usually
+    fields first and inherits a winning edge; at bat-first venues the
+    opposite holds.
+    """
+    base_a = _team_score(team_a, team_b, standings, recent_matches, squads, all_teams, match, completed_matches)
+    base_b = _team_score(team_b, team_a, standings, recent_matches, squads, all_teams, match, completed_matches)
+    p_a = _logistic(base_a - base_b)
+
+    toss_winner   = match.get("toss_winner")
+    toss_decision = match.get("toss_decision")  # 'bat' / 'field' / None
+    chase_rate    = _venue_chase_rate(match.get("venue_id", ""), completed_matches)
+
+    # Tilt: if toss winner chose the right side of par at this venue,
+    # add ~5% to their win probability; wrong side, subtract.
+    tilt = 0.0
+    if toss_winner and toss_decision and chase_rate is not None:
+        favored_side = "field" if chase_rate > 0.55 else ("bat" if chase_rate < 0.45 else None)
+        if favored_side and toss_decision == favored_side:
+            tilt = 0.05
+        elif favored_side and toss_decision != favored_side:
+            tilt = -0.05
+    elif toss_winner and toss_decision:
+        # No venue history — small generic boost to the toss winner if they fielded
+        # (T20 trend: chasing wins ~52% globally)
+        tilt = 0.03 if toss_decision == "field" else 0.0
+
+    if toss_winner == team_a:
+        p_a = max(0.05, min(0.95, p_a + tilt))
+    elif toss_winner == team_b:
+        p_a = max(0.05, min(0.95, p_a - tilt))
+
+    winner = team_a if p_a >= 0.5 else team_b
+    prob = p_a if winner == team_a else (1 - p_a)
+
+    # Reason
+    bits = []
+    if toss_winner and toss_decision:
+        bits.append(f"{toss_winner} won the toss and chose to {toss_decision}")
+    if chase_rate is not None:
+        if chase_rate > 0.55:
+            bits.append(f"chases win {int(chase_rate*100)}% here historically")
+        elif chase_rate < 0.45:
+            bits.append(f"batting first wins {int((1-chase_rate)*100)}% here historically")
+    reason = " · ".join(bits) if bits else "Toss outcome factored in"
+    return winner, prob, reason
+
+
+def predict_after_powerplay(
+    batting_team: str, bowling_team: str,
+    pp_runs: int, pp_wkts: int,
+    innings_num: int,
+    target: int | None,
+    standings: list[dict],
+    completed_matches: list[dict],
+) -> tuple[str, float, str]:
+    """Update win probability after a 6-over powerplay.
+
+    Heuristics (simple and explainable):
+      - Innings 1: par is ~50 runs / 1.5 wkts in T20 powerplay; above-par lifts
+        batting team's win prob, below-par lowers it.
+      - Innings 2: required run rate vs current run rate is the lead indicator.
+    """
+    if innings_num == 1:
+        # Innings 1 powerplay analysis
+        par_runs = 50
+        delta_runs = pp_runs - par_runs
+        wicket_penalty = max(0, pp_wkts - 1) * 4  # each wicket beyond 1 costs ~4 runs of "value"
+        score_edge = (delta_runs - wicket_penalty) / 100.0  # ~0.20 swing
+        # Apply to batting team
+        p_bat = 0.5 + score_edge
+        p_bat = max(0.20, min(0.80, p_bat))
+
+        winner = batting_team if p_bat >= 0.5 else bowling_team
+        prob = p_bat if winner == batting_team else (1 - p_bat)
+        verdict = "above" if delta_runs > 0 else "below"
+        reason = f"{pp_runs}/{pp_wkts} after PP — {verdict} par ({par_runs}) at this stage"
+        return winner, prob, reason
+
+    # Innings 2 powerplay: compare current RR to required RR
+    if target is None or target <= 0:
+        return batting_team, 0.5, "Chase target unknown"
+
+    overs_done = 6.0
+    overs_left = 14.0
+    needed = max(0, target - pp_runs)
+    rrr = needed / overs_left if overs_left > 0 else 0  # required run rate
+    crr = pp_runs / overs_done                          # current run rate
+
+    # If RRR ≤ CRR + 1 and wickets ≤ 2: chase is likely on
+    diff = crr - rrr
+    score_edge = diff / 8.0  # 1 rpo gap ≈ 0.125 swing
+    wicket_drag = max(0, pp_wkts - 1) * 0.06
+    p_chase = 0.50 + score_edge - wicket_drag
+    p_chase = max(0.10, min(0.90, p_chase))
+
+    winner = batting_team if p_chase >= 0.5 else bowling_team
+    prob = p_chase if winner == batting_team else (1 - p_chase)
+    reason = (f"{pp_runs}/{pp_wkts} chasing {target} — RRR {rrr:.1f} vs CRR {crr:.1f}")
+    return winner, prob, reason
+
+
+def predict_chase(
+    batting_team: str, bowling_team: str,
+    target: int,
+    first_innings_runs: int,
+    first_innings_wkts: int,
+    completed_matches: list[dict],
+    venue_id: str | None = None,
+) -> tuple[str, float, str]:
+    """After innings 1 ends — purely a chase prediction.
+    Uses venue chase rate as the dominant signal."""
+    chase_rate = _venue_chase_rate(venue_id or "", completed_matches) if venue_id else None
+    base_chase = chase_rate if chase_rate is not None else 0.50
+
+    # First innings score signal: 180+ tilts toward defense, < 150 tilts toward chase
+    if first_innings_runs >= 200:
+        score_tilt = -0.18
+    elif first_innings_runs >= 180:
+        score_tilt = -0.10
+    elif first_innings_runs >= 160:
+        score_tilt = -0.03
+    elif first_innings_runs >= 140:
+        score_tilt = 0.05
+    else:
+        score_tilt = 0.12
+
+    p_chase = max(0.10, min(0.90, base_chase + score_tilt))
+    winner = batting_team if p_chase >= 0.5 else bowling_team
+    prob = p_chase if winner == batting_team else (1 - p_chase)
+
+    required_rr = target / 20.0
+    bits = [f"target {target}, RRR {required_rr:.2f}"]
+    if chase_rate is not None:
+        bits.append(f"chases win {int(chase_rate*100)}% at this ground")
+    if first_innings_runs >= 200:
+        bits.append("200+ totals are rarely chased")
+    elif first_innings_runs < 140:
+        bits.append("a sub-140 total is usually chased")
+    reason = " · ".join(bits)
+    return winner, prob, reason

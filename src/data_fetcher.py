@@ -293,6 +293,31 @@ def _parse_iplt20_match(m: dict) -> dict | None:
                 "rc":     _to_int(m.get("MOMRC")),
             }
 
+        # Parse innings summaries — format: "67/1 (6.2 Ov)" or "210/5 (20.0 Ov)"
+        _SUMMARY_RE = re.compile(r'^(\d+)/(\d+)\s*\((\d+(?:\.\d+)?)\s*Ov', re.IGNORECASE)
+        def _parse_summary(s):
+            s = (s or "").strip()
+            if not s:
+                return None
+            m2 = _SUMMARY_RE.match(s)
+            if not m2:
+                return None
+            try:
+                return {
+                    "runs":  int(m2.group(1)),
+                    "wkts":  int(m2.group(2)),
+                    "overs": float(m2.group(3)),
+                    "raw":   s,
+                }
+            except (ValueError, TypeError):
+                return None
+
+        inn1 = _parse_summary(m.get("FirstBattingSummary"))
+        inn2 = _parse_summary(m.get("SecondBattingSummary"))
+        current_innings = _to_int(m.get("CurrentInnings"))
+        match_progress  = (m.get("MatchProgress") or "").strip()
+        revised_target  = _to_int(m.get("RevisedTarget"))
+
         return {
             "id": mid,
             "teams": [_normalize_team(t1), _normalize_team(t2)],
@@ -308,7 +333,14 @@ def _parse_iplt20_match(m: dict) -> dict | None:
             "venue_name": (m.get("GroundName") or "").strip(),
             "toss_winner": toss_winner,
             "toss_decision": toss_decision,
+            "toss_text": (m.get("TossText") or "").strip() or None,
             "mom": mom,
+            # Live state — populated mid-match
+            "inn1": inn1,                     # {runs, wkts, overs, raw} or None
+            "inn2": inn2,
+            "current_innings": current_innings,  # 0 if unknown / 1 if first innings / 2 if chase
+            "match_progress": match_progress,    # free-text from feed
+            "revised_target": revised_target,    # DLS-adjusted target, 0 if not set
         }
     except (KeyError, ValueError, TypeError) as e:
         _log(f"iplt20: skipping match: {e}")

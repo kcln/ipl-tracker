@@ -115,6 +115,7 @@ SHELL = """<!doctype html>
     article .meta { display: flex; flex-direction: column; gap: 8px; }
     article .meta .tag { display: inline-block; align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
     article .meta .tag.morning { color: var(--p-700); background: var(--p-100); }
+    article .meta .tag.phase   { color: var(--p-800); background: var(--p-200); }
     article .meta .tag.result  { color: var(--card);  background: var(--p-700); }
     article .meta .tag.recap   { color: var(--card);  background: var(--brown); }
     article .meta .when { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); line-height: 1.7; }
@@ -428,9 +429,19 @@ def _label_for(msg_type: str) -> str:
         return "Morning brief"
     if msg_type == "end_of_day":
         return "Day recap"
+    if msg_type == "season_recap":
+        return "Season recap"
     if msg_type.startswith("post_match"):
         n = msg_type.split("_")[-1]
         return f"Match {n} result"
+    if msg_type.startswith("toss_"):
+        return "Toss"
+    if msg_type.startswith("innings_break_"):
+        return "Innings break"
+    if msg_type.startswith("powerplay_1_"):
+        return "Powerplay 1"
+    if msg_type.startswith("powerplay_2_"):
+        return "Powerplay 2"
     return msg_type.replace("_", " ").title()
 
 
@@ -513,11 +524,16 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
     # Meta column — colored tag + multi-zone time stack
     meta = soup.new_tag("div", attrs={"class": "meta"})
 
-    tag_class_map = {
-        "morning": "morning",
-        "end_of_day": "recap",
-    }
-    tag_cls = tag_class_map.get(msg_type, "result" if msg_type.startswith("post_match") else "morning")
+    if msg_type == "morning":
+        tag_cls = "morning"
+    elif msg_type == "end_of_day":
+        tag_cls = "recap"
+    elif msg_type.startswith("post_match"):
+        tag_cls = "result"
+    elif msg_type.startswith("toss_") or msg_type.startswith("powerplay_") or msg_type.startswith("innings_break_"):
+        tag_cls = "phase"
+    else:
+        tag_cls = "morning"
     tag = soup.new_tag("span", attrs={"class": f"tag {tag_cls}"})
     tag.string = _label_for(msg_type)
     meta.append(tag)
