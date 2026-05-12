@@ -71,35 +71,82 @@
       background: transparent; border: 0; padding: 0; margin: 0;
     }
 
-    /* Top bar — live source link */
-    .top-bar {
+    /* Live-source card at top — clickable ESPN Cricinfo logo */
+    .live-source {
+      display: block;
+      max-width: 760px;
+      margin: 0 auto 40px;
+      padding: 28px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+      position: relative;
+    }
+    .live-source:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(224, 0, 28, 0.25);
+      transform: translateY(-1px);
+    }
+    .live-source .live-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 14px;
+    }
+    .live-source .live-label::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--crimson);
+      margin-right: 10px;
+      vertical-align: 1px;
+      animation: live-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(224,0,28,0.55); }
+      50%      { box-shadow: 0 0 0 5px rgba(224,0,28,0); }
+    }
+    .live-source .live-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 760px;
-      margin: 0 auto 32px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      letter-spacing: 0.04em;
+      gap: 24px;
     }
-    .top-bar .label {
-      color: var(--text-faint);
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      font-size: 10px;
+    .live-source .live-logo {
+      max-height: 36px;
+      width: auto;
+      display: block;
+      /* Wikimedia PNG has white background — multiply against the cream card */
+      mix-blend-mode: multiply;
     }
-    .top-bar a {
+    .live-source .live-arrow {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
       color: var(--crimson);
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      flex-shrink: 0;
+      transition: transform 0.18s;
     }
-    .top-bar a::after { content: '→'; font-size: 14px; }
-    .top-bar a:hover { opacity: 0.75; }
+    .live-source:hover .live-arrow { transform: translateX(4px); }
+    .live-source .live-sub {
+      display: block;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    @media (max-width: 520px) {
+      .live-source { padding: 22px 22px; }
+      .live-source .live-logo { max-height: 28px; }
+    }
 
     /* Footer */
     footer.page-foot {
@@ -174,10 +221,14 @@
 </head>
 <body>
 <div class="wrap">
-<div class="top-bar">
-<span class="label">Live scoreboard</span>
-<a href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" rel="noopener noreferrer" target="_blank">ESPN Cricinfo</a>
-</div>
+<a class="live-source" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" rel="noopener noreferrer" target="_blank">
+<span class="live-label">Live scoreboard</span>
+<span class="live-row">
+<img alt="ESPN Cricinfo" class="live-logo" height="66" src="assets/espncricinfo-logo.png" width="500"/>
+<span aria-hidden="true" class="live-arrow">→</span>
+</span>
+<span class="live-sub">Open the official IPL 2026 series page for ball-by-ball, scorecards, and commentary.</span>
+</a>
 <header class="page-head">
 <div class="eyebrow">IPL 2026</div>
 <h1>Daily <em>tracker</em></h1>
