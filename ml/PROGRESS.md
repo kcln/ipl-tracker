@@ -10,7 +10,7 @@ Branch: `ml-engine` · Started: 2026-05-12
 - [x] Phase 2: Live win-probability model (71.6% test, in target band)
 - [x] Phase 3: Per-phase GBM models
 - [x] Phase 4: Player-level features (added signal but did not improve val accuracy)
-- [ ] Phase 5: Ensemble + documentation
+- [x] Phase 5: Ensemble + documentation
 
 ## Dataset
 
@@ -44,6 +44,7 @@ Concerns to keep in mind:
 | v3 | phase_post_pp1 (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 67.1% | 0.208 | 13 features incl. PP1 runs/wkts; **in target band** |
 | v3 | phase_innings_break (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 64.3% | 0.205 | 16 features incl. first innings total + RRR |
 | v4 | player_gbm (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 40.0% | 0.293 | 14 base + 12 player aggregates. Player features dominate gain rankings but val acc dropped 2.8% vs v3_pre_match — overfits on n_train=1005. |
+| v5 | ensemble_stacked_logistic | 2026-05-12 | meta on 2024 | 2025 | 47.1% | 0.255 | meta over (v1, v3_pre_match, v4); meta weights v1≈0, v3=0.54, v4=0.69; **best test Brier** but ties v3 on accuracy |
 
 ## Test-set integrity log
 
@@ -58,6 +59,7 @@ Each row records the single time 2025 was touched for a given model version.
 | v3_phase_post_pp1 | 2026-05-12 | 67.1% | 0.208 |
 | v3_phase_innings_break | 2026-05-12 | 64.3% | 0.205 |
 | v4_player_gbm | 2026-05-12 | 40.0% | 0.293 |
+| v5_ensemble | 2026-05-12 | 47.1% | 0.255 |
 
 ## Kill-criteria log
 

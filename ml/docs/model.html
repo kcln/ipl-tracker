@@ -77,6 +77,18 @@ canvas { max-width: 100%; }
   <p class="muted">Each chart shows team1's win probability across the match. WP is smoothed over a 6-ball window. All matches shown were decided by 1–2 runs/wickets.</p>
   <div id="charts"></div>
 
+  <h2>v5 stacked ensemble (pre-match default)</h2>
+  <div class="card">
+    <p><b>2025 test:</b> 47.1% acc · <b>Brier:</b> 0.255 (best of all pre-match models) · meta trained on 2024 (n=71)</p>
+    <p class="note">
+      Logistic meta-learner over (v1, v3_pre_match, v4) probabilities.
+      Meta weights: <code>p_v1 ≈ 0.01</code> (broken v1 correctly demoted),
+      <code>p_v3 = 0.54</code>, <code>p_v4 = 0.69</code>, intercept −0.64.
+      Pre-match accuracy on 2025 ties v3_pre_match but Brier is lower —
+      i.e. the ensemble is better-calibrated.
+    </p>
+  </div>
+
   <h2>v3 per-phase models</h2>
   <p class="muted">One calibrated LightGBM per stage of the match. Same train/val/test split.</p>
   <table>

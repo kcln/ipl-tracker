@@ -1,10 +1,11 @@
 """Parallel ML predict surface for the ml/ namespace.
 
-Routes to the appropriate calibrated model based on the match stage:
-  pre_match -> v3_phase_pre_match
-  post_toss -> v3_phase_post_toss
-  post_pp1  -> v3_phase_post_pp1
+Routes to the appropriate model based on the match stage:
+  pre_match     -> v5 stacked ensemble (v1 + v3_pre_match + v4 -> logistic meta)
+  post_toss     -> v3_phase_post_toss
+  post_pp1      -> v3_phase_post_pp1
   innings_break -> v3_phase_innings_break
+  live          -> v2_wp_lightgbm (per-delivery)
 
 This does NOT replace the existing src/predictor.py used by the live tracker.
 """
@@ -17,46 +18,43 @@ from typing import Any
 
 import numpy as np
 
-from ml.src.features import FEATURE_FUNCS, build_features
-
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MODELS_DIR = ROOT / "ml" / "data" / "models"
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=16)
 def _load(path: str):
     with open(path, "rb") as f:
         return pickle.load(f)
 
 
-def _model_for_stage(stage: str, version: int = 3) -> dict:
-    """Returns {'calibrator', 'feature_names', 'phase'}"""
+def predict_pre_match(
+    *,
+    p_v1: float, p_v3: float, p_v4: float,
+) -> float:
+    """v5 ensemble pre-match predict. Caller provides base-model probabilities;
+    returns the stacked logistic meta-learner's calibrated p_team1."""
+    art = _load(str(MODELS_DIR / "v5_ensemble.pkl"))
+    meta = art["meta"]
+    X = np.array([[p_v1, p_v3, p_v4]])
+    return float(meta.predict_proba(X)[0, 1])
+
+
+def predict_phase(stage: str, features: dict, version: int = 3) -> float:
+    """Stage-specific predict (post_toss / post_pp1 / innings_break)."""
+    if stage == "pre_match":
+        raise ValueError("use predict_pre_match() for pre-match ensemble")
     name = f"v{version}_phase_{stage}.pkl"
-    return _load(str(MODELS_DIR / name))
-
-
-def predict_for_stage(stage: str, features: dict, version: int = 3) -> tuple[float, list[str]]:
-    """Returns (p_team1_wins, feature_order_used)."""
-    art = _model_for_stage(stage, version)
+    art = _load(str(MODELS_DIR / name))
     cols = art["feature_names"]
     X = np.array([[features.get(c, 0.0) for c in cols]])
-    p = float(art["calibrator"].predict_proba(X)[0, 1])
-    return p, cols
+    return float(art["calibrator"].predict_proba(X)[0, 1])
 
 
-def predict_match(match_state: dict, version: int = 3) -> dict:
-    """High-level predict. match_state shape:
-        {
-          "stage": "pre_match" | "post_toss" | "post_pp1" | "innings_break",
-          "features": { name: value, ... }  # phase-appropriate features
-        }
-    Returns {predicted_winner, p_team1, p_team2, stage}
-    """
-    stage = match_state["stage"]
-    p_team1, _ = predict_for_stage(stage, match_state["features"], version=version)
-    return {
-        "stage": stage,
-        "p_team1": p_team1,
-        "p_team2": 1.0 - p_team1,
-        "predicted_winner": "team1" if p_team1 >= 0.5 else "team2",
-    }
+def predict_live(features: dict) -> float:
+    """Per-delivery WP. features must include the keys from v2_wp_lightgbm.json."""
+    art = _load(str(MODELS_DIR / "v2_wp_lightgbm.pkl"))
+    cal = art["calibrator"]
+    cols = art["feature_names"]
+    X = np.array([[features.get(c, 0.0) for c in cols]])
+    return float(cal.predict_proba(X)[0, 1])

@@ -1,0 +1,28 @@
+{
+  "version": 5,
+  "name": "ensemble_stacked_logistic",
+  "model_type": "stacked_logistic_meta",
+  "created_at_utc": "2026-05-12T18:00:08.615811Z",
+  "git_sha": "a6805e54f6a78f1f7a22889cdceceb6dceb207f7",
+  "sklearn_version": "1.5.2",
+  "base_models": [
+    "v1_logistic",
+    "v3_phase_pre_match",
+    "v4_player_gbm"
+  ],
+  "meta_coefficients": {
+    "p_v1": 0.011556593469493892,
+    "p_v3": 0.5422337977124474,
+    "p_v4": 0.6949129235791707
+  },
+  "meta_intercept": -0.6442999845391661,
+  "train_season": 2024,
+  "n_train": 71,
+  "test_season": 2025,
+  "n_test": 70,
+  "train_accuracy": 0.5492957746478874,
+  "train_brier": 0.2437330387893102,
+  "test_accuracy": 0.4714285714285714,
+  "test_brier": 0.25467104493616916,
+  "test_log_loss": 0.7025967132920656
+}
