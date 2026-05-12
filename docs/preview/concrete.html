@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Concrete + Mint · IPL 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --concrete:     #EEEDE9;
+    --concrete-2:   #E2E0DA;
+    --paper:        #FAFAF7;
+    --ink:          #131313;
+    --ink-2:        #2C2C2C;
+    --ink-soft:     rgba(19,19,19,0.62);
+    --ink-faint:    rgba(19,19,19,0.36);
+    --rule:         rgba(19,19,19,0.14);
+    --rule-soft:    rgba(19,19,19,0.06);
+    --mint:         #6FE8A1;     /* electric mint */
+    --mint-dark:    #1FBF6A;
+    --mint-glow:    rgba(111,232,161,0.45);
+    --coral:        #FF5A5F;
+    --steel:        #878787;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--concrete);
+    color: var(--ink);
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* subtle concrete texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(0deg, transparent 95%, var(--rule-soft) 100%),
+      linear-gradient(90deg, transparent 95%, var(--rule-soft) 100%);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .ab {
+    background: var(--ink); color: var(--concrete);
+    text-align: center; padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    position: relative; z-index: 10;
+  }
+  .ab a { color: var(--mint); margin: 0 8px; padding: 1px 6px; border-bottom: 1px solid var(--mint); }
+  .ab a:hover { background: var(--mint); color: var(--ink); }
+
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── NAV ── */
+  nav.bar {
+    padding: 24px 0;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 28px;
+    border-bottom: 1px solid var(--ink);
+  }
+  nav .mark {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    font-size: 18px; letter-spacing: -0.012em;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  nav .mark::before {
+    content: ''; width: 22px; height: 22px;
+    background: var(--mint);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  nav .crumbs {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  nav .crumbs .sep { color: var(--ink-faint); margin: 0 6px; }
+  nav .live {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--ink); color: var(--mint);
+    padding: 12px 18px;
+    transition: all 0.12s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  nav .live .arr { transition: transform 0.18s; }
+  nav .live:hover { background: var(--mint); color: var(--ink); }
+  nav .live:hover .arr { transform: translateX(4px); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 56px;
+    display: grid; grid-template-columns: 1fr 280px; gap: 56px;
+    align-items: end;
+  }
+  .hero .left .tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero .left .tag::before { content: ''; width: 28px; height: 8px; background: var(--mint); }
+  .hero .left h1 {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    font-size: clamp(64px, 11vw, 140px);
+    line-height: 0.86; letter-spacing: -0.045em;
+    text-transform: uppercase;
+  }
+  .hero .left h1 .strike {
+    background: var(--mint); color: var(--ink);
+    padding: 0 0.12em 0.04em;
+    display: inline-block; transform: translateY(-0.02em);
+  }
+  .hero .left h1 .coral { color: var(--coral); }
+  .hero .left p.lead {
+    margin-top: 28px;
+    max-width: 56ch; font-size: 17px; line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* Score-card on the right */
+  .scoreplate {
+    background: var(--ink); color: var(--paper);
+    padding: 24px 22px;
+    position: relative;
+    box-shadow: 8px 8px 0 var(--mint);
+  }
+  .scoreplate::after {
+    content: 'LIVE';
+    position: absolute; top: -10px; left: 22px;
+    background: var(--coral); color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; font-weight: 600;
+    padding: 4px 10px;
+  }
+  .scoreplate .row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+  .scoreplate .row:last-child { border-bottom: 0; }
+  .scoreplate .row .k {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .scoreplate .row .v {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 24px; line-height: 1; letter-spacing: -0.01em;
+  }
+  .scoreplate .row .v.mint { color: var(--mint); }
+  .scoreplate .row .v.coral { color: var(--coral); }
+
+  /* ── MATCH LOG ── */
+  .section-bar {
+    margin-top: 56px;
+    padding: 18px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 18px; align-items: center;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .section-bar .title { color: var(--ink); font-weight: 600; }
+  .section-bar .rule { height: 1px; background: repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px); }
+  .section-bar .count { color: var(--ink-soft); }
+
+  details.day {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    margin: 24px 0;
+  }
+  details.day > summary {
+    list-style: none; cursor: pointer;
+    padding: 22px 26px;
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 22px;
+    align-items: center;
+    border-bottom: 1px solid transparent;
+  }
+  details.day[open] > summary { border-bottom-color: var(--ink); }
+  details.day > summary::-webkit-details-marker { display: none; }
+  .day-num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 40px; line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    min-width: 64px;
+  }
+  .day-num .slash { color: var(--mint-dark); }
+  .day-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.1;
+    text-transform: uppercase; letter-spacing: -0.01em;
+  }
+  .day-sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+    letter-spacing: 0.20em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  details.day > summary .toggle {
+    width: 36px; height: 36px;
+    background: var(--mint); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px;
+    transition: transform 0.25s, background 0.2s;
+  }
+  details.day[open] > summary .toggle { background: var(--coral); color: var(--paper); transform: rotate(45deg); }
+
+  .day-body { padding: 4px 26px 28px; }
+  article {
+    padding: 22px 0;
+    border-top: 1px dashed var(--rule);
+    display: grid; grid-template-columns: 152px 1fr; gap: 32px;
+  }
+  article:first-of-type { border-top: 0; padding-top: 22px; }
+  article .meta .pin {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 600;
+    background: var(--mint); color: var(--ink);
+    padding: 3px 8px;
+    margin-bottom: 10px;
+  }
+  article .meta .when {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+  }
+  article .body {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  article .body strong {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    background: var(--mint); color: var(--ink);
+    padding: 0 4px; letter-spacing: 0.02em;
+    font-size: 0.96em;
+  }
+
+  /* ── SIGNUP ── */
+  .signup {
+    margin-top: 56px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--ink);
+  }
+  .signup-l {
+    background: var(--ink); color: var(--paper);
+    padding: 48px 36px;
+    position: relative; overflow: hidden;
+  }
+  .signup-l::before {
+    content: '';
+    position: absolute; bottom: -40%; right: -20%; width: 80%; height: 200%;
+    background: radial-gradient(circle, var(--mint-glow), transparent 60%);
+    pointer-events: none;
+  }
+  .signup-l-inner { position: relative; }
+  .signup-l .kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 22px;
+  }
+  .signup-l h2 {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    font-size: clamp(36px, 5vw, 56px); line-height: 0.94; letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  .signup-l h2 .mint { color: var(--mint); }
+  .signup-l p.lead {
+    margin-top: 22px; font-size: 15px; line-height: 1.6;
+    color: rgba(255,255,255,0.72);
+    max-width: 38ch;
+  }
+  .signup-l .stats {
+    margin-top: 36px; padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.16);
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.20em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    display: flex; gap: 28px; flex-wrap: wrap;
+  }
+  .signup-l .stats span strong { display: block; font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 24px; color: var(--mint); letter-spacing: -0.01em; margin-bottom: 4px; }
+
+  .signup-r {
+    background: var(--paper);
+    padding: 48px 36px;
+  }
+
+  form { display: grid; gap: 18px; }
+  form label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.20em; text-transform: uppercase;
+    color: var(--ink); font-weight: 600;
+    margin-bottom: 8px; display: block;
+  }
+  input[type="text"], input[type="tel"] {
+    width: 100%; font-family: 'Hanken Grotesk', sans-serif; font-size: 16px; font-weight: 500;
+    background: var(--concrete); color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 14px 16px;
+    outline: none;
+    transition: all 0.12s;
+  }
+  input::placeholder { color: var(--ink-faint); }
+  input:focus { background: var(--paper); box-shadow: 4px 4px 0 var(--mint); }
+
+  .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .platform label.radio {
+    cursor: pointer; text-align: center;
+    padding: 14px; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.10em; text-transform: uppercase;
+    background: var(--concrete); color: var(--ink-soft);
+    border: 1.5px solid var(--ink);
+    margin-bottom: 0;
+    transition: all 0.12s;
+  }
+  .platform label.radio:first-child { border-right-width: 0.75px; }
+  .platform label.radio:last-child  { border-left-width: 0.75px; }
+  .platform label.radio:has(input:checked) {
+    background: var(--ink); color: var(--mint);
+  }
+  .platform input[type="radio"] { display: none; }
+
+  button.send {
+    justify-self: start;
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 13px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--ink); color: var(--mint);
+    border: 1.5px solid var(--ink);
+    padding: 16px 30px;
+    cursor: pointer;
+    transition: all 0.12s;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  button.send::after { content: '↗'; font-size: 16px; transition: transform 0.18s; }
+  button.send:hover { background: var(--mint); color: var(--ink); }
+  button.send:hover::after { transform: translate(2px, -2px); }
+
+  /* ── FOOTER ── */
+  footer.foot {
+    margin: 56px 0 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center;
+  }
+  footer .made {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 16px;
+    letter-spacing: -0.01em; text-transform: uppercase;
+  }
+  footer .made a { background: var(--mint); padding: 2px 6px; box-shadow: 2px 2px 0 var(--ink); transition: all 0.12s; }
+  footer .made a:hover { background: var(--coral); color: var(--paper); }
+  footer .links {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; }
+    .scoreplate { max-width: 320px; }
+    .signup { grid-template-columns: 1fr; }
+    .signup-r { border-top: 1px solid var(--ink); }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 0 22px; }
+    .hero { padding: 48px 0 32px; }
+    .hero .left h1 { font-size: 64px; }
+    nav.bar { grid-template-columns: 1fr auto; }
+    nav .crumbs { display: none; }
+    details.day > summary { grid-template-columns: auto 1fr auto; padding: 16px 18px; gap: 14px; }
+    .day-num { font-size: 28px; min-width: 44px; }
+    .day-title { font-size: 16px; }
+    .day-sub { display: none; }
+    article { grid-template-columns: 1fr; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ab">
+  Preview · <a href="./stadium.html?v=3">A · Stadium</a> <a href="./bombay.html?v=3">B · Bombay</a> <a href="./concrete.html?v=3">C · Concrete</a>
+</div>
+
+<div class="wrap">
+
+  <nav class="bar">
+    <span class="mark">LAKSHMINARASIMHAM</span>
+    <span class="crumbs">IPL 2026 <span class="sep">/</span> Match 55 <span class="sep">/</span> Updated daily</span>
+    <a class="live" href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719">Live <span class="arr">→</span></a>
+  </nav>
+
+  <section class="hero">
+    <div class="left">
+      <div class="tag">IPL 2026 · DAILY TRACKER</div>
+      <h1>EVERY<br>MATCH.<br><span class="strike">EVERY</span><br><span class="coral">PREDICTION.</span></h1>
+      <p class="lead">A machine-curated archive — prediction before play, result after the match, recap at night. Texted to your phone every match day.</p>
+    </div>
+    <div class="right">
+      <div class="scoreplate">
+        <div class="row"><span class="k">Leader</span><span class="v mint">RCB</span></div>
+        <div class="row"><span class="k">Today</span><span class="v">PBKS · DC</span></div>
+        <div class="row"><span class="k">Matches</span><span class="v">55 / 74</span></div>
+        <div class="row"><span class="k">Hit rate</span><span class="v coral">0 / 1</span></div>
+        <div class="row"><span class="k">Final on</span><span class="v">May 31</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-bar">
+    <span class="title">MATCH LOG</span>
+    <span class="rule"></span>
+    <span class="count">Day 55 · 1 entry</span>
+  </div>
+
+  <details class="day" open>
+    <summary>
+      <span class="day-num">55<span class="slash">/</span></span>
+      <span>
+        <div class="day-title">Punjab Kings vs Delhi Capitals</div>
+        <div class="day-sub">Mon · May 11 · HPCA Stadium</div>
+      </span>
+      <span class="day-sub" style="grid-column: 3;">3 entries</span>
+      <span class="toggle">+</span>
+    </summary>
+    <div class="day-body">
+
+      <article>
+        <div class="meta">
+          <span class="pin">Morning brief</span>
+          <span class="when">5:07 am IST</span>
+        </div>
+        <div class="body">IPL 2026 - Monday, May 11
+
+Today's matches:
+
+Match 1: PBKS vs DC
+7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT
+Prediction: <strong>PBKS</strong> wins
+Reason: PBKS have home advantage at HPCA Stadium
+
+Current top 4: RCB, SRH, GT, PBKS
+Predicted final top 4: <strong>SRH, RCB, GT, RR</strong></div>
+      </article>
+
+      <article>
+        <div class="meta">
+          <span class="pin">Match result</span>
+          <span class="when">11:42 pm IST</span>
+        </div>
+        <div class="body"><strong>DC</strong> beat PBKS by 3 Wickets
+
+Pre-match prediction: incorrect
+
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: SRH, RCB, GT, RR</div>
+      </article>
+
+      <article>
+        <div class="meta">
+          <span class="pin">Day recap</span>
+          <span class="when">12:00 am IST</span>
+        </div>
+        <div class="body">IPL 2026 - Monday, May 11 - Day recap
+
+<strong>DC</strong> beat PBKS by 3 Wickets
+
+Predictions today: 0 of 1 correct
+
+Updated top 4: <strong>RCB, SRH, GT, PBKS</strong>
+Predicted final top 4: SRH, RCB, GT, RR</div>
+      </article>
+
+    </div>
+  </details>
+
+  <section class="signup">
+    <div class="signup-l">
+      <div class="signup-l-inner">
+        <div class="kicker">/ Join the list</div>
+        <h2>Get the<br>texts on<br>your <span class="mint">phone</span>.</h2>
+        <p class="lead">Predictions before play. Results as they happen. Day recap at midnight. Free, no ads, opt out anytime.</p>
+        <div class="stats">
+          <span><strong>~3</strong>texts/day</span>
+          <span><strong>$0</strong>cost</span>
+          <span><strong>1-tap</strong>opt out</span>
+        </div>
+      </div>
+    </div>
+    <div class="signup-r">
+      <form>
+        <div>
+          <label>01 / Name</label>
+          <input type="text" placeholder="Priya Kumar">
+        </div>
+        <div>
+          <label>02 / Phone (with country code)</label>
+          <input type="tel" placeholder="+14155551234">
+        </div>
+        <div>
+          <label>03 / Platform</label>
+          <div class="platform">
+            <label class="radio"><input type="radio" name="p" checked> iPhone</label>
+            <label class="radio"><input type="radio" name="p"> Android</label>
+          </div>
+        </div>
+        <button class="send" type="button">Send it</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span class="made">BUILT BY <a href="https://github.com/kcln/ipl-tracker">KC LAKSHMINARASIMHAM</a></span>
+    <span class="links">iplt20.com · ESPN CRICINFO · github.com/kcln</span>
+  </footer>
+
+</div>
+</body>
+</html>
