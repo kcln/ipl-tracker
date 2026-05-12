@@ -26,7 +26,8 @@ def plot_reliability(probs: np.ndarray, y: np.ndarray, out_path: pathlib.Path, t
     ax.set_ylim(0, 1)
     ax.grid(alpha=0.2)
     fig.tight_layout()
+    import os
     tmp = out_path.with_name(out_path.name + ".tmp.png")
     fig.savefig(tmp, dpi=120, format="png")
     plt.close(fig)
-    tmp.replace(out_path)
+    os.replace(tmp, out_path)

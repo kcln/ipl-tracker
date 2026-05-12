@@ -136,7 +136,7 @@ def train(version: int):
         "version": version,
         "name": "wp_lightgbm",
         "model_type": "lightgbm_isotonic_prefit",
-        "created_at_utc": dt.datetime.utcnow().isoformat() + "Z",
+        "created_at_utc": dt.datetime.now(dt.UTC).isoformat(),
         "git_sha": _git_sha(),
         "sklearn_version": sklearn.__version__,
         "lightgbm_version": lgb.__version__,

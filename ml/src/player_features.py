@@ -53,12 +53,13 @@ def _team_recent_lineup(matches_seq: pd.DataFrame, balls_indexed: dict, team: st
     """Find the (batters, bowlers) for a team across its previous n_matches before before_match_id.
     matches_seq must be sorted ascending by date.
     """
-    team_matches = matches_seq[(matches_seq["team1"] == team) | (matches_seq["team2"] == team)]
-    idx = team_matches.index[team_matches["match_id"] == before_match_id]
-    if len(idx) == 0:
+    team_matches = matches_seq[(matches_seq["team1"] == team) | (matches_seq["team2"] == team)].reset_index(drop=True)
+    matches_at_target = team_matches.index[team_matches["match_id"] == before_match_id]
+    if len(matches_at_target) == 0:
         return [], []
-    pos = idx[0]
-    prev = team_matches.loc[:pos - 1].tail(n_matches) if pos > 0 else team_matches.iloc[0:0]
+    pos = int(matches_at_target[0])
+    # Use positional indexing to avoid label-vs-position ambiguity.
+    prev = team_matches.iloc[max(0, pos - n_matches):pos] if pos > 0 else team_matches.iloc[0:0]
 
     batters = []
     bowlers = []

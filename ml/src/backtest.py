@@ -71,6 +71,7 @@ def run_backtest(
 
     details = []
     leakage_detected = False
+    same_day_warnings = 0
 
     for i, row in df.iterrows():
         if skip_no_result and row.get("no_result", False):
@@ -108,6 +109,10 @@ def run_backtest(
             "correct": int(correct),
         })
 
+        # Count same-day prior matches at prediction time (doubleheader leakage class)
+        if any(c["date"] == row["date"] for c in state["completed"]):
+            same_day_warnings += 1
+
         # update state AFTER prediction
         state["completed"].append({
             "match_id": row["match_id"],
@@ -135,9 +140,12 @@ def run_backtest(
         v = row.get("venue", "")
         state["venue_history"].setdefault(v, []).append({"winner": actual, "team1": row["team1"], "team2": row["team2"], "date": row["date"]})
 
-        # Periodic leakage check: every entry in state["completed"] must have date < current
+        # Periodic leakage check: every entry in state["completed"] must have
+        # date <= current. Strict-greater entries are unambiguous leaks (future).
+        # Equal-date entries indicate a same-day fixture being processed earlier
+        # in the loop — those are flagged via `same_day_warnings` so callers can
+        # decide whether to treat them as leakage or not.
         if (i + 1) % leakage_check_every == 0:
-            # Allow equal date if match_id order is earlier; conservative: just check strictly less.
             if any(c["date"] > row["date"] for c in state["completed"][:-1]):
                 leakage_detected = True
                 break
@@ -167,7 +175,7 @@ def run_backtest(
         }
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    ts = dt.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    ts = dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ")
     out_path = RESULTS_DIR / f"{name}_{ts}.parquet"
     tmp = out_path.with_suffix(".parquet.tmp")
     pq.write_table(pa.Table.from_pandas(details_df, preserve_index=False), tmp)
@@ -179,6 +187,7 @@ def run_backtest(
         "by_season": by_season,
         "details_path": str(out_path.relative_to(ROOT)),
         "leakage_detected": leakage_detected,
+        "same_day_warnings": same_day_warnings,
     }
 
 

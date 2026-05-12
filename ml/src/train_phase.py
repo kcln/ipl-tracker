@@ -158,7 +158,7 @@ def train_phase(phase: str, version: int = 3):
     meta = {
         "version": version, "name": f"phase_{phase}", "phase": phase,
         "model_type": "lightgbm_isotonic_prefit",
-        "created_at_utc": dt.datetime.utcnow().isoformat() + "Z",
+        "created_at_utc": dt.datetime.now(dt.UTC).isoformat(),
         "git_sha": _git_sha(), "sklearn_version": sklearn.__version__, "lightgbm_version": lgb.__version__,
         "best_n_estimators": best_n, "cv_mean_neg_log_loss": best_score,
         "n_train": int(len(train)), "n_val": int(len(val)), "n_test": int(len(test)),

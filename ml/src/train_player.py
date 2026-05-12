@@ -114,7 +114,7 @@ def train(version: int = 4):
     meta = {
         "version": version, "name": "player_gbm",
         "model_type": "lightgbm_isotonic_prefit",
-        "created_at_utc": dt.datetime.utcnow().isoformat() + "Z",
+        "created_at_utc": dt.datetime.now(dt.UTC).isoformat(),
         "git_sha": _git_sha(), "sklearn_version": sklearn.__version__, "lightgbm_version": lgb.__version__,
         "best_n_estimators": best_n, "cv_mean_neg_log_loss": best_score,
         "n_train": int(len(X_train)), "n_val": int(len(X_val)), "n_test": int(len(X_test)),

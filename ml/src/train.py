@@ -134,7 +134,7 @@ def train_logistic(version: int) -> dict:
         "version": version,
         "name": "logistic",
         "model_type": "logistic_regression_isotonic",
-        "created_at_utc": dt.datetime.utcnow().isoformat() + "Z",
+        "created_at_utc": dt.datetime.now(dt.UTC).isoformat(),
         "git_sha": _git_sha(),
         "sklearn_version": sklearn.__version__,
         "training_seasons": sorted({int(s) for s in train_df["season"].unique()}),

@@ -94,18 +94,15 @@ def feat_h2h_season(match_row: dict, state: dict) -> float:
 
 
 def feat_venue_chase_rate(match_row: dict, state: dict) -> float:
-    """Historical chase rate at this venue, centred at 0 (chase rate - 0.5)."""
-    # Cricsheet matches.parquet doesn't directly store first-batting team. Use a
-    # proxy: did the venue tend to favour the team that batted second?
-    # We approximate by counting matches won by win_by_wickets (chases) vs win_by_runs (defenses).
-    # Requires win_by_runs/wickets data which we have on matches_df, but state only stores winners.
-    # For Phase 0 we approximate via venue's recent win rate balance.
-    venue = match_row.get("venue", "")
-    vh = state["venue_history"].get(venue, [])[-30:]
-    if not vh:
-        return 0.0
-    # Without first/second batting info in state, return 0 (neutral).
-    # This feature will be refined in Phase 1 when we read win_by_wickets from matches_df.
+    """Placeholder feature — always returns 0.0.
+
+    The intent was historical chase-rate at this venue (chase rate − 0.5), but
+    cricsheet's matches.parquet only exposes the WINNER per match, not the team
+    that batted second. The richer phase_features module reads `win_by_wickets`
+    from matches.parquet directly to recover chase information; this feature is
+    kept here as a no-op so v1's saved logistic artifact stays loadable
+    (it expects a 9-feature input vector that includes `venue_chase_rate`).
+    """
     return 0.0
 
 

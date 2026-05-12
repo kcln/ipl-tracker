@@ -9,6 +9,11 @@ Run N bootstrap simulations: sample each remaining fixture outcome from its
 predicted probability, recompute final standings, record top-4 finishers.
 Return each team's probability of finishing top-4 with a 95% bootstrap CI.
 
+Known simplification: NRR is held at the input value through all simulated
+fixtures. When two teams finish on equal points, the tiebreaker therefore uses
+their pre-simulation NRR, not their simulated NRR. This skews top-4 estimates
+only for late-season ties; for unambiguous separations it has no effect.
+
 This is parallel infrastructure for future cutover; the existing tracker's
 top-4 logic in src/predictor.py is untouched.
 """

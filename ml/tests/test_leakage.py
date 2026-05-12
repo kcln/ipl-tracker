@@ -60,12 +60,79 @@ def test_feature_recompute_is_pit():
 
 
 def test_no_future_winner_referenced():
-    """The h2h table at the time of match N must not contain a result from a match dated >= N."""
-    from ml.src.features import build_features_dataset
+    """For 10 sampled matches, recompute every feature using ONLY prior matches
+    and assert it matches the stored value. This catches any future-data leak
+    in any feature function. We match `build_features_dataset`'s exact ordering
+    — i.e. same-date matches with smaller match_id count as prior (this is the
+    known same-day class flagged by run_backtest's `same_day_warnings`)."""
+    from ml.src.features import FEATURE_FUNCS
+
+    matches_path = HIST / "matches.parquet"
+    feats_path = HIST / "features.parquet"
+    _skip_if_missing(matches_path)
+    _skip_if_missing(feats_path)
+
+    matches = pd.read_parquet(matches_path)
+    matches = matches.dropna(subset=["date", "team1", "team2", "season"]).sort_values(["date", "match_id"]).reset_index(drop=True)
+    feats = pd.read_parquet(feats_path).sort_values(["date", "match_id"]).reset_index(drop=True)
+    # features.parquet doesn't carry venue/toss columns — join them back from matches.
+    feats = feats.merge(matches[["match_id", "venue", "toss_winner", "toss_decision"]], on="match_id", how="left")
+
+    n = len(feats)
+    sample_idxs = [int(n * frac) for frac in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]]
+    failures = []
+    for sample_idx in sample_idxs:
+        row = feats.iloc[sample_idx]
+        # Match build_features_dataset's "prior" semantics: same-date matches
+        # with strictly smaller match_id count as prior (chronological tie-break).
+        prior = matches[
+            (matches["date"] < row["date"])
+            | ((matches["date"] == row["date"]) & (matches["match_id"] < row["match_id"]))
+        ]
+        state = {"completed": [], "h2h": {}, "venue_history": {}, "team_form": {}, "team_played": {}, "team_won": {}}
+        for _, m in prior.iterrows():
+            if bool(m.get("no_result", False)):
+                state["completed"].append({
+                    "match_id": m["match_id"], "date": m["date"], "season": int(m["season"]),
+                    "team1": m["team1"], "team2": m["team2"], "winner": None, "no_result": True,
+                })
+                continue
+            if pd.isna(m.get("winner")):
+                continue
+            state["completed"].append({
+                "match_id": m["match_id"], "date": m["date"], "season": int(m["season"]),
+                "team1": m["team1"], "team2": m["team2"], "winner": m["winner"],
+                "venue": m.get("venue", ""), "no_result": False,
+            })
+            w = m["winner"]
+            a, b = sorted([m["team1"], m["team2"]])
+            key = (a, b, int(m["season"]))
+            ent = state["h2h"].setdefault(key, {a: 0, b: 0})
+            if w in ent: ent[w] += 1
+            state["venue_history"].setdefault(m.get("venue", ""), []).append({
+                "winner": w, "team1": m["team1"], "team2": m["team2"], "date": m["date"],
+            })
+
+        for name, fn in FEATURE_FUNCS.items():
+            stored = float(row[name])
+            recomputed = float(fn(row.to_dict(), state))
+            if abs(recomputed - stored) > 1e-6:
+                failures.append(f"match_idx={sample_idx} feature={name}: stored={stored:.6f} recomputed={recomputed:.6f}")
+    assert not failures, "PIT violations:\n" + "\n".join(failures)
+
+
+def test_same_day_warnings_counted():
+    """Same-day matches in cricsheet (doubleheaders) should be counted in
+    same_day_warnings even though they don't trigger leakage_detected."""
+    from ml.src.backtest import run_backtest
 
     p = HIST / "matches.parquet"
     _skip_if_missing(p)
-    matches = pd.read_parquet(p).head(500)  # smoke check on a slice for speed
-    feats = build_features_dataset(matches)
-    # The dataset itself is constructed chronologically — if it succeeds without error, PIT holds.
-    assert len(feats) > 0
+    matches = pd.read_parquet(p)
+    def naive(match_row, _state):
+        return match_row["team1"], 0.5
+    summary = run_backtest(naive, matches, name="same_day_check")
+    assert "same_day_warnings" in summary
+    # IPL has many doubleheaders; we expect non-zero
+    assert summary["same_day_warnings"] > 0, "expected same-day matches in IPL history"
+    assert not summary["leakage_detected"]

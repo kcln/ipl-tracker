@@ -24,8 +24,9 @@ V1_FEATURES = [
 
 
 def _load_pkl(name):
+    # Trust boundary: we only load our own training artifacts from ml/data/models.
     with open(MODELS / name, "rb") as f:
-        return pickle.load(f)
+        return pickle.load(f)  # nosec B301
 
 
 def _git_sha():
@@ -109,7 +110,7 @@ def main():
     art = {
         "version": 5, "name": "ensemble_stacked_logistic",
         "model_type": "stacked_logistic_meta",
-        "created_at_utc": dt.datetime.utcnow().isoformat() + "Z",
+        "created_at_utc": dt.datetime.now(dt.UTC).isoformat(),
         "git_sha": _git_sha(), "sklearn_version": sklearn.__version__,
         "base_models": ["v1_logistic", "v3_phase_pre_match", "v4_player_gbm"],
         "meta_coefficients": {k: float(c) for k, c in zip(["p_v1","p_v3","p_v4"], meta.coef_[0].tolist())},

@@ -24,8 +24,11 @@ MODELS_DIR = ROOT / "ml" / "data" / "models"
 
 @lru_cache(maxsize=16)
 def _load(path: str):
+    # Pickle is safe here: the only files we ever load are our own trained model
+    # artifacts produced under ml/data/models/ on this machine. We never load a
+    # pickle from user input or the network. See ml/CLAUDE.md "atomic file writes".
     with open(path, "rb") as f:
-        return pickle.load(f)
+        return pickle.load(f)  # nosec B301
 
 
 def predict_pre_match(
