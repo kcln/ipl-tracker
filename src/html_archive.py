@@ -89,12 +89,102 @@ SHELL = """<!doctype html>
       white-space: pre-wrap; word-wrap: break-word;
       background: transparent; border: 0; padding: 0; margin: 0;
     }
-    footer.page-foot {
-      margin-top: 64px; padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 12px; color: var(--text-faint);
-      text-align: center;
+
+    /* Top bar — live source link */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 760px;
+      margin: 0 auto 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      letter-spacing: 0.04em;
     }
+    .top-bar .label {
+      color: var(--text-faint);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      font-size: 10px;
+    }
+    .top-bar a {
+      color: var(--crimson);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .top-bar a::after { content: '→'; font-size: 14px; }
+    .top-bar a:hover { opacity: 0.75; }
+
+    /* Footer */
+    footer.page-foot {
+      margin-top: 80px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .foot-credits {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .foot-credits .built-by {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--text);
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+    .foot-credits .built-by em {
+      font-style: normal;
+      color: var(--crimson);
+    }
+    .foot-credits .sources {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+    .foot-credits .sources a {
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+    }
+    .foot-credits .sources a:hover {
+      color: var(--crimson);
+      border-color: var(--crimson);
+    }
+    .foot-credits .repo {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--crimson);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid rgba(224,0,28,0.22);
+      border-radius: 100px;
+      background: rgba(224,0,28,0.06);
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .foot-credits .repo:hover {
+      background: rgba(224,0,28,0.12);
+      border-color: rgba(224,0,28,0.4);
+    }
+
     .empty {
       color: var(--text-muted); font-style: italic;
       padding: 32px 0; text-align: center;
@@ -103,6 +193,10 @@ SHELL = """<!doctype html>
 </head>
 <body>
   <div class="wrap">
+    <div class="top-bar">
+      <span class="label">Live scoreboard</span>
+      <a href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" target="_blank" rel="noopener noreferrer">ESPN Cricinfo</a>
+    </div>
     <header class="page-head">
       <div class="eyebrow">IPL 2026</div>
       <h1>Daily <em>tracker</em></h1>
@@ -110,7 +204,16 @@ SHELL = """<!doctype html>
     </header>
     <main id="days"></main>
     <footer class="page-foot">
-      Generated automatically · github.com/kcln/ipl-tracker
+      <div class="foot-credits">
+        <div class="built-by">Built by <em>KCL</em></div>
+        <a class="repo" href="https://github.com/kcln/ipl-tracker" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+        <div class="sources">
+          Data:
+          <a href="https://www.iplt20.com/" target="_blank" rel="noopener noreferrer">iplt20.com</a>
+          ·
+          <a href="https://www.espncricinfo.com/series/indian-premier-league-2026-1510719" target="_blank" rel="noopener noreferrer">ESPN Cricinfo</a>
+        </div>
+      </div>
     </footer>
   </div>
 </body>
