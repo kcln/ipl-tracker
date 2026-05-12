@@ -77,6 +77,23 @@ canvas { max-width: 100%; }
   <p class="muted">Each chart shows team1's win probability across the match. WP is smoothed over a 6-ball window. All matches shown were decided by 1–2 runs/wickets.</p>
   <div id="charts"></div>
 
+  <h2>v3 per-phase models</h2>
+  <p class="muted">One calibrated LightGBM per stage of the match. Same train/val/test split.</p>
+  <table>
+    <thead><tr><th>Stage</th><th>Features</th><th>Val 2024</th><th>Test 2025</th><th>Brier (test)</th></tr></thead>
+    <tbody>
+      <tr><td>pre_match</td><td>14</td><td>57.7%</td><td>47.1%</td><td>0.266</td></tr>
+      <tr><td>post_toss</td><td>11</td><td>56.3%</td><td>41.4%</td><td>0.269</td></tr>
+      <tr><td>post_pp1</td><td>13</td><td>64.8%</td><td><b class="good">67.1%</b></td><td>0.208</td></tr>
+      <tr><td>innings_break</td><td>16</td><td>71.8%</td><td>64.3%</td><td>0.205</td></tr>
+    </tbody>
+  </table>
+  <p class="note">
+    Pre-match val 57.7% improves over v1 by +11.2% and over the heuristic val by +1.4%, but the +2024-to-2025 distribution shift hurts the test slice (n=70 is small).
+    The post-PP1 and innings-break models cross into the academic target band, which is what we'd expect — the more match state we observe, the more separable the outcome.
+    <code>predict.py</code> now routes to the appropriate stage model.
+  </p>
+
   <h2>v1 logistic regression — <span class="warn">killed</span></h2>
   <div class="card">
     <p><b>2024 val:</b> 46.5% · <b>2025 test:</b> 41.4% · <b>Brier:</b> 0.261</p>

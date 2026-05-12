@@ -8,7 +8,7 @@ Branch: `ml-engine` · Started: 2026-05-12
 - [x] Phase 0: Data foundation + backtest harness + heuristic baseline
 - [x] Phase 1: v1 logistic regression with calibration (KILLED — see below)
 - [x] Phase 2: Live win-probability model (71.6% test, in target band)
-- [ ] Phase 3: Per-phase GBM models
+- [x] Phase 3: Per-phase GBM models
 - [ ] Phase 4: Player-level features
 - [ ] Phase 5: Ensemble + documentation
 
@@ -39,6 +39,10 @@ Concerns to keep in mind:
 |---|---|---|---|---|---|---|---|
 | v1 | logistic + isotonic | 2026-05-12 | 2008–2023 | 2025 | 41.4% | 0.261 | 9 features, C=0.1. KILLED. |
 | v2 | wp_lightgbm + isotonic | 2026-05-12 | 2008–2023 | 2025 | 71.6% | 0.190 | per-delivery WP, 12 numeric + venue, n_train=239,693 |
+| v3 | phase_pre_match (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 47.1% | 0.266 | 14 PIT features; val 57.7% (beats v1 by +11.2%, beats heuristic val by +1.4%, just under 3% kill threshold) |
+| v3 | phase_post_toss (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 41.4% | 0.269 | 11 features incl. toss; toss adds no signal here |
+| v3 | phase_post_pp1 (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 67.1% | 0.208 | 13 features incl. PP1 runs/wkts; **in target band** |
+| v3 | phase_innings_break (LightGBM+iso) | 2026-05-12 | 2008–2023 | 2025 | 64.3% | 0.205 | 16 features incl. first innings total + RRR |
 
 ## Test-set integrity log
 
@@ -48,6 +52,10 @@ Each row records the single time 2025 was touched for a given model version.
 |---|---|---|---|
 | v1_logistic | 2026-05-12 | 41.4% | 0.261 |
 | v2_wp_lightgbm | 2026-05-12 | 71.6% | 0.190 |
+| v3_phase_pre_match | 2026-05-12 | 47.1% | 0.266 |
+| v3_phase_post_toss | 2026-05-12 | 41.4% | 0.269 |
+| v3_phase_post_pp1 | 2026-05-12 | 67.1% | 0.208 |
+| v3_phase_innings_break | 2026-05-12 | 64.3% | 0.205 |
 
 ## Kill-criteria log
 
