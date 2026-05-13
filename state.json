@@ -103,10 +103,11 @@
         "2497": {
           "state": "none",
           "entered_at": null,
-          "last_overs_value": 17.0,
-          "last_overs_progress_at": "2026-05-13T09:39:49.406416-07:00",
+          "last_overs_value": 17.2,
+          "last_overs_progress_at": "2026-05-13T09:41:10.643494-07:00",
           "last_note_hash": null,
-          "fired_count": 0
+          "fired_count": 0,
+          "entered_phase": null
         }
       }
     }
