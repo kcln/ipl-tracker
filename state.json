@@ -191,6 +191,15 @@
           "delivered_at": "2026-05-13T08:46:21.970108-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "KKR vs RCB \u2014 Innings break\n\nKKR finished 192/4 in 20.0 overs.\nRCB need 193 to win.\n\nUpdated prediction: KKR wins (60%)\nReason: target 193, RRR 9.65",
+          "generated_at": "2026-05-13T09:53:24.798009-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T09:53:25.942684-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -198,8 +207,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-13T09:52:05.162014-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-13T09:53:24.764437-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
