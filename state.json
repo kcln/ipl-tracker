@@ -192,7 +192,18 @@
           "delivery_skipped": false,
           "skipped_reason": null
         }
-      ]
+      ],
+      "delay_state": {
+        "2497": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": 18.4,
+          "last_overs_progress_at": "2026-05-13T09:46:47.947865-07:00",
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
