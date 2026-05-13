@@ -189,7 +189,7 @@
         },
         {
           "type": "toss_1",
-          "body": "KKR vs RCB \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (78%)\nReason: RCB won the toss and chose to field",
+          "body": "RCB vs KKR \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (78%)\nReason: RCB won the toss and chose to field",
           "generated_at": "2026-05-13T08:02:51.627589-07:00",
           "delivered": true,
           "delivered_at": "2026-05-13T08:02:52.987731-07:00",
@@ -198,7 +198,7 @@
         },
         {
           "type": "powerplay_1_1",
-          "body": "KKR vs RCB \u2014 Powerplay 1\n\nKKR: 56/2 after 6.0 overs.\n\nUpdated prediction: KKR wins (52%)\nReason: 56/2 after PP \u2014 above par (50) at this stage",
+          "body": "RCB vs KKR \u2014 Powerplay 1\n\nKKR: 56/2 after 6.0 overs.\n\nUpdated prediction: KKR wins (52%)\nReason: 56/2 after PP \u2014 above par (50) at this stage",
           "generated_at": "2026-05-13T08:46:20.950274-07:00",
           "delivered": true,
           "delivered_at": "2026-05-13T08:46:21.970108-07:00",
@@ -207,7 +207,7 @@
         },
         {
           "type": "innings_break_1",
-          "body": "KKR vs RCB \u2014 Innings break\n\nKKR finished 192/4 in 20.0 overs.\nRCB need 193 to win.\n\nUpdated prediction: KKR wins (60%)\nReason: target 193, RRR 9.65",
+          "body": "RCB vs KKR \u2014 Innings break\n\nKKR finished 192/4 in 20.0 overs.\nRCB need 193 to win.\n\nUpdated prediction: KKR wins (60%)\nReason: target 193, RRR 9.65",
           "generated_at": "2026-05-13T09:53:24.798009-07:00",
           "delivered": true,
           "delivered_at": "2026-05-13T09:53:25.942684-07:00",
@@ -216,7 +216,7 @@
         },
         {
           "type": "powerplay_2_1",
-          "body": "KKR vs RCB \u2014 Powerplay 2\n\nRCB: 66/1 after 6.0 overs, chasing 193.\n\nUpdated prediction: RCB wins (74%)\nReason: 66/1 chasing 193 \u2014 RRR 9.1 vs CRR 11.0",
+          "body": "RCB vs KKR \u2014 Powerplay 2\n\nRCB: 66/1 after 6.0 overs, chasing 193.\n\nUpdated prediction: RCB wins (74%)\nReason: 66/1 chasing 193 \u2014 RRR 9.1 vs CRR 11.0",
           "generated_at": "2026-05-13T10:33:32.572876-07:00",
           "delivered": true,
           "delivered_at": "2026-05-13T10:33:34.265848-07:00",

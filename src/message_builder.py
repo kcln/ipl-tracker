@@ -237,6 +237,36 @@ _PHASE_RESUMED_COPY = {
 }
 
 
+_TEAM_HEADER_RE = re.compile(r"^([A-Z]{2,5}) vs ([A-Z]{2,5})(.*)$")
+
+
+def rewrite_team_header(body: str, *, home_team: str) -> str:
+    """If the first line of `body` is a 'TeamA vs TeamB[ — suffix]' header and
+    home_team is one of the two teams but is in the wrong position, swap
+    them. Otherwise return body unchanged. Only the first line is touched.
+    """
+    if not body:
+        return body
+    lines = body.splitlines(keepends=False)
+    first = lines[0]
+    m = _TEAM_HEADER_RE.match(first)
+    if not m:
+        return body
+    a, b, suffix = m.group(1), m.group(2), m.group(3)
+    if home_team not in (a, b):
+        return body
+    if a == home_team:
+        return body  # already correct
+    # Swap so home is first
+    new_first = f"{b} vs {a}{suffix}"
+    lines[0] = new_first
+    # Preserve trailing newline if original had one
+    out = "\n".join(lines)
+    if body.endswith("\n"):
+        out += "\n"
+    return out
+
+
 def status_update_message(match: dict, *, phase: str, note: str | None) -> str:
     t1, t2 = match["teams"]
     lines = [f"{t1} vs {t2} — Status update", ""]
