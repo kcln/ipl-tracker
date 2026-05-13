@@ -200,6 +200,15 @@
           "delivered_at": "2026-05-13T09:53:25.942684-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "KKR vs RCB \u2014 Powerplay 2\n\nRCB: 66/1 after 6.0 overs, chasing 193.\n\nUpdated prediction: RCB wins (74%)\nReason: 66/1 chasing 193 \u2014 RRR 9.1 vs CRR 11.0",
+          "generated_at": "2026-05-13T10:33:32.572876-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T10:33:34.265848-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -207,8 +216,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-13T10:32:12.642488-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-13T10:33:32.539744-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
