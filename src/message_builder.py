@@ -180,10 +180,11 @@ def end_of_day_message(
     recent_matches: list[dict],
     squads: dict,
     archive_url: str,
+    *,
+    season_correct: int = 0,
+    season_total: int = 0,
 ) -> str:
     lines: list[str] = [f"IPL 2026 - {_format_date_long(date_iso)} - Day recap", ""]
-    correct = 0
-    total = 0
     for m in days_matches:
         if m.get("status") != "complete":
             continue
@@ -194,12 +195,13 @@ def end_of_day_message(
         loser = teams[1] if winner == teams[0] else teams[0]
         margin = _strip_winner_prefix(m.get("result") or "", winner, loser)
         lines.append(f"{winner} beat {loser} by {margin}".rstrip())
-        total += 1
-        if m.get("predicted_winner") == winner:
-            correct += 1
 
     lines.append("")
-    lines.append(f"Predictions today: {correct} of {total} correct")
+    if season_total > 0:
+        pct = int(round(100 * season_correct / season_total))
+        lines.append(f"Season to date: {season_correct} of {season_total} correct ({pct}%)")
+    else:
+        lines.append(f"Season to date: {season_correct} of {season_total} correct")
     lines.append("")
     lines.append(_top4_line("Updated top 4", predictor.current_top4(standings)))
     lines.append(_top4_line(
@@ -238,6 +240,24 @@ _PHASE_RESUMED_COPY = {
 
 
 _TEAM_HEADER_RE = re.compile(r"^([A-Z]{2,5}) vs ([A-Z]{2,5})(.*)$")
+_OLD_PREDICTIONS_LINE_RE = re.compile(r"^Predictions today: \d+ of \d+ correct$", re.MULTILINE)
+
+
+def _season_line(correct: int, total: int) -> str:
+    if total > 0:
+        pct = int(round(100 * correct / total))
+        return f"Season to date: {correct} of {total} correct ({pct}%)"
+    return f"Season to date: {correct} of {total} correct"
+
+
+def rewrite_eod_predictions_line(body: str, *, correct: int, total: int) -> str:
+    """Replace the legacy 'Predictions today: X of Y correct' line in `body`
+    with 'Season to date: <correct> of <total> correct (Z%)'. No-op if the
+    legacy line isn't present.
+    """
+    if not body or not _OLD_PREDICTIONS_LINE_RE.search(body):
+        return body
+    return _OLD_PREDICTIONS_LINE_RE.sub(_season_line(correct, total), body, count=1)
 
 
 def rewrite_team_header(body: str, *, home_team: str) -> str:

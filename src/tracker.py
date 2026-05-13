@@ -403,6 +403,7 @@ def _maybe_generate_end_of_day(
     day_entry: dict, date_iso: str,
     todays: list[dict], standings: list[dict],
     remaining: list[dict], recent: list[dict], squads: dict,
+    state_obj: dict,
 ) -> bool:
     if state.find_message(day_entry, "end_of_day"):
         return False
@@ -412,8 +413,10 @@ def _maybe_generate_end_of_day(
         return False
     # Use the matches stored on day_entry (carry predicted_winner)
     enriched = day_entry.get("matches") or todays
+    season_correct, season_total = state.season_prediction_record(state_obj)
     body = message_builder.end_of_day_message(
         date_iso, enriched, standings, remaining, recent, squads, ARCHIVE_URL,
+        season_correct=season_correct, season_total=season_total,
     )
     msg = state.add_or_update_message(day_entry, "end_of_day", body)
     html_archive.upsert_message(date_iso, "end_of_day", msg["generated_at"], body)
@@ -808,7 +811,7 @@ def main() -> int:
     _maybe_generate_delay_phases(day_entry, today, todays, now_pt())
     _maybe_generate_in_match_phases(day_entry, today, todays, standings, recent, squads)
     _maybe_generate_post_match(day_entry, today, todays, standings, remaining, recent, squads)
-    _maybe_generate_end_of_day(day_entry, today, todays, standings, remaining, recent, squads)
+    _maybe_generate_end_of_day(day_entry, today, todays, standings, remaining, recent, squads, state_obj)
 
     # Catch up brand-new signups on today's earlier messages BEFORE the broadcast,
     # so they receive messages in chronological order:

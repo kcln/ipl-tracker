@@ -137,6 +137,38 @@ def mark_delivered(msg: dict) -> None:
     msg["delivered_at"] = now_pt().isoformat()
 
 
+# Substrings used by message_builder.post_match_message — keep in sync if
+# wording ever changes. The trailing keyword makes the match unambiguous
+# against the substring "correct" appearing inside "incorrect".
+_PREDICTION_CORRECT_MARKER = "Pre-match prediction: correct"
+_PREDICTION_INCORRECT_MARKER = "Pre-match prediction: incorrect"
+
+
+def season_prediction_record(state_obj: dict) -> tuple[int, int]:
+    """Walk every post_match message body across all days and return
+    (correct, total). Only counts messages whose `type` starts with
+    "post_match" (so a morning/recap body that happens to quote the
+    marker string doesn't bump the tally). Abandoned matches don't
+    contain the marker — naturally skipped.
+    """
+    correct = 0
+    total = 0
+    days = state_obj.get("days") or {}
+    for day_entry in days.values():
+        for msg in day_entry.get("messages", []) or []:
+            if not msg.get("type", "").startswith("post_match"):
+                continue
+            body = msg.get("body") or ""
+            # Order matters: check the longer ("incorrect") phrase first so
+            # the substring "correct" inside "incorrect" doesn't false-fire.
+            if _PREDICTION_INCORRECT_MARKER in body:
+                total += 1
+            elif _PREDICTION_CORRECT_MARKER in body:
+                correct += 1
+                total += 1
+    return correct, total
+
+
 # ---------------------------------------------------------------------------
 # Delay tracking: per (day, match_id) state used by the B1 / B2 detection
 # gates in tracker._maybe_generate_delay_phases.
