@@ -1,55 +1,151 @@
 {
   "days": {
-    "2026-05-13": {
+    "2026-05-11": {
       "matches": [
         {
-          "id": "1001",
+          "id": "2495",
           "teams": [
-            "CSK",
-            "MI"
-          ],
-          "scheduled_ist": "15:30",
-          "status": "complete",
-          "result": "CSK won by 18 runs",
-          "predicted_winner": "CSK",
-          "actual_winner": "CSK"
-        },
-        {
-          "id": "1002",
-          "teams": [
-            "RCB",
-            "KKR"
+            "PBKS",
+            "DC"
           ],
           "scheduled_ist": "19:30",
           "status": "complete",
-          "result": "RCB won by 4 wickets",
-          "predicted_winner": "RCB",
-          "actual_winner": "RCB"
+          "result": "Delhi Capitals Won by 3  Wickets",
+          "predicted_winner": "PBKS",
+          "actual_winner": "DC"
         }
       ],
       "messages": [
         {
           "type": "morning",
-          "body": "IPL 2026 - Wednesday, May 13\n\nToday's matches:\n\nMatch 1: CSK vs MI\n3:30 PM IST / 6:00 AM ET / 5:00 AM CT / 3:00 AM PT\nPrediction: CSK wins\nReason: CSK have better recent form\n\nMatch 2: RCB vs KKR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: RCB wins\nReason: RCB have better recent form\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:42:04.072233-07:00",
-          "delivered": false,
-          "delivered_at": null,
-          "delivery_skipped": true,
-          "skipped_reason": "newer message available"
+          "body": "IPL 2026 - Monday, May 11\n\nToday's matches:\n\nMatch 1: PBKS vs DC\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: PBKS wins\nReason: PBKS have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
+          "generated_at": "2026-05-11T00:00:30-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T00:00:30-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "PBKS vs DC \u2014 Toss\n\nToss: DC won and chose to field.\n\nUpdated prediction: PBKS wins (70%)\nReason: DC won the toss and chose to field",
+          "generated_at": "2026-05-11T06:30:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T06:30:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "PBKS vs DC \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nPBKS first innings: 210/5 in 20.0 overs.",
+          "generated_at": "2026-05-11T07:35:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T07:35:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "PBKS vs DC \u2014 Innings break\n\nPBKS finished 210/5 in 20.0 overs.\nDC need 211 to win.\n\nUpdated prediction: PBKS wins (68%)\nReason: target 211, RRR 10.55 \u00b7 200+ totals are rarely chased",
+          "generated_at": "2026-05-11T08:38:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T08:38:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "PBKS vs DC \u2014 Powerplay 2\n\nLive chase powerplay snapshot not captured.\nDC chase: 216/7 in 19.0 overs (target 211).",
+          "generated_at": "2026-05-11T09:13:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T09:13:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         },
         {
           "type": "post_match_1",
-          "body": "CSK beat MI by 18 runs\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:42:04.125680-07:00",
-          "delivered": false,
-          "delivered_at": null,
-          "delivery_skipped": true,
-          "skipped_reason": "newer message available"
+          "body": "DC beat PBKS by 3 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
+          "generated_at": "2026-05-11T09:35:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T09:35:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         },
         {
-          "type": "post_match_2",
-          "body": "RCB beat KKR by 4 wickets\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:42:04.181221-07:00",
+          "type": "end_of_day",
+          "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\n\nPredictions today: 0 of 1 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-11T23:58:00-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-11T23:58:00-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ]
+    },
+    "2026-05-12": {
+      "matches": [
+        {
+          "id": "2496",
+          "teams": [
+            "GT",
+            "SRH"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Gujarat Titans Won by 82 Runs",
+          "predicted_winner": "GT",
+          "actual_winner": "GT"
+        }
+      ],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Tuesday, May 12\n\nToday's matches:\n\nMatch 1: GT vs SRH\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: GT wins\nReason: GT have home advantage at Narendra Modi Stadium\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
+          "generated_at": "2026-05-12T00:36:22.154420-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T00:36:22.428846-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "GT vs SRH \u2014 Toss\n\nToss: SRH won and chose to field.\n\nUpdated prediction: GT wins (56%)\nReason: GT's pre-match form outweighs the toss going to SRH",
+          "generated_at": "2026-05-12T07:00:49.644304-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T07:00:51.440285-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "GT vs SRH \u2014 Powerplay 1\n\nGT: 34/2 after 6.0 overs.\n\nUpdated prediction: SRH wins (70%)\nReason: 34/2 after PP \u2014 below par (50) at this stage",
+          "generated_at": "2026-05-12T07:32:07.084924-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T07:32:07.285442-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "GT vs SRH \u2014 Innings break\n\nGT finished 168/5 in 20.0 overs.\nSRH need 169 to win.\n\nUpdated prediction: SRH wins (57%)\nReason: target 169, RRR 8.45 \u00b7 chases win 60% at this ground",
+          "generated_at": "2026-05-12T08:50:53.960215-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T08:50:55.901949-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "GT vs SRH \u2014 Powerplay 2\n\nSRH: 34/4 after 6.0 overs, chasing 169.\n\nUpdated prediction: GT wins (90%)\nReason: 34/4 chasing 169 \u2014 RRR 9.6 vs CRR 5.7",
+          "generated_at": "2026-05-12T09:36:55.071931-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-12T09:36:56.508704-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "GT beat SRH by 82 Runs\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, GT, SRH, PBKS",
+          "generated_at": "2026-05-12T10:25:30.450329-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -57,61 +153,46 @@
         },
         {
           "type": "end_of_day",
-          "body": "IPL 2026 - Wednesday, May 13 - Day recap\n\nCSK beat MI by 18 runs\nRCB beat KKR by 4 wickets\n\nPredictions today: 2 of 2 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT\n\nArchive: https://kcln.github.io/ipl-tracker/",
-          "generated_at": "2026-05-13T09:42:04.243118-07:00",
+          "body": "IPL 2026 - Tuesday, May 12 - Day recap\n\nGT beat SRH by 82 Runs\n\nPredictions today: 1 of 1 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, GT, SRH, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-12T10:25:34.381000-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-13T09:42:04.246665-07:00",
+          "delivered_at": "2026-05-12T10:25:34.866985-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ]
+    },
+    "2026-05-13": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Wednesday, May 13\n\nToday's matches:\n\nMatch 1: RCB vs KKR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: RCB wins\nReason: RCB have home advantage at Shaheed Veer Narayan Singh International Cricket Stadium\n\nCurrent top 4: GT, RCB, SRH, PBKS\nPredicted final top 4: GT, RCB, PBKS, SRH",
+          "generated_at": "2026-05-13T00:01:13.671407-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T00:01:14.692502-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         },
         {
           "type": "toss_1",
           "body": "KKR vs RCB \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (78%)\nReason: RCB won the toss and chose to field",
-          "generated_at": "2026-05-13T09:42:24.130933-07:00",
-          "delivered": false,
-          "delivered_at": null,
-          "delivery_skipped": true,
-          "skipped_reason": "newer message available"
+          "generated_at": "2026-05-13T08:02:51.627589-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T08:02:52.987731-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         },
         {
           "type": "powerplay_1_1",
-          "body": "KKR vs RCB \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nKKR first innings: 172/3 in 17.5 overs.",
-          "generated_at": "2026-05-13T09:42:24.138168-07:00",
+          "body": "KKR vs RCB \u2014 Powerplay 1\n\nKKR: 56/2 after 6.0 overs.\n\nUpdated prediction: KKR wins (52%)\nReason: 56/2 after PP \u2014 above par (50) at this stage",
+          "generated_at": "2026-05-13T08:46:20.950274-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-13T09:42:25.944293-07:00",
+          "delivered_at": "2026-05-13T08:46:21.970108-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
-      ],
-      "delay_state": {
-        "1001": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
-          "last_overs_value": null,
-          "last_overs_progress_at": null,
-          "last_note_hash": null,
-          "fired_count": 0
-        },
-        "1002": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
-          "last_overs_value": null,
-          "last_overs_progress_at": null,
-          "last_note_hash": null,
-          "fired_count": 0
-        },
-        "2497": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
-          "last_overs_value": 18.3,
-          "last_overs_progress_at": "2026-05-13T09:45:27.344804-07:00",
-          "last_note_hash": null,
-          "fired_count": 0
-        }
-      }
+      ]
     }
   }
 }
