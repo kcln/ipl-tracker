@@ -586,6 +586,36 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
         pre_tag.append(line)
 
 
+def _sort_articles_desc_into(details, articles: list) -> None:
+    """Append `articles` (and any current children of `details`) into
+    `details` in newest-first order by data-generated."""
+    articles.sort(
+        key=lambda a: a.get("data-generated", "") or "",
+        reverse=True,
+    )
+    for a in articles:
+        details.append(a)
+
+
+def resort_all_days() -> None:
+    """Re-sort every <details data-day> section's articles into
+    descending order. One-shot used to heal legacy ascending day sections.
+
+    Safe to re-run — idempotent. No-op if docs/index.html doesn't exist.
+    """
+    if not INDEX.exists():
+        return
+    soup = _ensure_index()
+    for details in soup.find_all("details", attrs={"data-day": True}):
+        articles = list(details.find_all("article", recursive=False))
+        if not articles:
+            continue
+        for a in articles:
+            a.extract()
+        _sort_articles_desc_into(details, articles)
+    INDEX.write_text(str(soup), encoding="utf-8")
+
+
 def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: str) -> None:
     soup = _ensure_index()
     details = _find_day_details(soup, date_iso) or _create_day_details(soup, date_iso)
@@ -644,18 +674,9 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
     # all existing siblings first so legacy ascending sections heal on next
     # upsert rather than staying mixed.
     siblings = list(details.find_all("article", recursive=False))
-    siblings.sort(
-        key=lambda a: a.get("data-generated", "") or "",
-        reverse=True,
-    )
     for s in siblings:
         s.extract()
     siblings.append(article)
-    siblings.sort(
-        key=lambda a: a.get("data-generated", "") or "",
-        reverse=True,
-    )
-    for s in siblings:
-        details.append(s)
+    _sort_articles_desc_into(details, siblings)
 
     INDEX.write_text(str(soup), encoding="utf-8")
