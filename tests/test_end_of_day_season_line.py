@@ -24,7 +24,7 @@ def test_season_line_with_percentage(standings):
         "2026-05-13", [], standings, [], [], {}, "https://example.test/",
         season_correct=13, season_total=17,
     )
-    assert "Season to date: 13 of 17 correct (76%)" in body
+    assert "Season to date prediction: 13 of 17 correct (76%)" in body
     assert "Predictions today" not in body
 
 
@@ -33,9 +33,10 @@ def test_season_line_no_percentage_when_zero_total(standings):
         "2026-05-13", [], standings, [], [], {}, "url",
         season_correct=0, season_total=0,
     )
-    assert "Season to date: 0 of 0 correct" in body
+    assert "Season to date prediction: 0 of 0 correct" in body
     # No "(X%)" segment when there's nothing to divide by
-    assert "%" not in body.split("Season to date:")[1].split("\n")[0]
+    assert "%" not in body.split("Season to date prediction:")[1].split("\n")[0]
+
 
 
 def test_season_line_zero_correct_with_some_total(standings):
@@ -43,7 +44,7 @@ def test_season_line_zero_correct_with_some_total(standings):
         "2026-05-13", [], standings, [], [], {}, "url",
         season_correct=0, season_total=3,
     )
-    assert "Season to date: 0 of 3 correct (0%)" in body
+    assert "Season to date prediction: 0 of 3 correct (0%)" in body
 
 
 def test_season_line_perfect_record(standings):
@@ -51,7 +52,7 @@ def test_season_line_perfect_record(standings):
         "2026-05-13", [], standings, [], [], {}, "url",
         season_correct=5, season_total=5,
     )
-    assert "Season to date: 5 of 5 correct (100%)" in body
+    assert "Season to date prediction: 5 of 5 correct (100%)" in body
 
 
 def test_season_line_rounds_percentage_to_integer(standings):
@@ -60,7 +61,7 @@ def test_season_line_rounds_percentage_to_integer(standings):
         "2026-05-13", [], standings, [], [], {}, "url",
         season_correct=2, season_total=3,
     )
-    assert "Season to date: 2 of 3 correct (67%)" in body
+    assert "Season to date prediction: 2 of 3 correct (67%)" in body
 
 
 def test_existing_recap_components_preserved(standings):

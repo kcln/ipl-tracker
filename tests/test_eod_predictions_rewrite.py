@@ -20,7 +20,7 @@ def test_rewrite_replaces_today_line_with_season_line():
     )
     out = message_builder.rewrite_eod_predictions_line(body, correct=2, total=3)
     assert "Predictions today" not in out
-    assert "Season to date: 2 of 3 correct (67%)" in out
+    assert "Season to date prediction: 2 of 3 correct (67%)" in out
     # Everything else is preserved
     assert "RCB beat KKR by 6 wickets" in out
     assert "Updated top 4: RCB, GT, SRH, PBKS" in out
@@ -29,14 +29,14 @@ def test_rewrite_replaces_today_line_with_season_line():
 def test_rewrite_handles_zero_total():
     body = "Predictions today: 0 of 0 correct"
     out = message_builder.rewrite_eod_predictions_line(body, correct=0, total=0)
-    assert out == "Season to date: 0 of 0 correct"
+    assert out == "Season to date prediction: 0 of 0 correct"
     assert "%" not in out
 
 
 def test_rewrite_handles_perfect_record():
     body = "...\nPredictions today: 1 of 1 correct\n..."
     out = message_builder.rewrite_eod_predictions_line(body, correct=5, total=5)
-    assert "Season to date: 5 of 5 correct (100%)" in out
+    assert "Season to date prediction: 5 of 5 correct (100%)" in out
 
 
 def test_rewrite_noop_when_no_predictions_line():
@@ -48,6 +48,6 @@ def test_rewrite_noop_when_no_predictions_line():
 def test_rewrite_is_idempotent_on_already_rewritten_body():
     """If body already says 'Season to date', leave it alone — don't add a
     second line."""
-    body = "Season to date: 2 of 3 correct (67%)"
+    body = "Season to date prediction: 2 of 3 correct (67%)"
     out = message_builder.rewrite_eod_predictions_line(body, correct=2, total=3)
     assert out == body

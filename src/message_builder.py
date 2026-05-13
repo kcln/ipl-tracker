@@ -197,11 +197,7 @@ def end_of_day_message(
         lines.append(f"{winner} beat {loser} by {margin}".rstrip())
 
     lines.append("")
-    if season_total > 0:
-        pct = int(round(100 * season_correct / season_total))
-        lines.append(f"Season to date: {season_correct} of {season_total} correct ({pct}%)")
-    else:
-        lines.append(f"Season to date: {season_correct} of {season_total} correct")
+    lines.append(_season_line(season_correct, season_total))
     lines.append("")
     lines.append(_top4_line("Updated top 4", predictor.current_top4(standings)))
     lines.append(_top4_line(
@@ -240,20 +236,27 @@ _PHASE_RESUMED_COPY = {
 
 
 _TEAM_HEADER_RE = re.compile(r"^([A-Z]{2,5}) vs ([A-Z]{2,5})(.*)$")
-_OLD_PREDICTIONS_LINE_RE = re.compile(r"^Predictions today: \d+ of \d+ correct$", re.MULTILINE)
+# Matches both legacy forms so the heal rewriter is idempotent across versions:
+#   "Predictions today: X of Y correct"
+#   "Season to date: X of Y correct (Z%)"
+# both rewrite to the current canonical "Season to date prediction: ...".
+_OLD_PREDICTIONS_LINE_RE = re.compile(
+    r"^(?:Predictions today|Season to date): \d+ of \d+ correct(?: \(\d+%\))?$",
+    re.MULTILINE,
+)
 
 
 def _season_line(correct: int, total: int) -> str:
     if total > 0:
         pct = int(round(100 * correct / total))
-        return f"Season to date: {correct} of {total} correct ({pct}%)"
-    return f"Season to date: {correct} of {total} correct"
+        return f"Season to date prediction: {correct} of {total} correct ({pct}%)"
+    return f"Season to date prediction: {correct} of {total} correct"
 
 
 def rewrite_eod_predictions_line(body: str, *, correct: int, total: int) -> str:
-    """Replace the legacy 'Predictions today: X of Y correct' line in `body`
-    with 'Season to date: <correct> of <total> correct (Z%)'. No-op if the
-    legacy line isn't present.
+    """Replace any legacy predictions-tally line in `body` with the current
+    canonical 'Season to date prediction: <correct> of <total> correct (Z%)'.
+    No-op if no recognizable predictions line is present.
     """
     if not body or not _OLD_PREDICTIONS_LINE_RE.search(body):
         return body
