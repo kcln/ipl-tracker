@@ -31,7 +31,7 @@
         {
           "type": "morning",
           "body": "IPL 2026 - Wednesday, May 13\n\nToday's matches:\n\nMatch 1: CSK vs MI\n3:30 PM IST / 6:00 AM ET / 5:00 AM CT / 3:00 AM PT\nPrediction: CSK wins\nReason: CSK have better recent form\n\nMatch 2: RCB vs KKR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: RCB wins\nReason: RCB have better recent form\n\nCurrent top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:39:33.025653-07:00",
+          "generated_at": "2026-05-13T09:42:04.072233-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -40,7 +40,7 @@
         {
           "type": "post_match_1",
           "body": "CSK beat MI by 18 runs\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:39:33.078092-07:00",
+          "generated_at": "2026-05-13T09:42:04.125680-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -49,7 +49,7 @@
         {
           "type": "post_match_2",
           "body": "RCB beat KKR by 4 wickets\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT",
-          "generated_at": "2026-05-13T09:39:33.129380-07:00",
+          "generated_at": "2026-05-13T09:42:04.181221-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -58,16 +58,16 @@
         {
           "type": "end_of_day",
           "body": "IPL 2026 - Wednesday, May 13 - Day recap\n\nCSK beat MI by 18 runs\nRCB beat KKR by 4 wickets\n\nPredictions today: 2 of 2 correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, SRH, PBKS, GT\n\nArchive: https://kcln.github.io/ipl-tracker/",
-          "generated_at": "2026-05-13T09:39:33.184702-07:00",
+          "generated_at": "2026-05-13T09:42:04.243118-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-13T09:39:33.187998-07:00",
+          "delivered_at": "2026-05-13T09:42:04.246665-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         },
         {
           "type": "toss_1",
           "body": "KKR vs RCB \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (78%)\nReason: RCB won the toss and chose to field",
-          "generated_at": "2026-05-13T09:39:49.440084-07:00",
+          "generated_at": "2026-05-13T09:42:24.130933-07:00",
           "delivered": false,
           "delivered_at": null,
           "delivery_skipped": true,
@@ -75,10 +75,10 @@
         },
         {
           "type": "powerplay_1_1",
-          "body": "KKR vs RCB \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nKKR first innings: 165/3 in 17.0 overs.",
-          "generated_at": "2026-05-13T09:39:49.514896-07:00",
+          "body": "KKR vs RCB \u2014 Powerplay 1\n\nLive powerplay snapshot not captured.\nKKR first innings: 172/3 in 17.5 overs.",
+          "generated_at": "2026-05-13T09:42:24.138168-07:00",
           "delivered": true,
-          "delivered_at": "2026-05-13T09:39:51.066376-07:00",
+          "delivered_at": "2026-05-13T09:42:25.944293-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
@@ -87,6 +87,7 @@
         "1001": {
           "state": "none",
           "entered_at": null,
+          "entered_phase": null,
           "last_overs_value": null,
           "last_overs_progress_at": null,
           "last_note_hash": null,
@@ -95,6 +96,7 @@
         "1002": {
           "state": "none",
           "entered_at": null,
+          "entered_phase": null,
           "last_overs_value": null,
           "last_overs_progress_at": null,
           "last_note_hash": null,
@@ -103,11 +105,11 @@
         "2497": {
           "state": "none",
           "entered_at": null,
-          "last_overs_value": 17.2,
-          "last_overs_progress_at": "2026-05-13T09:41:10.643494-07:00",
+          "entered_phase": null,
+          "last_overs_value": 17.5,
+          "last_overs_progress_at": "2026-05-13T09:42:24.129835-07:00",
           "last_note_hash": null,
-          "fired_count": 0,
-          "entered_phase": null
+          "fired_count": 0
         }
       }
     }
