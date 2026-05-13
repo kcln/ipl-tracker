@@ -161,6 +161,20 @@
           "skipped_reason": null
         }
       ]
+    },
+    "2026-05-13": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Wednesday, May 13\n\nToday's matches:\n\nMatch 1: RCB vs KKR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: RCB wins\nReason: RCB have home advantage at Shaheed Veer Narayan Singh International Cricket Stadium\n\nCurrent top 4: GT, RCB, SRH, PBKS\nPredicted final top 4: GT, RCB, PBKS, SRH",
+          "generated_at": "2026-05-13T00:01:13.671407-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T00:01:14.692502-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ]
     }
   }
 }
