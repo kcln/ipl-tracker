@@ -103,6 +103,29 @@ def post_match_message(
     squads: dict,
 ) -> str:
     """`match` must have winner, result (margin text), and predicted_winner fields."""
+    # Abandoned / no-result branch: skip the win body and the prediction-grade
+    # line. An abandoned game has no real winner, so grading the prediction is
+    # meaningless (and would dilute the daily accuracy count).
+    if match.get("result_type") in ("no_result", "abandoned"):
+        teams = match.get("teams", [])
+        header = f"{teams[0]} vs {teams[1]}" if len(teams) == 2 else "Match"
+        note = match.get("note") or "Match abandoned — no result"
+        lines = [
+            f"{header} — Match abandoned (no result)",
+            "",
+            note,
+            "",
+            _top4_line("Updated top 4", predictor.current_top4(standings)),
+            _top4_line(
+                "Predicted final top 4",
+                predictor.predict_final_top4(
+                    standings, remaining_fixtures, recent_matches, squads,
+                    completed_matches=recent_matches,
+                ),
+            ),
+        ]
+        return "\n".join(lines)
+
     winner = match.get("actual_winner") or match.get("winner")
     teams = match.get("teams", [])
     loser = teams[1] if teams and winner == teams[0] else (teams[0] if teams else "")
@@ -193,6 +216,46 @@ def end_of_day_message(
 
 def _pct(p: float) -> str:
     return f"{int(round(p * 100))}%"
+
+
+# ---------------------------------------------------------------------------
+# Delay messages: status_update fires when a B1/B2 gate detects an overdue or
+# frozen milestone; status_resumed fires when the delay clears.
+# Generic, phase-aware copy so the body reads naturally without upstream text.
+# ---------------------------------------------------------------------------
+
+_PHASE_DELAY_FALLBACK = {
+    "pre_toss":          "Match delayed — toss not yet held",
+    "post_toss_pre_play": "Play delayed — first ball not yet bowled",
+    "in_play":           "Play stopped — overs counter has not advanced",
+}
+
+_PHASE_RESUMED_COPY = {
+    "pre_toss":          "Toss is underway",
+    "post_toss_pre_play": "Play has started — first ball bowled",
+    "in_play":           "Play has resumed",
+}
+
+
+def status_update_message(match: dict, *, phase: str, note: str | None) -> str:
+    t1, t2 = match["teams"]
+    lines = [f"{t1} vs {t2} — Status update", ""]
+    if note:
+        lines.append(note)
+    else:
+        lines.append(_PHASE_DELAY_FALLBACK.get(phase, "Match delayed"))
+    return "\n".join(lines)
+
+
+def status_resumed_message(match: dict, *, phase: str, delay_minutes: float) -> str:
+    t1, t2 = match["teams"]
+    mins = int(round(delay_minutes))
+    headline = _PHASE_RESUMED_COPY.get(phase, "Play resumed")
+    return (
+        f"{t1} vs {t2} — {headline}\n"
+        f"\n"
+        f"Resumed after a {mins}-minute delay."
+    )
 
 
 def toss_message(

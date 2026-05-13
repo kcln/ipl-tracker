@@ -20,7 +20,8 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, date
+import hashlib
+from datetime import datetime, date, timedelta
 from pathlib import Path
 
 # Allow running as `python3 src/tracker.py` (script) or `python3 -m src.tracker` (module)
@@ -113,6 +114,163 @@ def _maybe_generate_morning(
     html_archive.upsert_message(date_iso, "morning", msg["generated_at"], body)
     _log(f"generated morning brief ({len(todays)} matches)", "ok")
     return True
+
+
+# Thresholds for the B1 / B2 delay-detection gates. Kept module-level so
+# tests can override if desired without touching internals.
+_PRE_TOSS_DELAY_MINUTES = 10
+_POST_TOSS_DELAY_MINUTES = 30
+_IN_PLAY_FREEZE_MINUTES = 10
+_DELAY_SOFT_CAP = 5  # max status_update messages per match per day
+
+
+def _note_hash(note: str | None) -> str | None:
+    if not note:
+        return None
+    return hashlib.sha1(note.strip().lower().encode("utf-8")).hexdigest()[:12]
+
+
+def _scheduled_dt_pt(match: dict) -> datetime | None:
+    try:
+        dt_ist = datetime.strptime(
+            f"{match['date_ist']} {match['scheduled_ist']}", "%Y-%m-%d %H:%M",
+        ).replace(tzinfo=IST)
+        return dt_ist.astimezone(PT)
+    except (KeyError, ValueError, TypeError):
+        return None
+
+
+def _delay_gate_status(
+    match: dict, idx: int, day_entry: dict, now_pt: datetime,
+) -> tuple[str, bool]:
+    """Returns (phase, gate_open) for the delay-detection gates.
+
+    phase ∈ {"pre_toss", "post_toss_pre_play", "in_play"}.
+    """
+    toss_winner = match.get("toss_winner")
+    inn1 = match.get("inn1") or {}
+    inn2 = match.get("inn2") or {}
+    overs1 = inn1.get("overs") or 0
+    overs2 = inn2.get("overs") or 0
+
+    # B1.1 — pre-toss overdue
+    if not toss_winner:
+        sched = _scheduled_dt_pt(match)
+        if sched is None:
+            return ("pre_toss", False)
+        return ("pre_toss", now_pt > sched + timedelta(minutes=_PRE_TOSS_DELAY_MINUTES))
+
+    # B1.2 — post-toss but first ball not yet bowled
+    if overs1 == 0 and overs2 == 0:
+        toss_msg = state.find_message(day_entry, f"toss_{idx}")
+        if not toss_msg:
+            # We see toss_winner in the feed but the tracker hasn't generated
+            # its toss message yet (same tick). Defer — next tick handles it.
+            return ("post_toss_pre_play", False)
+        try:
+            toss_ts = datetime.fromisoformat(toss_msg["generated_at"])
+        except (KeyError, ValueError):
+            return ("post_toss_pre_play", False)
+        return (
+            "post_toss_pre_play",
+            now_pt > toss_ts + timedelta(minutes=_POST_TOSS_DELAY_MINUTES),
+        )
+
+    # B2 — in play, check overs-frozen against state-tracked last-progress timestamp
+    secs = state.seconds_since_overs_progress(day_entry, match["id"], now=now_pt)
+    if secs is None:
+        return ("in_play", False)
+    return ("in_play", secs >= _IN_PLAY_FREEZE_MINUTES * 60)
+
+
+def _maybe_generate_delay_phases(
+    day_entry: dict, date_iso: str, todays: list[dict], now_pt: datetime,
+) -> int:
+    """Emit status_update / status_resumed messages based on B1 + B2 gates.
+
+    Runs before _maybe_generate_in_match_phases so a transition like
+    pre_toss → toss-fires-this-tick produces both a status_resumed (here) and
+    the toss milestone message (there). The iMessage sender will deliver the
+    newer of the two and mark the other skipped, which is the right behavior:
+    the milestone carries more info than the bare resumption ping.
+    """
+    generated = 0
+    for idx, match in enumerate(todays, 1):
+        match_id = match["id"]
+        status = match.get("status", "scheduled")
+
+        # Track overs progress regardless of gate state — gives us the
+        # last_overs_progress_at timestamp B2 needs.
+        inn1 = match.get("inn1") or {}
+        inn2 = match.get("inn2") or {}
+        if status in ("live", "complete"):
+            cur_overs = (inn2.get("overs") if (inn2 and inn2.get("overs"))
+                         else (inn1.get("overs") if inn1 else None))
+            if cur_overs is not None:
+                state.record_overs_progress(day_entry, match_id, overs=cur_overs, now=now_pt)
+
+        if status == "complete":
+            # Don't open new delays on a completed match. If we had an active
+            # delay, treat completion (or transition to complete) as a clear.
+            rec = state.get_delay_record(day_entry, match_id)
+            if rec["state"] == "active":
+                resumed_phase = rec.get("entered_phase") or "in_play"
+                _emit_status_resumed(
+                    day_entry, date_iso, idx, match, rec, now_pt, resumed_phase,
+                )
+                state.set_delay_cleared(day_entry, match_id, now=now_pt)
+                generated += 1
+            continue
+
+        phase, gate_open = _delay_gate_status(match, idx, day_entry, now_pt)
+        rec = state.get_delay_record(day_entry, match_id)
+        prev_state = rec["state"]
+        prev_hash = rec["last_note_hash"]
+        note = (match.get("note") or "").strip() or None
+        nh = _note_hash(note)
+
+        if gate_open:
+            state.set_delay_active(day_entry, match_id, now=now_pt, note_hash=nh, phase=phase)
+            fresh = state.get_delay_record(day_entry, match_id)
+            should_emit = (prev_state != "active") or (prev_hash != nh)
+            if fresh["fired_count"] > _DELAY_SOFT_CAP:
+                should_emit = False
+            if should_emit:
+                key = f"status_update_{idx}_{fresh['fired_count']}"
+                body = message_builder.status_update_message(match, phase=phase, note=note)
+                msg = state.add_or_update_message(day_entry, key, body)
+                html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+                generated += 1
+                _log(f"generated {key}: {match['teams']} ({phase})", "ok")
+        elif prev_state == "active":
+            # Use the phase the delay STARTED in, not the current phase — a
+            # pre-toss delay clearing should read "Toss is underway", not
+            # "Play has started", even though the match has now advanced.
+            resumed_phase = rec.get("entered_phase") or phase
+            _emit_status_resumed(day_entry, date_iso, idx, match, rec, now_pt, resumed_phase)
+            state.set_delay_cleared(day_entry, match_id, now=now_pt)
+            generated += 1
+
+    return generated
+
+
+def _emit_status_resumed(
+    day_entry: dict, date_iso: str, idx: int, match: dict, rec: dict,
+    now_pt: datetime, phase: str,
+) -> None:
+    entered_at = rec.get("entered_at")
+    delay_minutes = 0.0
+    if entered_at:
+        try:
+            t0 = datetime.fromisoformat(entered_at)
+            delay_minutes = (now_pt - t0).total_seconds() / 60.0
+        except ValueError:
+            pass
+    key = f"status_resumed_{idx}_{rec.get('fired_count', 0)}"
+    body = message_builder.status_resumed_message(match, phase=phase, delay_minutes=delay_minutes)
+    msg = state.add_or_update_message(day_entry, key, body)
+    html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
+    _log(f"generated {key}: {match['teams']} ({phase}, {int(round(delay_minutes))}min)", "ok")
 
 
 def _maybe_generate_in_match_phases(
@@ -631,6 +789,12 @@ def main() -> int:
                 m["result"] = latest.get("result") or m.get("result")
                 if latest.get("winner"):
                     m["winner"] = latest["winner"]
+                # Carry through delay-detection fields so 60s-refreshed status
+                # text reaches _maybe_generate_delay_phases.
+                if latest.get("note") is not None:
+                    m["note"] = latest["note"]
+                if latest.get("result_type") is not None:
+                    m["result_type"] = latest["result_type"]
 
     day_entry = state.day(state_obj, today)
     recent = _completed_match_lookup(all_matches)
@@ -638,6 +802,10 @@ def main() -> int:
 
     # Generate any messages that should exist
     _maybe_generate_morning(day_entry, today, todays, standings, remaining, recent, squads)
+    # Delay-phase gates run BEFORE in_match_phases so a resumption + milestone
+    # firing on the same tick produce both messages; the iMessage sender will
+    # auto-skip the resumption in favor of the more-informative milestone.
+    _maybe_generate_delay_phases(day_entry, today, todays, now_pt())
     _maybe_generate_in_match_phases(day_entry, today, todays, standings, recent, squads)
     _maybe_generate_post_match(day_entry, today, todays, standings, remaining, recent, squads)
     _maybe_generate_end_of_day(day_entry, today, todays, standings, remaining, recent, squads)

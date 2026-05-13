@@ -135,3 +135,75 @@ def mark_older_as_skipped(day_entry: dict, keep_msg: dict, reason: str) -> int:
 def mark_delivered(msg: dict) -> None:
     msg["delivered"] = True
     msg["delivered_at"] = now_pt().isoformat()
+
+
+# ---------------------------------------------------------------------------
+# Delay tracking: per (day, match_id) state used by the B1 / B2 detection
+# gates in tracker._maybe_generate_delay_phases.
+#
+# `state` transitions: "none" → "active" → "none". A status_update message
+# fires on none → active (and on active → active when the upstream note text
+# materially changes). A status_resumed message fires on active → none.
+# ---------------------------------------------------------------------------
+
+def _delay_bucket(day_entry: dict) -> dict:
+    return day_entry.setdefault("delay_state", {})
+
+
+def get_delay_record(day_entry: dict, match_id: str) -> dict:
+    bucket = _delay_bucket(day_entry)
+    rec = bucket.setdefault(str(match_id), {
+        "state": "none",
+        "entered_at": None,
+        "entered_phase": None,
+        "last_overs_value": None,
+        "last_overs_progress_at": None,
+        "last_note_hash": None,
+        "fired_count": 0,
+    })
+    # Backfill for records persisted before entered_phase existed
+    rec.setdefault("entered_phase", None)
+    return rec
+
+
+def set_delay_active(
+    day_entry: dict, match_id: str, *, now: datetime,
+    note_hash: str | None, phase: str | None = None,
+) -> dict:
+    rec = get_delay_record(day_entry, match_id)
+    if rec["state"] != "active":
+        rec["state"] = "active"
+        rec["entered_at"] = now.isoformat()
+        rec["entered_phase"] = phase
+        rec["last_note_hash"] = note_hash
+        rec["fired_count"] += 1
+    elif note_hash != rec["last_note_hash"]:
+        # Same delay event, new upstream info — re-fire but keep entered_at/phase
+        rec["last_note_hash"] = note_hash
+        rec["fired_count"] += 1
+    return rec
+
+
+def set_delay_cleared(day_entry: dict, match_id: str, *, now: datetime) -> dict:
+    rec = get_delay_record(day_entry, match_id)
+    rec["state"] = "none"
+    return rec
+
+
+def record_overs_progress(day_entry: dict, match_id: str, *, overs: float, now: datetime) -> bool:
+    rec = get_delay_record(day_entry, match_id)
+    prev = rec["last_overs_value"]
+    if prev is None or overs != prev:
+        rec["last_overs_value"] = overs
+        rec["last_overs_progress_at"] = now.isoformat()
+        return True
+    return False
+
+
+def seconds_since_overs_progress(day_entry: dict, match_id: str, *, now: datetime) -> float | None:
+    rec = get_delay_record(day_entry, match_id)
+    ts = rec["last_overs_progress_at"]
+    if not ts:
+        return None
+    prev = datetime.fromisoformat(ts)
+    return (now - prev).total_seconds()

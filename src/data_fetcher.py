@@ -224,7 +224,17 @@ _IPLT20_STATUS_MAP = {
     "pre": "scheduled",
     "upcoming": "scheduled",
     "scheduled": "scheduled",
+    # No-result terminal states — treated as complete so post_match fires its
+    # abandonment branch instead of leaving the match perpetually "scheduled".
+    "abandoned": "complete",
+    "no result": "complete",
+    "noresult": "complete",
+    "washed out": "complete",
+    "washedout": "complete",
+    "called off": "complete",
 }
+
+_IPLT20_NO_RESULT_KEYWORDS = ("abandoned", "no result", "noresult", "washed", "called off")
 
 
 def _parse_iplt20_match(m: dict) -> dict | None:
@@ -243,10 +253,17 @@ def _parse_iplt20_match(m: dict) -> dict | None:
                 return None
         status_raw = (m.get("MatchStatus") or "").lower().strip()
         status = _IPLT20_STATUS_MAP.get(status_raw, "scheduled" if status_raw else "scheduled")
+        # Distinguish a normal win from a no-result / abandoned outcome
+        result_type: str | None = None
+        if status == "complete":
+            if any(k in status_raw for k in _IPLT20_NO_RESULT_KEYWORDS):
+                result_type = "abandoned" if "abandon" in status_raw else "no_result"
+            else:
+                result_type = "win"
         # Winner
         winner = None
         result_text = None
-        if status == "complete":
+        if status == "complete" and result_type == "win":
             wt_id = m.get("WinningTeamID")
             if wt_id and str(wt_id) == str(m.get("FirstBattingTeamID")):
                 winner = t1
@@ -341,6 +358,11 @@ def _parse_iplt20_match(m: dict) -> dict | None:
             "current_innings": current_innings,  # 0 if unknown / 1 if first innings / 2 if chase
             "match_progress": match_progress,    # free-text from feed
             "revised_target": revised_target,    # DLS-adjusted target, 0 if not set
+            # Free-text upstream status note (delay/inspection/DLS/rain etc.) —
+            # nullable; consumed by delay-gate copy in message_builder.
+            "note": match_progress or None,
+            # "win" | "no_result" | "abandoned" | None — derived from status_raw.
+            "result_type": result_type,
         }
     except (KeyError, ValueError, TypeError) as e:
         _log(f"iplt20: skipping match: {e}")
@@ -455,6 +477,8 @@ def _match_from_iplt20(match_id: str) -> dict | None:
                     "status": parsed["status"],
                     "result": parsed["result"],
                     "winner": parsed["winner"],
+                    "note": parsed.get("note"),
+                    "result_type": parsed.get("result_type"),
                 }
     return None
 
