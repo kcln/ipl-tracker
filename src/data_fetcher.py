@@ -335,16 +335,26 @@ def _parse_iplt20_match(m: dict) -> dict | None:
         match_progress  = (m.get("MatchProgress") or "").strip()
         revised_target  = _to_int(m.get("RevisedTarget"))
 
+        # Pin display order to scheduled (home-first) when home_team is known
+        # so message bodies don't reorder post-toss (which flips
+        # FirstBattingTeamCode in the upstream feed).
+        nt1 = _normalize_team(t1)
+        nt2 = _normalize_team(t2)
+        if home_team in (nt1, nt2):
+            teams = [home_team, nt2 if home_team == nt1 else nt1]
+        else:
+            teams = [nt1, nt2]
+
         return {
             "id": mid,
-            "teams": [_normalize_team(t1), _normalize_team(t2)],
+            "teams": teams,
             "date_ist": date_ist,
             "scheduled_ist": time_ist,
             "status": status,
             "result": result_text,
             "winner": winner,
-            "first_batting": _normalize_team(t1),
-            "second_batting": _normalize_team(t2),
+            "first_batting": nt1,
+            "second_batting": nt2,
             "home_team": home_team,
             "venue_id": str(m.get("GroundID") or ""),
             "venue_name": (m.get("GroundName") or "").strip(),

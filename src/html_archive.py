@@ -639,18 +639,23 @@ def upsert_message(date_iso: str, msg_type: str, generated_at_iso: str, body: st
     _populate_pre(soup, body_div, body, msg_type=msg_type)
     article.append(body_div)
 
-    # Insert articles in chronological order within the day
-    inserted = False
-    for sibling in details.find_all("article", recursive=False):
-        sib_iso = sibling.get("data-generated", "")
-        if not sib_iso:
-            sib_time = sibling.find("time")
-            sib_iso = sib_time.get("datetime", "") if sib_time else ""
-        if generated_at_iso < sib_iso:
-            sibling.insert_before(article)
-            inserted = True
-            break
-    if not inserted:
-        details.append(article)
+    # Insert articles in reverse-chronological order within the day — newest
+    # at the top, matching the page-level "latest day first" ordering. Sort
+    # all existing siblings first so legacy ascending sections heal on next
+    # upsert rather than staying mixed.
+    siblings = list(details.find_all("article", recursive=False))
+    siblings.sort(
+        key=lambda a: a.get("data-generated", "") or "",
+        reverse=True,
+    )
+    for s in siblings:
+        s.extract()
+    siblings.append(article)
+    siblings.sort(
+        key=lambda a: a.get("data-generated", "") or "",
+        reverse=True,
+    )
+    for s in siblings:
+        details.append(s)
 
     INDEX.write_text(str(soup), encoding="utf-8")
