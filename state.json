@@ -173,6 +173,15 @@
           "delivered_at": "2026-05-13T00:01:14.692502-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "KKR vs RCB \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (78%)\nReason: RCB won the toss and chose to field",
+          "generated_at": "2026-05-13T08:02:51.627589-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-13T08:02:52.987731-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ]
     }
