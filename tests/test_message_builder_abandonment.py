@@ -67,3 +67,62 @@ def test_post_match_normal_win_unchanged(standings):
     body = message_builder.post_match_message(match, standings, [], [], {})
     assert "RCB beat KKR" in body
     assert "abandoned" not in body.lower()
+
+
+def test_post_match_with_innings_includes_score_line(standings):
+    match = {
+        "id": "1001",
+        "teams": ["PBKS", "MI"],
+        "first_batting": "PBKS",
+        "second_batting": "MI",
+        "status": "complete",
+        "result_type": "win",
+        "winner": "MI",
+        "actual_winner": "MI",
+        "result": "MI won by 6 wickets",
+        "predicted_winner": "PBKS",
+        "inn1": {"runs": 200, "wkts": 8, "overs": 20.0},
+        "inn2": {"runs": 203, "wkts": 4, "overs": 18.2},
+    }
+    body = message_builder.post_match_message(match, standings, [], [], {})
+    assert "MI beat PBKS by 6 wickets" in body
+    assert "PBKS 200/8 (20.0)  ·  MI 203/4 (18.2)" in body
+    assert "Pre-match prediction: incorrect" in body
+
+
+def test_post_match_without_innings_omits_score_line(standings):
+    # Backfill path: no inn data — should not crash, just skip the score line
+    match = {
+        "id": "1001",
+        "teams": ["RCB", "KKR"],
+        "status": "complete",
+        "result_type": "win",
+        "winner": "RCB",
+        "actual_winner": "RCB",
+        "result": "RCB won by 4 wickets",
+        "predicted_winner": "RCB",
+    }
+    body = message_builder.post_match_message(match, standings, [], [], {})
+    assert "RCB beat KKR" in body
+    # No score-line separator " · " when innings data missing
+    assert "  ·  " not in body
+
+
+def test_end_of_day_includes_score_line_per_match(standings):
+    match = {
+        "teams": ["PBKS", "MI"],
+        "first_batting": "PBKS",
+        "second_batting": "MI",
+        "status": "complete",
+        "winner": "MI",
+        "actual_winner": "MI",
+        "result": "MI won by 6 wickets",
+        "inn1": {"runs": 200, "wkts": 8, "overs": 20.0},
+        "inn2": {"runs": 203, "wkts": 4, "overs": 18.2},
+    }
+    body = message_builder.end_of_day_message(
+        "2026-05-14", [match], standings, [], [], {}, "https://kcln.github.io/ipl-tracker/",
+        season_correct=2, season_total=4,
+    )
+    assert "MI beat PBKS by 6 wickets" in body
+    assert "PBKS 200/8 (20.0)  ·  MI 203/4 (18.2)" in body

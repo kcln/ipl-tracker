@@ -403,16 +403,28 @@ def _maybe_generate_post_match(
 
 
 def _record_match_outcome(day_entry: dict, match: dict, predicted_winner: str) -> None:
-    """Store {id, teams, predicted_winner, actual_winner, status, result} on day_entry.matches."""
+    """Store outcome + final innings scores on day_entry.matches."""
     entries = day_entry.setdefault("matches", [])
     mid = match.get("id")
     actual = match.get("winner") or match.get("actual_winner")
+    inn1 = match.get("inn1")
+    inn2 = match.get("inn2")
+    first_batting = match.get("first_batting")
+    second_batting = match.get("second_batting")
     for e in entries:
         if e.get("id") == mid:
             e["status"] = match.get("status")
             e["result"] = match.get("result")
             e["predicted_winner"] = predicted_winner
             e["actual_winner"] = actual
+            if inn1:
+                e["inn1"] = inn1
+            if inn2:
+                e["inn2"] = inn2
+            if first_batting:
+                e["first_batting"] = first_batting
+            if second_batting:
+                e["second_batting"] = second_batting
             return
     entries.append({
         "id": mid,
@@ -422,6 +434,10 @@ def _record_match_outcome(day_entry: dict, match: dict, predicted_winner: str) -
         "result": match.get("result"),
         "predicted_winner": predicted_winner,
         "actual_winner": actual,
+        "inn1": inn1,
+        "inn2": inn2,
+        "first_batting": first_batting,
+        "second_batting": second_batting,
     })
 
 

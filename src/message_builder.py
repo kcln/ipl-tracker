@@ -42,6 +42,32 @@ def _top4_line(label: str, teams: list[str]) -> str:
     return f"{label}: " + (", ".join(teams) if teams else "(unavailable)")
 
 
+def _fmt_innings(team: str, inn: dict | None) -> str | None:
+    if not inn:
+        return None
+    runs = inn.get("runs")
+    wkts = inn.get("wkts")
+    overs = inn.get("overs")
+    if runs is None or wkts is None or overs is None:
+        return None
+    return f"{team} {runs}/{wkts} ({overs})"
+
+
+def _format_score_line(match: dict) -> str | None:
+    """Render 'T1 R/W (O) · T2 R/W (O)' for a completed match. Returns None
+    if either innings is missing. Team order is batting first, then chasing."""
+    inn1 = match.get("inn1")
+    inn2 = match.get("inn2")
+    teams = match.get("teams") or []
+    first = match.get("first_batting") or (teams[0] if teams else "")
+    second = match.get("second_batting") or (teams[1] if len(teams) > 1 else "")
+    s1 = _fmt_innings(first, inn1) if first else None
+    s2 = _fmt_innings(second, inn2) if second else None
+    if not s1 or not s2:
+        return None
+    return f"{s1}  ·  {s2}"
+
+
 def morning_message(
     date_iso: str,
     todays_matches: list[dict],
@@ -135,6 +161,11 @@ def post_match_message(
 
     lines = [
         f"{winner} beat {loser} by {_strip_winner_prefix(margin, winner, loser)}",
+    ]
+    score = _format_score_line(match)
+    if score:
+        lines.append(score)
+    lines += [
         "",
         f"Pre-match prediction: {correct}",
         "",
@@ -195,6 +226,9 @@ def end_of_day_message(
         loser = teams[1] if winner == teams[0] else teams[0]
         margin = _strip_winner_prefix(m.get("result") or "", winner, loser)
         lines.append(f"{winner} beat {loser} by {margin}".rstrip())
+        score = _format_score_line(m)
+        if score:
+            lines.append(score)
 
     lines.append("")
     lines.append(_season_line(season_correct, season_total))

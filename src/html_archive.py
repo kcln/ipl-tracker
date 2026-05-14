@@ -24,6 +24,8 @@ _UPDATED_PRED_RE     = re.compile(r'^(Updated prediction:\s*)([A-Z][A-Z0-9]+)( w
 _PP_SCORE_RE         = re.compile(r'^([A-Z][A-Z0-9]+): (\d+/\d+) after ([\d.]+) overs')
 _INNINGS_FINAL_RE    = re.compile(r'^([A-Z][A-Z0-9]+) finished (\d+/\d+) in ([\d.]+) overs\.?$')
 _INNINGS_TARGET_RE   = re.compile(r'^([A-Z][A-Z0-9]+) need (\d+) to win\.?$')
+# Final score line in post_match / end_of_day: "T1 R/W (O)  ·  T2 R/W (O)"
+_SCORE_LINE_RE       = re.compile(r'^([A-Z][A-Z0-9]+) (\d+/\d+) \(([\d.]+)\)  ·  ([A-Z][A-Z0-9]+) (\d+/\d+) \(([\d.]+)\)$')
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -506,6 +508,10 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
         s.string = text
         return s
 
+    # Tracks the winner from the most recent "X beat Y by Z" line so that the
+    # following score line can bold the correct team's score.
+    last_winner: str | None = None
+
     for i, line in enumerate(lines):
         if i > 0:
             pre_tag.append('\n')
@@ -530,8 +536,25 @@ def _populate_pre(soup: BeautifulSoup, pre_tag, body_text: str, msg_type: str = 
         if is_post_match or is_recap:
             m = _RESULT_LINE_RE.match(line)
             if m:
+                last_winner = m.group(1)
                 pre_tag.append(_wrap_strong(m.group(1)))
                 pre_tag.append(' beat ' + m.group(2) + ' by ' + m.group(3))
+                continue
+
+            # ── Score line: bold the winner's segment ──
+            m = _SCORE_LINE_RE.match(line)
+            if m:
+                t1, s1, o1, t2, s2, o2 = m.group(1), m.group(2), m.group(3), m.group(4), m.group(5), m.group(6)
+                seg1 = f"{t1} {s1} ({o1})"
+                seg2 = f"{t2} {s2} ({o2})"
+                if last_winner == t1:
+                    pre_tag.append(_wrap_strong(seg1))
+                    pre_tag.append(f"  ·  {seg2}")
+                elif last_winner == t2:
+                    pre_tag.append(f"{seg1}  ·  ")
+                    pre_tag.append(_wrap_strong(seg2))
+                else:
+                    pre_tag.append(line)
                 continue
 
         # ── Bold "Updated top 4: ..." list in both match-result and recap ──
