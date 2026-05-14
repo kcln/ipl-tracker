@@ -12,7 +12,21 @@
           "status": "complete",
           "result": "Delhi Capitals Won by 3  Wickets",
           "predicted_winner": "PBKS",
-          "actual_winner": "DC"
+          "actual_winner": "DC",
+          "inn1": {
+            "runs": 210,
+            "wkts": 5,
+            "overs": 20.0,
+            "raw": "210/5 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 216,
+            "wkts": 7,
+            "overs": 19.0,
+            "raw": "216/7 (19.0 Ov)"
+          },
+          "first_batting": "PBKS",
+          "second_batting": "DC"
         }
       ],
       "messages": [
@@ -63,7 +77,7 @@
         },
         {
           "type": "post_match_1",
-          "body": "DC beat PBKS by 3 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS",
+          "body": "DC beat PBKS by 3 Wickets\nPBKS 210/5 (20.0)  \u00b7  DC 216/7 (19.0)\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
           "generated_at": "2026-05-11T09:35:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T09:35:00-07:00",
@@ -72,7 +86,7 @@
         },
         {
           "type": "end_of_day",
-          "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\n\nSeason to date prediction: 0 of 1 correct (0%)\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: GT, SRH, RCB, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "body": "IPL 2026 - Monday, May 11 - Day recap\n\nDC beat PBKS by 3 Wickets\nPBKS 210/5 (20.0)  \u00b7  DC 216/7 (19.0)\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
           "generated_at": "2026-05-11T23:58:00-07:00",
           "delivered": true,
           "delivered_at": "2026-05-11T23:58:00-07:00",
@@ -93,7 +107,21 @@
           "status": "complete",
           "result": "Gujarat Titans Won by 82 Runs",
           "predicted_winner": "GT",
-          "actual_winner": "GT"
+          "actual_winner": "GT",
+          "inn1": {
+            "runs": 168,
+            "wkts": 5,
+            "overs": 20.0,
+            "raw": "168/5 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 86,
+            "wkts": 10,
+            "overs": 14.5,
+            "raw": "86/10 (14.5 Ov)"
+          },
+          "first_batting": "GT",
+          "second_batting": "SRH"
         }
       ],
       "messages": [
@@ -144,7 +172,7 @@
         },
         {
           "type": "post_match_1",
-          "body": "GT beat SRH by 82 Runs\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, GT, SRH, PBKS",
+          "body": "GT beat SRH by 82 Runs\nGT 168/5 (20.0)  \u00b7  SRH 86/10 (14.5)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
           "generated_at": "2026-05-12T10:25:30.450329-07:00",
           "delivered": false,
           "delivered_at": null,
@@ -153,7 +181,7 @@
         },
         {
           "type": "end_of_day",
-          "body": "IPL 2026 - Tuesday, May 12 - Day recap\n\nGT beat SRH by 82 Runs\n\nSeason to date prediction: 1 of 2 correct (50%)\n\nUpdated top 4: RCB, SRH, GT, PBKS\nPredicted final top 4: RCB, GT, SRH, PBKS\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "body": "IPL 2026 - Tuesday, May 12 - Day recap\n\nGT beat SRH by 82 Runs\nGT 168/5 (20.0)  \u00b7  SRH 86/10 (14.5)\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
           "generated_at": "2026-05-12T10:25:34.381000-07:00",
           "delivered": true,
           "delivered_at": "2026-05-12T10:25:34.866985-07:00",
@@ -174,7 +202,21 @@
           "status": "complete",
           "result": "Royal Challengers Bengaluru Won by 6 Wickets",
           "predicted_winner": "RCB",
-          "actual_winner": "RCB"
+          "actual_winner": "RCB",
+          "inn1": {
+            "runs": 192,
+            "wkts": 4,
+            "overs": 20.0,
+            "raw": "192/4 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 194,
+            "wkts": 4,
+            "overs": 19.1,
+            "raw": "194/4 (19.1 Ov)"
+          },
+          "first_batting": "KKR",
+          "second_batting": "RCB"
         }
       ],
       "messages": [
@@ -225,7 +267,7 @@
         },
         {
           "type": "post_match_1",
-          "body": "RCB beat KKR by 6 Wickets\n\nPre-match prediction: correct\n\nUpdated top 4: GT, RCB, SRH, PBKS\nPredicted final top 4: GT, PBKS, SRH, RCB",
+          "body": "RCB beat KKR by 6 Wickets\nKKR 192/4 (20.0)  \u00b7  RCB 194/4 (19.1)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
           "generated_at": "2026-05-13T11:51:21.951885-07:00",
           "delivered": false,
           "delivered_at": null,
@@ -234,7 +276,7 @@
         },
         {
           "type": "end_of_day",
-          "body": "IPL 2026 - Wednesday, May 13 - Day recap\n\nRCB beat KKR by 6 Wickets\n\nSeason to date prediction: 2 of 3 correct (67%)\n\nUpdated top 4: GT, RCB, SRH, PBKS\nPredicted final top 4: GT, PBKS, SRH, RCB\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "body": "IPL 2026 - Wednesday, May 13 - Day recap\n\nRCB beat KKR by 6 Wickets\nKKR 192/4 (20.0)  \u00b7  RCB 194/4 (19.1)\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
           "generated_at": "2026-05-13T11:51:24.870302-07:00",
           "delivered": true,
           "delivered_at": "2026-05-13T11:51:25.847795-07:00",
@@ -266,7 +308,21 @@
           "status": "complete",
           "result": "Mumbai Indians Won by 6 Wickets",
           "predicted_winner": "PBKS",
-          "actual_winner": "MI"
+          "actual_winner": "MI",
+          "inn1": {
+            "runs": 200,
+            "wkts": 8,
+            "overs": 20.0,
+            "raw": "200/8 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 205,
+            "wkts": 4,
+            "overs": 19.5,
+            "raw": "205/4 (19.5 Ov)"
+          },
+          "first_batting": "PBKS",
+          "second_batting": "MI"
         }
       ],
       "messages": [
@@ -335,7 +391,7 @@
         },
         {
           "type": "post_match_1",
-          "body": "MI beat PBKS by 6 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
+          "body": "MI beat PBKS by 6 Wickets\nPBKS 200/8 (20.0)  \u00b7  MI 205/4 (19.5)\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
           "generated_at": "2026-05-14T10:52:17.048191-07:00",
           "delivered": false,
           "delivered_at": null,
@@ -344,7 +400,7 @@
         },
         {
           "type": "end_of_day",
-          "body": "IPL 2026 - Thursday, May 14 - Day recap\n\nMI beat PBKS by 6 Wickets\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "body": "IPL 2026 - Thursday, May 14 - Day recap\n\nMI beat PBKS by 6 Wickets\nPBKS 200/8 (20.0)  \u00b7  MI 205/4 (19.5)\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
           "generated_at": "2026-05-14T10:52:19.650479-07:00",
           "delivered": true,
           "delivered_at": "2026-05-14T10:52:20.327918-07:00",
