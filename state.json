@@ -255,7 +255,20 @@
       }
     },
     "2026-05-14": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2498",
+          "teams": [
+            "PBKS",
+            "MI"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Mumbai Indians Won by 6 Wickets",
+          "predicted_winner": "PBKS",
+          "actual_winner": "MI"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -319,6 +332,24 @@
           "delivered_at": "2026-05-14T09:29:47.271752-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "MI beat PBKS by 6 Wickets\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
+          "generated_at": "2026-05-14T10:52:17.048191-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Thursday, May 14 - Day recap\n\nMI beat PBKS by 6 Wickets\n\nSeason to date prediction: 2 of 4 correct (50%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-14T10:52:19.650479-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T10:52:20.327918-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -326,8 +357,8 @@
           "state": "none",
           "entered_at": "2026-05-14T08:58:01.474294-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 19.4,
-          "last_overs_progress_at": "2026-05-14T10:49:34.940754-07:00",
+          "last_overs_value": 19.5,
+          "last_overs_progress_at": "2026-05-14T10:52:14.738100-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
