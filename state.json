@@ -301,15 +301,24 @@
           "delivered_at": "2026-05-14T08:58:02.394422-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_resumed_1_1",
+          "body": "PBKS vs MI \u2014 Play has resumed\n\nResumed after a 5-minute delay.",
+          "generated_at": "2026-05-14T09:03:07.173487-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T09:03:07.824990-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2498": {
-          "state": "active",
+          "state": "none",
           "entered_at": "2026-05-14T08:58:01.474294-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 20.0,
-          "last_overs_progress_at": "2026-05-14T08:47:54.927089-07:00",
+          "last_overs_value": 0.1,
+          "last_overs_progress_at": "2026-05-14T09:03:07.173370-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
