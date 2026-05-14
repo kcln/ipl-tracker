@@ -265,6 +265,15 @@
           "delivered_at": "2026-05-14T00:01:01.878624-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "PBKS vs MI \u2014 Toss\n\nToss: MI won and chose to field.\n\nUpdated prediction: PBKS wins (86%)\nReason: PBKS's pre-match form outweighs the toss going to MI",
+          "generated_at": "2026-05-14T06:32:09.667082-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T06:32:12.482338-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
