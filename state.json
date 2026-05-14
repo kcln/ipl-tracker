@@ -317,8 +317,8 @@
           "state": "none",
           "entered_at": "2026-05-14T08:58:01.474294-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 20.0,
-          "last_overs_progress_at": "2026-05-14T09:05:47.437348-07:00",
+          "last_overs_value": 1.0,
+          "last_overs_progress_at": "2026-05-14T09:07:13.712738-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
