@@ -310,6 +310,15 @@
           "delivered_at": "2026-05-14T09:03:07.824990-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "PBKS vs MI \u2014 Powerplay 2\n\nMI: 59/0 after 6.0 overs, chasing 201.\n\nUpdated prediction: PBKS wins (54%)\nReason: 59/0 chasing 201 \u2014 RRR 10.1 vs CRR 9.8",
+          "generated_at": "2026-05-14T09:29:44.324943-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T09:29:47.271752-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -317,8 +326,8 @@
           "state": "none",
           "entered_at": "2026-05-14T08:58:01.474294-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-14T09:28:25.922520-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-14T09:29:44.324039-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
