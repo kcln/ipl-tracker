@@ -292,17 +292,26 @@
           "delivered_at": "2026-05-14T08:47:57.644135-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_update_1_1",
+          "body": "PBKS vs MI \u2014 Status update\n\nPlay stopped \u2014 overs counter has not advanced",
+          "generated_at": "2026-05-14T08:58:01.474341-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T08:58:02.394422-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2498": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
+          "state": "active",
+          "entered_at": "2026-05-14T08:58:01.474294-07:00",
+          "entered_phase": "in_play",
           "last_overs_value": 20.0,
           "last_overs_progress_at": "2026-05-14T08:47:54.927089-07:00",
           "last_note_hash": null,
-          "fired_count": 0
+          "fired_count": 1
         }
       }
     }
