@@ -292,6 +292,36 @@ def test_b2_clears_when_overs_resume(day_entry):
     assert "38" in resumed[0]["body"]
 
 
+# ---------- Archive URL is appended to in-match messages ----------
+
+def test_status_update_body_includes_archive_url(day_entry):
+    match = _match(note="Wet outfield, inspection delayed")
+    now = SCHED_PT + timedelta(minutes=12)
+    tracker._maybe_generate_delay_phases(day_entry, "2026-05-13", [match], now)
+    body = next(
+        m["body"] for m in day_entry["messages"] if m["type"].startswith("status_update_")
+    )
+    assert f"Archive: {tracker.ARCHIVE_URL}" in body
+
+
+def test_status_resumed_body_includes_archive_url(day_entry):
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(note="Wet outfield, inspection delayed")],
+        SCHED_PT + timedelta(minutes=12),
+    )
+    # Toss happens — delay clears
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB")],
+        SCHED_PT + timedelta(minutes=20),
+    )
+    body = next(
+        m["body"] for m in day_entry["messages"] if m["type"].startswith("status_resumed_")
+    )
+    assert f"Archive: {tracker.ARCHIVE_URL}" in body
+
+
 # ---------- Soft cap ----------
 
 def test_soft_cap_prevents_runaway_refires(day_entry):

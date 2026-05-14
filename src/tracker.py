@@ -251,7 +251,9 @@ def _maybe_generate_delay_phases(
                 should_emit = False
             if should_emit:
                 key = f"status_update_{idx}_{fresh['fired_count']}"
-                body = message_builder.status_update_message(match, phase=phase, note=note)
+                body = message_builder.status_update_message(
+                    match, phase=phase, note=note, archive_url=ARCHIVE_URL,
+                )
                 msg = state.add_or_update_message(day_entry, key, body)
                 html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
                 generated += 1
@@ -281,7 +283,9 @@ def _emit_status_resumed(
         except ValueError:
             pass
     key = f"status_resumed_{idx}_{rec.get('fired_count', 0)}"
-    body = message_builder.status_resumed_message(match, phase=phase, delay_minutes=delay_minutes)
+    body = message_builder.status_resumed_message(
+        match, phase=phase, delay_minutes=delay_minutes, archive_url=ARCHIVE_URL,
+    )
     msg = state.add_or_update_message(day_entry, key, body)
     html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
     _log(f"generated {key}: {match['teams']} ({phase}, {int(round(delay_minutes))}min)", "ok")
@@ -304,7 +308,9 @@ def _maybe_generate_in_match_phases(
         if match.get("toss_winner"):
             key = f"toss_{idx}"
             if not state.find_message(day_entry, key):
-                body = message_builder.toss_message(match, standings, recent, squads, recent)
+                body = message_builder.toss_message(
+                    match, standings, recent, squads, recent, archive_url=ARCHIVE_URL,
+                )
                 msg = state.add_or_update_message(day_entry, key, body)
                 html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
                 generated += 1
@@ -317,7 +323,9 @@ def _maybe_generate_in_match_phases(
         if inn1.get("overs", 0) >= 6.0:
             key = f"powerplay_1_{idx}"
             if not state.find_message(day_entry, key):
-                body = message_builder.powerplay_1_message(match, standings, recent)
+                body = message_builder.powerplay_1_message(
+                    match, standings, recent, archive_url=ARCHIVE_URL,
+                )
                 msg = state.add_or_update_message(day_entry, key, body)
                 html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
                 generated += 1
@@ -332,7 +340,9 @@ def _maybe_generate_in_match_phases(
         if innings_done:
             key = f"innings_break_{idx}"
             if not state.find_message(day_entry, key):
-                body = message_builder.innings_break_message(match, standings, recent)
+                body = message_builder.innings_break_message(
+                    match, standings, recent, archive_url=ARCHIVE_URL,
+                )
                 msg = state.add_or_update_message(day_entry, key, body)
                 html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
                 generated += 1
@@ -342,7 +352,9 @@ def _maybe_generate_in_match_phases(
         if inn2.get("overs", 0) >= 6.0:
             key = f"powerplay_2_{idx}"
             if not state.find_message(day_entry, key):
-                body = message_builder.powerplay_2_message(match, standings, recent)
+                body = message_builder.powerplay_2_message(
+                    match, standings, recent, archive_url=ARCHIVE_URL,
+                )
                 msg = state.add_or_update_message(day_entry, key, body)
                 html_archive.upsert_message(date_iso, key, msg["generated_at"], body)
                 generated += 1

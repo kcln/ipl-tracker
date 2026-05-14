@@ -290,25 +290,38 @@ def rewrite_team_header(body: str, *, home_team: str) -> str:
     return out
 
 
-def status_update_message(match: dict, *, phase: str, note: str | None) -> str:
+def _append_archive(lines: list[str], archive_url: str | None) -> None:
+    if archive_url:
+        lines.append("")
+        lines.append(f"Archive: {archive_url}")
+
+
+def status_update_message(
+    match: dict, *, phase: str, note: str | None, archive_url: str | None = None,
+) -> str:
     t1, t2 = match["teams"]
     lines = [f"{t1} vs {t2} — Status update", ""]
     if note:
         lines.append(note)
     else:
         lines.append(_PHASE_DELAY_FALLBACK.get(phase, "Match delayed"))
+    _append_archive(lines, archive_url)
     return "\n".join(lines)
 
 
-def status_resumed_message(match: dict, *, phase: str, delay_minutes: float) -> str:
+def status_resumed_message(
+    match: dict, *, phase: str, delay_minutes: float, archive_url: str | None = None,
+) -> str:
     t1, t2 = match["teams"]
     mins = int(round(delay_minutes))
     headline = _PHASE_RESUMED_COPY.get(phase, "Play resumed")
-    return (
-        f"{t1} vs {t2} — {headline}\n"
-        f"\n"
-        f"Resumed after a {mins}-minute delay."
-    )
+    lines = [
+        f"{t1} vs {t2} — {headline}",
+        "",
+        f"Resumed after a {mins}-minute delay.",
+    ]
+    _append_archive(lines, archive_url)
+    return "\n".join(lines)
 
 
 def toss_message(
@@ -317,6 +330,8 @@ def toss_message(
     recent_matches: list[dict],
     squads: dict,
     completed_matches: list[dict],
+    *,
+    archive_url: str | None = None,
 ) -> str:
     """Fires once the toss is known. Adjusted prediction with toss bias."""
     t1, t2 = match["teams"]
@@ -351,6 +366,7 @@ def toss_message(
             lines.append(_ml_line)
     except Exception:
         pass
+    _append_archive(lines, archive_url)
     return "\n".join(lines)
 
 
@@ -358,6 +374,8 @@ def powerplay_1_message(
     match: dict,
     standings: list[dict],
     completed_matches: list[dict],
+    *,
+    archive_url: str | None = None,
 ) -> str:
     """Fires after innings-1 powerplay (over 6.0)."""
     inn1 = match.get("inn1") or {}
@@ -376,6 +394,7 @@ def powerplay_1_message(
             f"Live powerplay snapshot not captured.",
             f"{batting} first innings: {runs}/{wkts} in {overs} overs.",
         ]
+        _append_archive(lines, archive_url)
         return "\n".join(lines)
 
     winner, prob, reason = predictor.predict_after_powerplay(
@@ -407,6 +426,7 @@ def powerplay_1_message(
             lines.append(_ml_line)
     except Exception:
         pass
+    _append_archive(lines, archive_url)
     return "\n".join(lines)
 
 
@@ -414,6 +434,8 @@ def innings_break_message(
     match: dict,
     standings: list[dict],
     completed_matches: list[dict],
+    *,
+    archive_url: str | None = None,
 ) -> str:
     """Fires when innings 1 ends — target set, chase prediction."""
     inn1 = match.get("inn1") or {}
@@ -459,6 +481,7 @@ def innings_break_message(
             lines.append(_ml_line)
     except Exception:
         pass
+    _append_archive(lines, archive_url)
     return "\n".join(lines)
 
 
@@ -466,6 +489,8 @@ def powerplay_2_message(
     match: dict,
     standings: list[dict],
     completed_matches: list[dict],
+    *,
+    archive_url: str | None = None,
 ) -> str:
     """Fires after innings-2 powerplay (over 6.0 of the chase)."""
     inn1 = match.get("inn1") or {}
@@ -484,6 +509,7 @@ def powerplay_2_message(
             f"Live chase powerplay snapshot not captured.",
             f"{chasing} chase: {runs}/{wkts} in {overs} overs (target {target}).",
         ]
+        _append_archive(lines, archive_url)
         return "\n".join(lines)
 
     winner, prob, reason = predictor.predict_after_powerplay(
@@ -515,6 +541,7 @@ def powerplay_2_message(
             lines.append(_ml_line)
     except Exception:
         pass
+    _append_archive(lines, archive_url)
     return "\n".join(lines)
 
 
