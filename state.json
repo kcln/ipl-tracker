@@ -253,6 +253,31 @@
           "fired_count": 0
         }
       }
+    },
+    "2026-05-14": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Thursday, May 14\n\nToday's matches:\n\nMatch 1: PBKS vs MI\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: PBKS wins\nReason: PBKS have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, PBKS, SRH",
+          "generated_at": "2026-05-14T00:01:01.193334-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T00:01:01.878624-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2498": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
