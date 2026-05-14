@@ -202,6 +202,71 @@ def test_b2_fires_when_overs_frozen_for_10min(day_entry):
     assert "Rain stoppage" in status_msgs[0]["body"]
 
 
+def test_b2_suppressed_during_innings_break(day_entry):
+    # Tick 1: innings 1 in progress, overs at 19.5
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=19.5)],
+        SCHED_PT + timedelta(minutes=90),
+    )
+    # Tick 2: innings 1 ends (overs1=20.0), chase not yet started
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0)],
+        SCHED_PT + timedelta(minutes=92),
+    )
+    # Tick 3: 15 min into the innings break — should NOT fire (natural break)
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0, note="Innings break")],
+        SCHED_PT + timedelta(minutes=107),
+    )
+    status_msgs = [m for m in day_entry["messages"] if m["type"].startswith("status_update_")]
+    assert len(status_msgs) == 0
+
+
+def test_b2_fires_after_innings_break_grace_window(day_entry):
+    # Tick 1: innings 1 ends at 20.0
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0)],
+        SCHED_PT + timedelta(minutes=92),
+    )
+    # Tick 2: 35 min later — chase still hasn't started → genuine delay
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0, note="Long rain delay")],
+        SCHED_PT + timedelta(minutes=127),
+    )
+    status_msgs = [m for m in day_entry["messages"] if m["type"].startswith("status_update_")]
+    assert len(status_msgs) == 1
+    assert "Long rain delay" in status_msgs[0]["body"]
+
+
+def test_b2_fires_normally_after_chase_starts(day_entry):
+    # Innings 1 ends, then chase begins and freezes mid-over
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0)],
+        SCHED_PT + timedelta(minutes=92),
+    )
+    # Chase begins
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0, overs2=2.3)],
+        SCHED_PT + timedelta(minutes=110),
+    )
+    # 12 min freeze during the chase → normal B2 alert
+    tracker._maybe_generate_delay_phases(
+        day_entry, "2026-05-13",
+        [_match(toss_winner="RCB", status="live", overs1=20.0, overs2=2.3, note="Rain stoppage")],
+        SCHED_PT + timedelta(minutes=122),
+    )
+    status_msgs = [m for m in day_entry["messages"] if m["type"].startswith("status_update_")]
+    assert len(status_msgs) == 1
+    assert "Rain stoppage" in status_msgs[0]["body"]
+
+
 def test_b2_clears_when_overs_resume(day_entry):
     # Establish frozen baseline
     tracker._maybe_generate_delay_phases(

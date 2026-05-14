@@ -121,6 +121,10 @@ def _maybe_generate_morning(
 _PRE_TOSS_DELAY_MINUTES = 10
 _POST_TOSS_DELAY_MINUTES = 30
 _IN_PLAY_FREEZE_MINUTES = 10
+# Between-innings interval is ~20 min by schedule. Suppress B2 freeze alerts
+# during this window (innings 1 done, chase not yet started) so the natural
+# break isn't reported as a play stoppage. Anything beyond 30 min is a real delay.
+_INNINGS_BREAK_GRACE_MINUTES = 30
 _DELAY_SOFT_CAP = 5  # max status_update messages per match per day
 
 
@@ -179,6 +183,16 @@ def _delay_gate_status(
     # B2 — in play, check overs-frozen against state-tracked last-progress timestamp
     secs = state.seconds_since_overs_progress(day_entry, match["id"], now=now_pt)
     if secs is None:
+        return ("in_play", False)
+    # Suppress during the natural innings break (innings 1 done, chase not yet
+    # started) for the grace window measured from the last over of innings 1.
+    first_done = (
+        (inn1.get("overs") or 0) >= 19.99
+        or match.get("current_innings") == 2
+        or (inn2 and inn2.get("runs") is not None)
+    )
+    chase_started = (inn2.get("overs") or 0) > 0
+    if first_done and not chase_started and secs < _INNINGS_BREAK_GRACE_MINUTES * 60:
         return ("in_play", False)
     return ("in_play", secs >= _IN_PLAY_FREEZE_MINUTES * 60)
 
