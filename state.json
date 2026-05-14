@@ -283,6 +283,15 @@
           "delivered_at": "2026-05-14T07:29:29.997139-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "PBKS vs MI \u2014 Innings break\n\nPBKS finished 200/8 in 20.0 overs.\nMI need 201 to win.\n\nUpdated prediction: PBKS wins (68%)\nReason: target 201, RRR 10.05 \u00b7 200+ totals are rarely chased",
+          "generated_at": "2026-05-14T08:47:54.960126-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-14T08:47:57.644135-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -290,8 +299,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-14T08:46:38.796277-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-14T08:47:54.927089-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
