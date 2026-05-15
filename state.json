@@ -431,6 +431,15 @@
           "delivered_at": "2026-05-15T00:00:18.446827-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "LSG vs CSK \u2014 Toss\n\nToss: LSG won and chose to field.\n\nUpdated prediction: CSK wins (89%)\nReason: LSG won the toss but chose to field \u2014 against the venue trend\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-15T06:32:17.114603-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-15T06:32:18.065289-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
