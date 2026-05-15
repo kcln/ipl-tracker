@@ -419,6 +419,31 @@
           "fired_count": 1
         }
       }
+    },
+    "2026-05-15": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Friday, May 15\n\nToday's matches:\n\nMatch 1: LSG vs CSK\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: CSK wins\nReason: CSK have better recent form\n\nCurrent top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
+          "generated_at": "2026-05-15T00:00:17.051365-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-15T00:00:18.446827-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2499": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
