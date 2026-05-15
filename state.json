@@ -449,6 +449,15 @@
           "delivered_at": "2026-05-15T07:34:27.053016-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "CSK vs LSG \u2014 Innings break\n\nCSK finished 187/5 in 20.0 overs.\nLSG need 188 to win.\n\nUpdated prediction: CSK wins (70%)\nReason: target 188, RRR 9.40 \u00b7 defense wins 60% at this ground\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-15T08:56:16.910911-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-15T08:56:18.093709-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -456,8 +465,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-15T08:54:58.060509-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-15T08:56:16.877296-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
