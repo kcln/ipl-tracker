@@ -555,6 +555,15 @@
           "delivered_at": "2026-05-16T07:33:39.838234-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "KKR vs GT \u2014 Innings break\n\nKKR finished 247/2 in 20.0 overs.\nGT need 248 to win.\n\nUpdated prediction: KKR wins (51%)\nReason: target 248, RRR 12.40 \u00b7 defense wins 33% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-16T08:45:13.915607-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-16T08:45:16.084902-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -562,8 +571,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.4,
-          "last_overs_progress_at": "2026-05-16T08:43:55.095953-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-16T08:45:13.906146-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
