@@ -525,6 +525,31 @@
           "fired_count": 0
         }
       }
+    },
+    "2026-05-16": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Saturday, May 16\n\nToday's matches:\n\nMatch 1: KKR vs GT\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: GT wins\nReason: GT have a stronger head-to-head record this season\n\nCurrent top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
+          "generated_at": "2026-05-16T00:00:41.287193-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-16T00:00:42.349007-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2500": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
