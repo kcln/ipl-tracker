@@ -564,6 +564,15 @@
           "delivered_at": "2026-05-16T08:45:16.084902-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "KKR vs GT \u2014 Powerplay 2\n\nGT: 56/1 after 6.0 overs, chasing 248.\n\nUpdated prediction: KKR wins (90%)\nReason: 56/1 chasing 248 \u2014 RRR 13.7 vs CRR 9.3\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-16T09:40:27.319682-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-16T09:40:28.972518-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -571,8 +580,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-16T09:39:11.020485-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-16T09:40:27.286814-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
