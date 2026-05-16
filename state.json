@@ -421,7 +421,34 @@
       }
     },
     "2026-05-15": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2499",
+          "teams": [
+            "LSG",
+            "CSK"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Lucknow Super Giants Won by 7  Wickets",
+          "predicted_winner": "LSG",
+          "actual_winner": "LSG",
+          "inn1": {
+            "runs": 187,
+            "wkts": 5,
+            "overs": 20.0,
+            "raw": "187/5 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 188,
+            "wkts": 3,
+            "overs": 16.4,
+            "raw": "188/3 (16.4 Ov)"
+          },
+          "first_batting": "CSK",
+          "second_batting": "LSG"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -467,6 +494,24 @@
           "delivered_at": "2026-05-15T09:44:00.907322-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "LSG beat CSK by 7 Wickets\nCSK 187/5 (20.0)  \u00b7  LSG 188/3 (16.4)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR",
+          "generated_at": "2026-05-15T18:15:17.906007-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Friday, May 15 - Day recap\n\nLSG beat CSK by 7 Wickets\nCSK 187/5 (20.0)  \u00b7  LSG 188/3 (16.4)\n\nSeason to date prediction: 3 of 5 correct (60%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: GT, RCB, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-15T18:15:20.402913-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-15T18:15:21.744528-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -474,8 +519,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 16.0,
-          "last_overs_progress_at": "2026-05-15T10:37:08.501295-07:00",
+          "last_overs_value": 16.4,
+          "last_overs_progress_at": "2026-05-15T18:15:14.952145-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
