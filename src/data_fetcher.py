@@ -91,6 +91,18 @@ def _write_cache(name: str, payload: dict) -> None:
         json.dump(payload, f, indent=2)
 
 
+def _read_raw_cache(name: str) -> dict | None:
+    """Read cache regardless of TTL — for guarding against degraded overwrites."""
+    p = _cache_path(name)
+    if not p.exists():
+        return None
+    try:
+        with p.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
 def _espn_get(path: str, params: dict) -> dict | None:
     url = f"{ESPN_BASE}/{path}"
     try:
@@ -135,6 +147,20 @@ def fetch_fixtures(force: bool = False) -> list[dict]:
         or []
     )
     if matches:
+        # Guard against cache poisoning by a degraded fallback source. The
+        # cricbuzz schedule page only lists upcoming matches (~2), so when
+        # iplt20 + ESPN both fail mid-day, the fallback can clobber a healthy
+        # cache and drop today's in-progress match — which then disappears
+        # from _matches_for_date_pt and skips post_match + end_of_day recap.
+        existing = _read_raw_cache("fixtures")
+        existing_count = len(existing.get("matches", [])) if existing else 0
+        if existing_count > 0 and len(matches) * 2 < existing_count:
+            _log(
+                f"refusing to overwrite fixtures cache: new fetch has "
+                f"{len(matches)} match(es) vs cached {existing_count}; "
+                f"keeping cache to avoid losing in-progress matches"
+            )
+            return existing.get("matches", [])
         _write_cache("fixtures", {"fetched_at": datetime.now().isoformat(), "matches": matches})
     return matches
 
