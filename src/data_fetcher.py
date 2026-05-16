@@ -182,6 +182,15 @@ def fetch_standings(force: bool = False) -> list[dict]:
         or []
     )
     if standings:
+        existing = _read_raw_cache("standings")
+        existing_count = len(existing.get("standings", [])) if existing else 0
+        if existing_count > 0 and len(standings) * 2 < existing_count:
+            _log(
+                f"refusing to overwrite standings cache: new fetch has "
+                f"{len(standings)} team(s) vs cached {existing_count}; "
+                f"keeping cache"
+            )
+            return existing.get("standings", [])
         _write_cache("standings", {"fetched_at": datetime.now().isoformat(), "standings": standings})
     return standings
 
@@ -199,6 +208,15 @@ def fetch_squads(force: bool = False) -> dict[str, dict]:
 
     teams = _squad_stats_from_iplt20() or _squad_stats_from_espn() or {}
     if teams:
+        existing = _read_raw_cache("squads")
+        existing_count = len(existing.get("teams", {})) if existing else 0
+        if existing_count > 0 and len(teams) * 2 < existing_count:
+            _log(
+                f"refusing to overwrite squads cache: new fetch has "
+                f"{len(teams)} team(s) vs cached {existing_count}; "
+                f"keeping cache"
+            )
+            return existing.get("teams", {})
         _write_cache("squads", {"fetched_at": datetime.now().isoformat(), "teams": teams})
     return teams
 
