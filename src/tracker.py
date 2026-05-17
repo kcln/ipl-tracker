@@ -21,6 +21,7 @@ import re
 import subprocess
 import sys
 import hashlib
+import time
 from datetime import datetime, date, timedelta
 from pathlib import Path
 
@@ -481,7 +482,32 @@ def _git(*args: str) -> tuple[int, str, str]:
         return 1, "", str(e)
 
 
+def _clear_stale_index_lock(max_age_sec: int = 300) -> None:
+    """Auto-remove `.git/index.lock` if it's been there longer than max_age_sec.
+
+    A real concurrent git process holds the lock for milliseconds. A lock older
+    than a few minutes is always stale — typically from a crashed previous run
+    or a kill -9. Leaving it in place silently blocks every future commit and
+    breaks the GitHub Pages update loop (this nuked the live site for 23 hours
+    on 2026-05-16).
+    """
+    lock = REPO_ROOT / ".git" / "index.lock"
+    if not lock.exists():
+        return
+    try:
+        age = time.time() - lock.stat().st_mtime
+    except OSError:
+        return
+    if age >= max_age_sec:
+        try:
+            lock.unlink()
+            _log(f"cleared stale .git/index.lock (age {age:.0f}s)", "ok")
+        except OSError as e:
+            _log(f"could not remove stale .git/index.lock: {e}", "warn")
+
+
 def _git_push_if_changes() -> bool:
+    _clear_stale_index_lock()
     rc, status_out, _ = _git("status", "--porcelain")
     if rc != 0:
         _log("git not a repo or git missing; skipping push", "warn")
