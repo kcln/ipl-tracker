@@ -1,0 +1,87 @@
+{
+  "version": 11,
+  "name": "phase_post_toss",
+  "phase": "post_toss",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-17T21:25:23.505924+00:00",
+  "git_sha": "b3b95ab8b4532123499ee575d8bd45f9f6e92077",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "best_n_estimators": 100,
+  "cv_mean_neg_log_loss": -0.744213566507048,
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70,
+  "validation_accuracy": 0.5633802816901409,
+  "validation_brier": 0.24312541918175717,
+  "validation_log_loss": 0.6791686727770049,
+  "test_accuracy": 0.4142857142857143,
+  "test_brier": 0.2686669906057661,
+  "test_log_loss": 0.7317338367594826,
+  "feature_names": [
+    "team1_career_wr",
+    "team2_career_wr",
+    "team1_season_wr",
+    "team2_season_wr",
+    "team1_form5",
+    "team2_form5",
+    "team1_venue_wr",
+    "team2_venue_wr",
+    "venue_chase_rate",
+    "toss_winner_is_team1",
+    "toss_decision_field"
+  ],
+  "feature_importance_gain_ranked": [
+    [
+      "team2_career_wr",
+      871.5619541499764
+    ],
+    [
+      "team1_career_wr",
+      625.5225628912449
+    ],
+    [
+      "venue_chase_rate",
+      569.5206192731857
+    ],
+    [
+      "team1_venue_wr",
+      474.74677044153214
+    ],
+    [
+      "team1_season_wr",
+      436.6303896307945
+    ],
+    [
+      "team2_season_wr",
+      356.8483524918556
+    ],
+    [
+      "team2_venue_wr",
+      178.39541852474213
+    ],
+    [
+      "team1_form5",
+      124.35991394519806
+    ],
+    [
+      "toss_winner_is_team1",
+      107.19379436969757
+    ],
+    [
+      "toss_decision_field",
+      72.35528665781021
+    ],
+    [
+      "team2_form5",
+      53.889425694942474
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  }
+}

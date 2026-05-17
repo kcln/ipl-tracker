@@ -25,7 +25,9 @@ import argparse
 import csv
 import json
 import pathlib
+import pickle
 import re
+import shutil
 import subprocess
 import sys
 import datetime as dt
@@ -33,11 +35,19 @@ import datetime as dt
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ML = ROOT / "ml"
 MODELS = ML / "data" / "models"
+HIST = ML / "data" / "historical"
 RESULTS = ML / "data" / "backtest_results"
 LOG_CSV = RESULTS / "retrain_history.csv"
+PROMOTE_LOG = RESULTS / "promotion_history.csv"
+BACKUP_DIR = MODELS / "backups"
 PHASES = ["pre_match", "post_toss", "post_pp1", "innings_break"]
 LIVE_VERSION = 3  # current production v3_phase_*.pkl is the reference baseline
 RESERVED_VERSIONS = {3, 6}  # do not collide with shipped artifacts
+
+# Auto-promotion gates — only act when 2026 holdout signal is strong.
+HOLDOUT_MIN_N = 20            # need ≥20 completed 2026 matches to trust the eval
+PROMOTE_BRIER_DELTA = 0.005   # new must beat live by ≥0.005 absolute Brier
+PROMOTE_ACC_FLOOR = 0.60      # CLAUDE.md kill criterion
 
 
 def _existing_versions() -> set[int]:
@@ -86,6 +96,118 @@ def _train(version: int, log_lines: list[str]) -> int:
     if proc.stderr:
         log_lines.append("[stderr]\n" + proc.stderr)
     return proc.returncode
+
+
+def _build_holdout_2026() -> dict[str, int]:
+    """Rebuild the 2026 holdout parquets from the current cricsheet snapshot."""
+    from ml.scripts import build_holdout_2026 as bh
+    return bh.build()
+
+
+def _load_holdout(phase: str):
+    p = HIST / f"holdout_2026_{phase}.parquet"
+    if not p.exists():
+        return None
+    import pandas as pd
+    return pd.read_parquet(p)
+
+
+def _eval_on_holdout(version: int, phase: str, holdout) -> tuple[float, float, int] | None:
+    """Score v{version}_phase_{phase} against holdout. Returns (acc, brier, n) or None."""
+    model_path = MODELS / f"v{version}_phase_{phase}.pkl"
+    if not model_path.exists() or holdout is None or holdout.empty:
+        return None
+    try:
+        from sklearn.metrics import accuracy_score, brier_score_loss
+        with open(model_path, "rb") as f:
+            obj = pickle.load(f)
+        cal = obj["calibrator"]
+        feats = obj["feature_names"]
+        # Drop holdout rows missing any required feature
+        sub = holdout.dropna(subset=feats)
+        if len(sub) < 1:
+            return None
+        X = sub[feats]
+        y = sub["winner_is_team1"]
+        p = cal.predict_proba(X)[:, 1]
+        return (
+            float(accuracy_score(y, (p >= 0.5).astype(int))),
+            float(brier_score_loss(y, p)),
+            int(len(sub)),
+        )
+    except Exception as e:
+        print(f"[nightly_retrain] eval failed for v{version}/{phase}: {e}", file=sys.stderr)
+        return None
+
+
+def _backup_and_promote(phase: str, new_version: int) -> pathlib.Path:
+    """Copy live v3 to backups/, then overwrite live with v{new_version}.
+    Returns the backup path. Original v{new_version} stays in models/ forever
+    (CLAUDE.md immutability)."""
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    ts = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    live_pkl = MODELS / f"v{LIVE_VERSION}_phase_{phase}.pkl"
+    live_json = MODELS / f"v{LIVE_VERSION}_phase_{phase}.json"
+    backup_pkl = BACKUP_DIR / f"v{LIVE_VERSION}_phase_{phase}_pre_promote_{ts}.pkl"
+    backup_json = BACKUP_DIR / f"v{LIVE_VERSION}_phase_{phase}_pre_promote_{ts}.json"
+    shutil.copy2(live_pkl, backup_pkl)
+    shutil.copy2(live_json, backup_json)
+    shutil.copy2(MODELS / f"v{new_version}_phase_{phase}.pkl", live_pkl)
+    shutil.copy2(MODELS / f"v{new_version}_phase_{phase}.json", live_json)
+    return backup_pkl
+
+
+def _maybe_auto_promote(phase: str, new_version: int, holdout) -> dict:
+    """Apply gates against 2026 holdout. Returns dict with decision + numbers."""
+    out = {"phase": phase, "version": new_version, "holdout_n": 0}
+    if holdout is None or holdout.empty:
+        out["decision"] = "NO_HOLDOUT"
+        return out
+    new = _eval_on_holdout(new_version, phase, holdout)
+    live = _eval_on_holdout(LIVE_VERSION, phase, holdout)
+    if new is None or live is None:
+        out["decision"] = "EVAL_FAILED"
+        return out
+    out["holdout_n"] = new[2]
+    out["new_acc_2026"] = round(new[0], 4)
+    out["new_brier_2026"] = round(new[1], 4)
+    out["live_acc_2026"] = round(live[0], 4)
+    out["live_brier_2026"] = round(live[1], 4)
+    out["delta_brier_2026"] = round(live[1] - new[1], 4)
+    out["delta_acc_2026"] = round(new[0] - live[0], 4)
+
+    if new[2] < HOLDOUT_MIN_N:
+        out["decision"] = f"INSUFFICIENT_N ({new[2]} < {HOLDOUT_MIN_N})"
+        return out
+    if out["delta_brier_2026"] < PROMOTE_BRIER_DELTA:
+        out["decision"] = f"KEEP_LIVE (Δbrier {out['delta_brier_2026']:+.4f} < {PROMOTE_BRIER_DELTA})"
+        return out
+    if new[0] < PROMOTE_ACC_FLOOR:
+        out["decision"] = f"KEEP_LIVE (acc {new[0]:.3f} < floor {PROMOTE_ACC_FLOOR})"
+        return out
+
+    backup = _backup_and_promote(phase, new_version)
+    out["decision"] = f"PROMOTED v{new_version}"
+    out["backup_path"] = str(backup.relative_to(ROOT))
+    return out
+
+
+def _append_promote_log(rows: list[dict]) -> None:
+    fieldnames = [
+        "ts_utc", "phase", "version", "holdout_n",
+        "live_acc_2026", "live_brier_2026",
+        "new_acc_2026", "new_brier_2026",
+        "delta_acc_2026", "delta_brier_2026",
+        "decision", "backup_path",
+    ]
+    RESULTS.mkdir(parents=True, exist_ok=True)
+    is_new = not PROMOTE_LOG.exists()
+    with PROMOTE_LOG.open("a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        if is_new:
+            w.writeheader()
+        for r in rows:
+            w.writerow(r)
 
 
 def _summarise(new_version: int) -> list[dict]:
@@ -197,6 +319,45 @@ def main() -> int:
     rows = _summarise(version)
     _append_log(rows)
     _print_summary(rows)
+
+    # Rebuild 2026 holdout from the freshly-ingested cricsheet, then evaluate
+    # the new candidate vs current live on genuinely out-of-sample data.
+    # 2025 is NEVER used for promotion (locked test set).
+    promote_rows: list[dict] = []
+    if rc == 0:
+        try:
+            counts = _build_holdout_2026()
+            print(f"[nightly_retrain] built 2026 holdouts: {counts}")
+        except Exception as e:
+            print(f"[nightly_retrain] holdout build failed (non-fatal): {e}", file=sys.stderr)
+            counts = {}
+
+        ts = dt.datetime.now(dt.UTC).isoformat(timespec="seconds")
+        print()
+        print("=" * 90)
+        print("AUTO-PROMOTE EVALUATION (vs 2026 holdout)")
+        print("=" * 90)
+        print(f"{'phase':18s}{'n_2026':>8s}{'acc_new':>10s}{'brier_new':>11s}"
+              f"{'acc_live':>10s}{'brier_live':>12s}{'Δbrier':>9s}  decision")
+        for phase in PHASES:
+            holdout = _load_holdout(phase)
+            res = _maybe_auto_promote(phase, version, holdout)
+            res["ts_utc"] = ts
+            promote_rows.append(res)
+            n = res.get("holdout_n", 0)
+            if "new_brier_2026" in res:
+                print(
+                    f"{phase:18s}{n:8d}"
+                    f"{res['new_acc_2026']:10.3f}{res['new_brier_2026']:11.3f}"
+                    f"{res['live_acc_2026']:10.3f}{res['live_brier_2026']:12.3f}"
+                    f"{res['delta_brier_2026']:+9.4f}  {res['decision']}"
+                )
+            else:
+                print(f"{phase:18s}{n:8d}  -- {res['decision']}")
+        _append_promote_log(promote_rows)
+        print()
+        print(f"Auto-promote gates: n≥{HOLDOUT_MIN_N}, Δbrier≥{PROMOTE_BRIER_DELTA}, acc≥{PROMOTE_ACC_FLOOR}")
+        print(f"Full promotion log: {PROMOTE_LOG}")
 
     # Save full training log for this run
     log_path = RESULTS / f"retrain_v{version}.log"

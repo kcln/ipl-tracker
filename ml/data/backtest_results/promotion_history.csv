@@ -1,0 +1,5 @@
+ts_utc,phase,version,holdout_n,live_acc_2026,live_brier_2026,new_acc_2026,new_brier_2026,delta_acc_2026,delta_brier_2026,decision,backup_path
+2026-05-17T21:25:31+00:00,pre_match,11,55,0.5455,0.2492,0.5455,0.2492,0.0,0.0,KEEP_LIVE (Δbrier +0.0000 < 0.005),
+2026-05-17T21:25:31+00:00,post_toss,11,55,0.4909,0.2406,0.4909,0.2406,0.0,0.0,KEEP_LIVE (Δbrier +0.0000 < 0.005),
+2026-05-17T21:25:31+00:00,post_pp1,11,55,0.6545,0.2974,0.6545,0.2974,0.0,0.0,KEEP_LIVE (Δbrier +0.0000 < 0.005),
+2026-05-17T21:25:31+00:00,innings_break,11,55,0.6,0.2538,0.6,0.2538,0.0,0.0,KEEP_LIVE (Δbrier +0.0000 < 0.005),

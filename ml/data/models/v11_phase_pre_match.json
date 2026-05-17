@@ -1,0 +1,102 @@
+{
+  "version": 11,
+  "name": "phase_pre_match",
+  "phase": "pre_match",
+  "model_type": "lightgbm_isotonic_prefit",
+  "created_at_utc": "2026-05-17T21:25:19.508284+00:00",
+  "git_sha": "b3b95ab8b4532123499ee575d8bd45f9f6e92077",
+  "sklearn_version": "1.5.2",
+  "lightgbm_version": "4.5.0",
+  "best_n_estimators": 100,
+  "cv_mean_neg_log_loss": -0.7568861586394922,
+  "n_train": 1005,
+  "n_val": 71,
+  "n_test": 70,
+  "validation_accuracy": 0.5774647887323944,
+  "validation_brier": 0.2399430929008393,
+  "validation_log_loss": 0.6702222146635844,
+  "test_accuracy": 0.4714285714285714,
+  "test_brier": 0.26618717874007664,
+  "test_log_loss": 0.7261412824298819,
+  "feature_names": [
+    "team1_career_wr",
+    "team2_career_wr",
+    "team1_career_played",
+    "team2_career_played",
+    "team1_season_wr",
+    "team2_season_wr",
+    "team1_season_played",
+    "team2_season_played",
+    "team1_form5",
+    "team2_form5",
+    "team1_venue_wr",
+    "team2_venue_wr",
+    "venue_chase_rate",
+    "venue_played"
+  ],
+  "feature_importance_gain_ranked": [
+    [
+      "team2_career_wr",
+      536.2981505393982
+    ],
+    [
+      "team1_career_played",
+      414.7195331454277
+    ],
+    [
+      "team1_career_wr",
+      412.21793307363987
+    ],
+    [
+      "team1_season_wr",
+      379.6726791858673
+    ],
+    [
+      "venue_chase_rate",
+      378.7798978090286
+    ],
+    [
+      "team1_season_played",
+      371.2940888404846
+    ],
+    [
+      "team2_career_played",
+      364.93909364938736
+    ],
+    [
+      "venue_played",
+      362.8154695034027
+    ],
+    [
+      "team1_venue_wr",
+      302.242895424366
+    ],
+    [
+      "team2_season_wr",
+      266.5958514213562
+    ],
+    [
+      "team2_season_played",
+      158.69783008098602
+    ],
+    [
+      "team2_venue_wr",
+      115.79090470075607
+    ],
+    [
+      "team1_form5",
+      109.77756297588348
+    ],
+    [
+      "team2_form5",
+      73.55375915765762
+    ]
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "random_state": 42
+  }
+}
