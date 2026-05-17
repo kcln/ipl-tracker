@@ -800,8 +800,47 @@ def _send_confirmation(phone: str, kind: str) -> None:
 # Main
 # ─────────────────────────────────────────
 
+# Channel control via env vars. In production both channels auto-enable:
+# iMessage fires unconditionally, Telegram fires whenever
+# telegram_chat_ids.txt exists with entries (the sender self-gates).
+# Dev/test flags below disable a channel or the push for safe local runs.
+NO_IMESSAGE = os.environ.get("IPLT_NO_IMESSAGE") == "1"
+NO_TELEGRAM = os.environ.get("IPLT_NO_TELEGRAM") == "1"
+NO_GIT_PUSH = os.environ.get("IPLT_NO_GIT_PUSH") == "1"
+
+
+def _send_via_channels(body: str) -> bool:
+    """Send to every enabled channel. Returns True if at least one succeeded.
+    Telegram self-gates on chat_ids file presence, so this is always safe to call."""
+    sent = False
+    if not NO_IMESSAGE:
+        if imessage_sender.send(body):
+            sent = True
+    if not NO_TELEGRAM:
+        try:
+            if __package__ in (None, ""):
+                from src import telegram_sender  # type: ignore
+            else:
+                from . import telegram_sender
+            if telegram_sender.send(body):
+                sent = True
+        except Exception as e:
+            _log(f"telegram send failed: {e}", "warn")
+    return sent
+
+
 def main() -> int:
     _log("tracker run starting")
+    if NO_IMESSAGE:
+        _log("IPLT_NO_IMESSAGE=1 — iMessage disabled for this run", "warn")
+        # Monkey-patch so every iMessage call site (season recap, catch-up,
+        # STOP/START confirmations) is a no-op for this test process.
+        imessage_sender.send = lambda body: False  # type: ignore[assignment]
+        imessage_sender.send_to = lambda body, phone: False  # type: ignore[assignment]
+    if NO_TELEGRAM:
+        _log("IPLT_NO_TELEGRAM=1 — Telegram disabled for this run", "warn")
+    if NO_GIT_PUSH:
+        _log("IPLT_NO_GIT_PUSH=1 — git push disabled for this run", "warn")
     partial = False
 
     state_obj = state.load()
@@ -893,11 +932,11 @@ def main() -> int:
         skipped = state.mark_older_as_skipped(day_entry, newest, "newer message available")
         if skipped:
             _log(f"marked {skipped} older message(s) as skipped")
-        ok = imessage_sender.send(newest["body"])
+        ok = _send_via_channels(newest["body"])
         if ok:
             state.mark_delivered(newest)
         else:
-            _log("iMessage send failed", "warn")
+            _log("send failed on all enabled channels", "warn")
             partial = True
 
     state.save(state_obj)
@@ -905,7 +944,9 @@ def main() -> int:
     # Fill the hero cards (Most recent / Leader) from live data
     _update_hero(all_matches, standings)
 
-    if not _git_push_if_changes():
+    if NO_GIT_PUSH:
+        _log("skipping git push (IPLT_NO_GIT_PUSH=1)")
+    elif not _git_push_if_changes():
         partial = True
 
     _log("tracker run complete", "ok")
