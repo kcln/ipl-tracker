@@ -659,6 +659,32 @@
           },
           "first_batting": "RCB",
           "second_batting": "PBKS"
+        },
+        {
+          "id": "2502",
+          "teams": [
+            "DC",
+            "RR"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Delhi Capitals Won by 5 Wickets",
+          "predicted_winner": "DC",
+          "actual_winner": "DC",
+          "inn1": {
+            "runs": 193,
+            "wkts": 8,
+            "overs": 20.0,
+            "raw": "193/8 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 197,
+            "wkts": 5,
+            "overs": 19.2,
+            "raw": "197/5 (19.2 Ov)"
+          },
+          "first_batting": "RR",
+          "second_batting": "DC"
         }
       ],
       "messages": [
@@ -749,6 +775,24 @@
           "generated_at": "2026-05-17T09:44:32.762783-07:00",
           "delivered": true,
           "delivered_at": "2026-05-17T09:44:34.421231-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "post_match_2",
+          "body": "DC beat RR by 5 Wickets\nRR 193/8 (20.0)  \u00b7  DC 197/5 (19.2)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-17T11:04:44.400328-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Sunday, May 17 - Day recap\n\nRCB beat PBKS by 23 Runs\nRCB 222/4 (20.0)  \u00b7  PBKS 199/8 (20.0)\nDC beat RR by 5 Wickets\nRR 193/8 (20.0)  \u00b7  DC 197/5 (19.2)\n\nSeason to date prediction: 5 of 8 correct (62%)\n\nUpdated top 4: RCB, GT, SRH, PBKS\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-17T11:04:46.313127-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-17T11:04:47.360786-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
