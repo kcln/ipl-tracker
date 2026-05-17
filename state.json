@@ -742,6 +742,15 @@
           "delivered_at": "2026-05-17T08:54:08.246132-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_2",
+          "body": "RR vs DC \u2014 Powerplay 2\n\nDC: 72/0 after 6.0 overs, chasing 194.\n\nUpdated prediction: DC wins (90%)\nReason: 72/0 chasing 194 \u2014 RRR 8.7 vs CRR 12.0\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-17T09:44:32.762783-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-17T09:44:34.421231-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -758,8 +767,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-17T09:43:14.343908-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-17T09:44:32.728444-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
