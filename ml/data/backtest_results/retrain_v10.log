@@ -1,0 +1,35 @@
+$ /Users/kcl/Desktop/ipl-tracker/ml/.venv/bin/python -m ml.src.train_phase --phase all --version 10
+
+=== pre_match ===
+[pre_match] train=1005 val=71 test=70 features=14
+  best n_estimators=100 cv_neg_log_loss=-0.7569
+  saved /Users/kcl/Desktop/ipl-tracker/ml/data/models/v10_phase_pre_match.pkl
+  val 2024: acc=0.577 brier=0.240
+  test 2025: acc=0.471 brier=0.266
+
+=== post_toss ===
+[post_toss] train=1005 val=71 test=70 features=11
+  best n_estimators=100 cv_neg_log_loss=-0.7442
+  saved /Users/kcl/Desktop/ipl-tracker/ml/data/models/v10_phase_post_toss.pkl
+  val 2024: acc=0.563 brier=0.243
+  test 2025: acc=0.414 brier=0.269
+
+=== post_pp1 ===
+[post_pp1] train=1005 val=71 test=70 features=13
+  best n_estimators=100 cv_neg_log_loss=-0.7344
+  saved /Users/kcl/Desktop/ipl-tracker/ml/data/models/v10_phase_post_pp1.pkl
+  val 2024: acc=0.648 brier=0.205
+  test 2025: acc=0.671 brier=0.208
+
+=== innings_break ===
+[innings_break] train=1005 val=71 test=70 features=16
+  best n_estimators=100 cv_neg_log_loss=-0.7241
+  saved /Users/kcl/Desktop/ipl-tracker/ml/data/models/v10_phase_innings_break.pkl
+  val 2024: acc=0.718 brier=0.184
+  test 2025: acc=0.643 brier=0.205
+
+Summary:
+  pre_match      val=0.577 test=0.471
+  post_toss      val=0.563 test=0.414
+  post_pp1       val=0.648 test=0.671
+  innings_break  val=0.718 test=0.643

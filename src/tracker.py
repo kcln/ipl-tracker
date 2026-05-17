@@ -516,9 +516,19 @@ def _git_push_if_changes() -> bool:
         _log("no git changes to push")
         return True
     _git("add", "state.json", "docs/")
-    rc, _, err = _git("commit", "-m", f"tracker update {now_pt().isoformat(timespec='minutes')}")
+    rc, out, err = _git("commit", "-m", f"tracker update {now_pt().isoformat(timespec='minutes')}")
     if rc != 0:
-        _log(f"git commit failed: {err}", "warn")
+        # "nothing to commit" is a normal no-op (git prints it to stdout, leaving
+        # stderr empty). Don't surface it as a failure.
+        out_l = (out or "").lower()
+        if any(s in out_l for s in (
+            "nothing to commit",
+            "nothing added to commit",
+            "no changes added to commit",
+        )):
+            _log("nothing to commit (no state/docs change)")
+            return True
+        _log(f"git commit failed: {err or out}", "warn")
         return False
     rc, _, err = _git("push")
     if rc != 0:
@@ -809,6 +819,66 @@ NO_TELEGRAM = os.environ.get("IPLT_NO_TELEGRAM") == "1"
 NO_GIT_PUSH = os.environ.get("IPLT_NO_GIT_PUSH") == "1"
 
 
+# Cricsheet ML data freshness
+CRICSHEET_PARQUET = REPO_ROOT / "ml" / "data" / "historical" / "matches.parquet"
+CRICSHEET_STALE_AFTER_SEC = 36 * 3600  # 36h — daily refresh + a margin for clock skew / missed runs
+CRICSHEET_INGEST_LOCK = REPO_ROOT / "ml" / "data" / ".ingest.lock"
+
+
+def _check_cricsheet_freshness() -> None:
+    """Trigger a background cricsheet refresh if the parquet is missing or stale.
+
+    Non-blocking: ingest runs as a detached subprocess so the tracker still
+    completes its current cycle. A lock file (auto-expiring after 1h) prevents
+    multiple simultaneous ingests if launchd fires before the previous one
+    finished.
+
+    Belt-and-braces for the scheduled cricsheet plist — if launchd skipped
+    the daily 6 PM run (asleep / off / unloaded), this catches it on the
+    very next tracker run."""
+    try:
+        if CRICSHEET_PARQUET.exists():
+            age = time.time() - CRICSHEET_PARQUET.stat().st_mtime
+            if age < CRICSHEET_STALE_AFTER_SEC:
+                return  # fresh — nothing to do
+            reason = f"stale (age {age/3600:.1f}h > {CRICSHEET_STALE_AFTER_SEC/3600:.0f}h)"
+        else:
+            reason = "missing"
+
+        # Lock file: skip if a prior ingest is still running (or crashed <1h ago)
+        if CRICSHEET_INGEST_LOCK.exists():
+            try:
+                lock_age = time.time() - CRICSHEET_INGEST_LOCK.stat().st_mtime
+                if lock_age < 3600:
+                    _log(f"cricsheet {reason} but ingest lock active ({lock_age/60:.0f}m old) — skipping", "warn")
+                    return
+                CRICSHEET_INGEST_LOCK.unlink()
+                _log(f"removing stale ingest lock ({lock_age/3600:.1f}h old)")
+            except OSError:
+                pass
+
+        py = REPO_ROOT / "ml" / ".venv" / "bin" / "python"
+        if not py.exists():
+            _log(f"cricsheet {reason}; ml/.venv python missing — skipping refresh", "warn")
+            return
+
+        CRICSHEET_INGEST_LOCK.parent.mkdir(parents=True, exist_ok=True)
+        CRICSHEET_INGEST_LOCK.touch()
+        # Detach: stdout/stderr to log, start_new_session so we don't block tracker exit
+        log = Path.home() / "Library" / "Logs" / "ipl-cricsheet-refresh.log"
+        with log.open("a") as lf:
+            subprocess.Popen(
+                [str(py), "-m", "ml.src.ingest", "--force"],
+                cwd=str(REPO_ROOT),
+                stdout=lf, stderr=subprocess.STDOUT,
+                start_new_session=True,
+            )
+        _log(f"cricsheet {reason} — kicked off background ingest (pid via Popen, logs at {log})", "ok")
+    except Exception as e:
+        # Never let freshness check block a tracker run
+        _log(f"cricsheet freshness check failed (non-fatal): {e}", "warn")
+
+
 def _send_via_channels(body: str) -> bool:
     """Send to every enabled channel. Returns True if at least one succeeded.
     Telegram self-gates on chat_ids file presence, so this is always safe to call."""
@@ -842,6 +912,11 @@ def main() -> int:
     if NO_GIT_PUSH:
         _log("IPLT_NO_GIT_PUSH=1 — git push disabled for this run", "warn")
     partial = False
+
+    # Self-heal cricsheet ML data: kick off a background refresh if stale.
+    # Non-blocking — tracker proceeds either way. Belt-and-braces for the
+    # daily 6 PM launchd job in case it was skipped during downtime.
+    _check_cricsheet_freshness()
 
     state_obj = state.load()
 

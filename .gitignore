@@ -28,3 +28,5 @@ ml/.tools-venv/
 # Local secrets
 .env
 telegram_chat_ids.txt
+
+.coverage
