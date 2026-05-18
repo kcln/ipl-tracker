@@ -856,6 +856,15 @@
           "delivered_at": "2026-05-18T08:58:19.839441-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "CSK vs SRH \u2014 Powerplay 2\n\nSRH: 45/1 after 6.0 overs, chasing 181.\n\nUpdated prediction: CSK wins (78%)\nReason: 45/1 chasing 181 \u2014 RRR 9.7 vs CRR 7.5\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-18T09:44:02.352801-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-18T09:44:05.892572-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -863,8 +872,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-18T09:42:47.182328-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-18T09:44:02.297552-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
