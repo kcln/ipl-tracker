@@ -124,11 +124,6 @@
     input::placeholder { color: var(--ink-faint); }
     input:focus { background: var(--card); border-color: var(--p-600); box-shadow: 0 0 0 4px var(--p-100); }
 
-    .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .platform label.radio { cursor: pointer; text-align: center; padding: 14px; border-radius: var(--radius-sm); background: var(--bg); color: var(--ink-soft); margin-bottom: 0; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0; text-transform: none; border: 1px solid transparent; transition: all 0.12s; }
-    .platform label.radio:has(input:checked) { background: var(--brown); color: var(--card); }
-    .platform input[type="radio"] { display: none; }
-
     /* Honeypot — off-screen */
     .honey { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
 
@@ -185,7 +180,7 @@
 <div class="h-card" style="grid-row: span 2;">
 <div class="kicker">IPL 2026 · Daily tracker</div>
 <h1>Every match.<br/>Every <span class="grad">prediction.</span></h1>
-<p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Texted daily to your phone.</p>
+<p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Delivered daily on Telegram.</p>
 </div>
 <div class="h-card dark">
 <div class="score">
@@ -605,12 +600,12 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 <section class="signup-grid" id="signup">
 <div class="signup-pitch">
 <div class="signup-pitch-inner">
-<div class="kicker">Get the texts</div>
-<h2>Match-day updates, on your phone.</h2>
+<div class="kicker">Get the messages</div>
+<h2>Match-day updates, on Telegram.</h2>
 <p>Predictions before play. Powerplay and innings update. Final recap after match.</p>
 <div class="stats">
 <div><strong>~7</strong>messages / match day</div>
-<div><strong>1-tap</strong>opt out</div>
+<div><strong>/stop</strong>to opt out</div>
 </div>
 </div>
 </div>
@@ -621,22 +616,15 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 <input autocomplete="name" id="su-name" name="name" placeholder="Priya Kumar" type="text"/>
 </div>
 <div>
-<label for="su-phone">Phone (with country code)</label>
-<input autocomplete="tel" id="su-phone" name="phone" placeholder="+14155551234" required="" type="tel"/>
-</div>
-<div>
-<label>Platform</label>
-<div class="platform">
-<label class="radio"><input checked="" name="platform" type="radio" value="iPhone"/> iPhone</label>
-<label class="radio"><input name="platform" type="radio" value="Android"/> Android</label>
-</div>
+<label for="su-telegram">Telegram username</label>
+<input autocapitalize="off" autocomplete="username" id="su-telegram" name="telegram" placeholder="@yourhandle" required="" spellcheck="false" type="text"/>
 </div>
 <div aria-hidden="true" class="honey">
 <label for="su-website">Website</label>
 <input autocomplete="off" id="su-website" name="website" tabindex="-1" type="text"/>
 </div>
 <button class="send" id="signup-submit" type="submit">Sign up</button>
-<p class="fine" id="signup-fine">Each request is reviewed before texts start. Reply <code>STOP</code> anytime to leave, <code>START</code> to rejoin. Format: <code>+14155551234</code></p>
+<p class="fine" id="signup-fine">Step 1: open Telegram and send <code>/start</code> to the IPL Tracker bot so it can message you. Step 2: submit this form with your <code>@handle</code>. Use <code>/stop</code> in the chat anytime to leave.</p>
 </form>
 <div aria-live="polite" class="signup-state" hidden="" id="signup-state" role="status"></div>
 </div>
@@ -692,24 +680,25 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
     formEl.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var name     = (document.getElementById('su-name').value || '').trim();
-      var phone    = (document.getElementById('su-phone').value || '').trim();
-      var platform = (document.querySelector('input[name="platform"]:checked') || {}).value || 'iPhone';
+      var telegram = (document.getElementById('su-telegram').value || '').trim();
       var website  = (document.getElementById('su-website').value || '').trim();
 
-      if (!phone) {
-        showState('error', 'Missing phone', 'We need your <em>phone number</em>.',
-          'Add it above (with country code, e.g. <code>+14155551234</code>) and try again.', true);
+      if (telegram && telegram.charAt(0) !== '@') telegram = '@' + telegram;
+
+      if (!telegram || telegram === '@') {
+        showState('error', 'Missing handle', 'We need your <em>Telegram handle</em>.',
+          'Add it above (e.g. <code>@yourhandle</code>) and try again.', true);
         return;
       }
-      if (!/^\+\d{8,15}$/.test(phone)) {
-        if (!confirm("That doesn\'t look like an E.164 phone number (e.g. +14155551234). Send anyway?")) return;
+      if (!/^@[A-Za-z0-9_]{4,32}$/.test(telegram)) {
+        if (!confirm("That doesn't look like a Telegram username (5–32 chars, letters/digits/underscores, e.g. @yourhandle). Send anyway?")) return;
       }
 
       submitEl.disabled = true;
       submitEl.textContent = 'Sending…';
 
       var payload = JSON.stringify({
-        name: name, phone: phone, platform: platform,
+        name: name, telegram: telegram, platform: 'Telegram',
         website: website, ip: visitorIP, ua: navigator.userAgent
       });
 
@@ -724,7 +713,7 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
           if (data && data.ok) {
             showState('success', "You're in",
               "You're <em>on the list.</em>",
-              "Match-day texts will start arriving on " + phone + " before the next match. Spread the word if you like it.",
+              "Match-day Telegram messages will start arriving for " + telegram + " before the next match. If you haven't yet, send <code>/start</code> to the IPL Tracker bot in Telegram so it can reach you. Spread the word if you like it.",
               false);
           } else if (data && data.error === 'daily_cap') {
             showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
