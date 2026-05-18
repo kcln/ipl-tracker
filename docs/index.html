@@ -135,6 +135,9 @@
 
     .fine { margin-top: 14px; font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
     .fine code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .fine a { color: var(--brown); text-decoration: underline; text-underline-offset: 2px; }
+    .fine a:hover { color: var(--p-700); }
+    .fine a code { background: var(--p-100); color: var(--brown); }
 
     /* Inline success / error state */
     .signup-state { padding: 28px 32px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); box-shadow: var(--shadow-md); }
@@ -624,7 +627,7 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 <input autocomplete="off" id="su-website" name="website" tabindex="-1" type="text"/>
 </div>
 <button class="send" id="signup-submit" type="submit">Sign up</button>
-<p class="fine" id="signup-fine">Step 1: open Telegram and send <code>/start</code> to the IPL Tracker bot so it can message you. Step 2: submit this form with your <code>@handle</code>. Use <code>/stop</code> in the chat anytime to leave.</p>
+<p class="fine" id="signup-fine">Step 1: open <a href="https://t.me/kclipltracker2026" rel="noopener" target="_blank"><code>@kclipltracker2026</code></a> on Telegram and tap <strong>Start</strong> (or send <code>/start</code>) so the bot can message you. Step 2: submit this form with your <code>@handle</code>. Use <code>/stop</code> in the chat anytime to leave.</p>
 </form>
 <div aria-live="polite" class="signup-state" hidden="" id="signup-state" role="status"></div>
 </div>
@@ -713,7 +716,7 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
           if (data && data.ok) {
             showState('success', "You're in",
               "You're <em>on the list.</em>",
-              "Match-day Telegram messages will start arriving for " + telegram + " before the next match. If you haven't yet, send <code>/start</code> to the IPL Tracker bot in Telegram so it can reach you. Spread the word if you like it.",
+              "Match-day Telegram messages will start arriving for " + telegram + " before the next match. If you haven't yet, open <a href=\"https://t.me/kclipltracker2026\" target=\"_blank\" rel=\"noopener\"><code>@kclipltracker2026</code></a> in Telegram and tap <strong>Start</strong> so the bot can reach you. Spread the word if you like it.",
               false);
           } else if (data && data.error === 'daily_cap') {
             showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
