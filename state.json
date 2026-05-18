@@ -829,6 +829,15 @@
           "delivered_at": "2026-05-18T00:01:10.593129-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "CSK vs SRH \u2014 Toss\n\nToss: CSK won and chose to bat.\n\nUpdated prediction: SRH wins (67%)\nReason: CSK won the toss but chose to bat \u2014 against the venue trend\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-18T06:32:15.328742-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-18T06:32:20.694457-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
