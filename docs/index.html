@@ -117,39 +117,22 @@
     .signup-pitch .stats div { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
     .signup-pitch .stats strong { display: block; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.012em; color: var(--card); margin-bottom: 4px; }
 
-    .signup-form-box { background: var(--card); border-radius: var(--radius-lg); padding: 36px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); }
-    form { display: grid; gap: 18px; }
-    form label { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.04em; color: var(--ink); margin-bottom: 8px; display: block; }
-    input[type="text"], input[type="tel"] { width: 100%; font-family: 'Work Sans', sans-serif; font-size: 16px; font-weight: 500; background: var(--bg); color: var(--ink); border: 1px solid transparent; border-radius: var(--radius-sm); padding: 14px 16px; outline: none; transition: all 0.15s; }
-    input::placeholder { color: var(--ink-faint); }
-    input:focus { background: var(--card); border-color: var(--p-600); box-shadow: 0 0 0 4px var(--p-100); }
+    .signup-cta-box { background: var(--card); border-radius: var(--radius-lg); padding: 40px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+    .signup-cta-box .cta-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faint); }
+    .signup-cta-box .cta-headline { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(22px, 2.6vw, 28px); letter-spacing: -0.018em; line-height: 1.15; color: var(--ink); }
+    .signup-cta-box .cta-headline em { font-style: italic; font-weight: 900; color: var(--p-800); }
+    .signup-cta-box .cta-sub { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
+    a.tg-cta { margin-top: 6px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; background: var(--brown); color: var(--card); padding: 16px 24px; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.15s; text-decoration: none; }
+    a.tg-cta::before { content: ''; width: 18px; height: 18px; background: currentColor; -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9.04 15.32 8.86 19.6c.31 0 .45-.13.61-.29l1.47-1.4 3.05 2.23c.56.31.95.15 1.11-.51l2.01-9.42c.18-.83-.3-1.15-.86-.94L4.39 13.69c-.81.31-.79.76-.14.96l3.06.96 7.1-4.47c.33-.21.64-.09.39.13'/></svg>") center/contain no-repeat; mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9.04 15.32 8.86 19.6c.31 0 .45-.13.61-.29l1.47-1.4 3.05 2.23c.56.31.95.15 1.11-.51l2.01-9.42c.18-.83-.3-1.15-.86-.94L4.39 13.69c-.81.31-.79.76-.14.96l3.06.96 7.1-4.47c.33-.21.64-.09.39.13'/></svg>") center/contain no-repeat; }
+    a.tg-cta::after { content: '→'; font-size: 18px; transition: transform 0.2s; }
+    a.tg-cta:hover { background: var(--p-700); }
+    a.tg-cta:hover::after { transform: translateX(4px); }
 
-    /* Honeypot — off-screen */
-    .honey { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
-
-    button.send { justify-self: stretch; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; background: var(--brown); color: var(--card); padding: 16px 24px; border: 0; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.15s; }
-    button.send::after { content: '→'; font-size: 18px; transition: transform 0.2s; }
-    button.send:hover { background: var(--p-700); }
-    button.send:hover::after { transform: translateX(4px); }
-    button.send:disabled { opacity: 0.6; cursor: wait; }
-
-    .fine { margin-top: 14px; font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
+    .fine { margin-top: 6px; font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
     .fine code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
     .fine a { color: var(--brown); text-decoration: underline; text-underline-offset: 2px; }
     .fine a:hover { color: var(--p-700); }
     .fine a code { background: var(--p-100); color: var(--brown); }
-
-    /* Inline success / error state */
-    .signup-state { padding: 28px 32px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); box-shadow: var(--shadow-md); }
-    .signup-state .state-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px; }
-    .signup-state .state-headline { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.018em; line-height: 1.08; margin-bottom: 8px; }
-    .signup-state .state-body { color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
-    .signup-state.success .state-label, .signup-state.success .state-headline { color: var(--p-700); }
-    .signup-state.success .state-headline em { color: var(--p-800); font-style: italic; font-weight: 900; }
-    .signup-state.error   .state-label, .signup-state.error   .state-headline { color: var(--brown); }
-    .signup-state.error   .state-headline em { color: var(--brown-2); font-style: italic; font-weight: 900; }
-    .signup-state button.try-again { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); background: var(--bg); border: 1px solid var(--hair); border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer; transition: background 0.12s; }
-    .signup-state button.try-again:hover { background: var(--p-100); }
 
     footer.foot { margin: 64px 0 56px; padding: 24px 28px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
     footer .made { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
@@ -167,7 +150,7 @@
       .h-card h1 { font-size: 40px; }
       details.day > summary { padding: 18px 20px; }
       .day-body { padding: 0 20px 20px; }
-      .signup-pitch, .signup-form-box { padding: 28px 24px; }
+      .signup-pitch, .signup-cta-box { padding: 28px 24px; }
     }
   </style>
 </head>
@@ -612,24 +595,12 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 </div>
 </div>
 </div>
-<div class="signup-form-box">
-<form id="signup-form" novalidate="">
-<div>
-<label for="su-name">Name</label>
-<input autocomplete="name" id="su-name" name="name" placeholder="Priya Kumar" type="text"/>
-</div>
-<div>
-<label for="su-telegram">Telegram username</label>
-<input autocapitalize="off" autocomplete="username" id="su-telegram" name="telegram" placeholder="@yourhandle" required="" spellcheck="false" type="text"/>
-</div>
-<div aria-hidden="true" class="honey">
-<label for="su-website">Website</label>
-<input autocomplete="off" id="su-website" name="website" tabindex="-1" type="text"/>
-</div>
-<button class="send" id="signup-submit" type="submit">Sign up</button>
-<p class="fine" id="signup-fine">Step 1: open <a href="https://t.me/kclipltracker2026" rel="noopener" target="_blank"><code>@kclipltracker2026</code></a> on Telegram and tap <strong>Start</strong> (or send <code>/start</code>) so the bot can message you. Step 2: submit this form with your <code>@handle</code>. Use <code>/stop</code> in the chat anytime to leave.</p>
-</form>
-<div aria-live="polite" class="signup-state" hidden="" id="signup-state" role="status"></div>
+<div class="signup-cta-box">
+<div class="cta-eyebrow">One tap</div>
+<div class="cta-headline">Tap Start on <em>@kclipltracker2026</em>.</div>
+<div class="cta-sub">That's the whole signup. Telegram requires you to message the bot first so it's allowed to message you back. After you tap Start, you're on the list for the next match.</div>
+<a class="tg-cta" href="https://t.me/kclipltracker2026?start=signup" rel="noopener" target="_blank">Start on Telegram</a>
+<p class="fine">Send <code>/stop</code> in the chat anytime to leave, <code>/start</code> to rejoin. No phone number needed. No spam.</p>
 </div>
 </section>
 <footer class="foot">
@@ -637,103 +608,5 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 <span class="links">iplt20.com · ESPN Cricinfo</span>
 </footer>
 </div>
-<script>
-    var SIGNUP_URL = 'https://script.google.com/macros/s/AKfycbx8wwSgBEPz-SMMTtsi2sEt9xzAUWgDBAtN7Wdg94wJb8VLT-Q5dctZDO0rl_1s4yV6/exec';
-
-    var formEl   = document.getElementById('signup-form');
-    var stateEl  = document.getElementById('signup-state');
-    var submitEl = document.getElementById('signup-submit');
-
-    function showState(kind, label, headline, body, withRetry) {
-      formEl.hidden = (kind === 'success' || kind === 'capped');
-      stateEl.hidden = false;
-      stateEl.className = 'signup-state ' + kind;
-      stateEl.innerHTML =
-        '<span class="state-label">' + label + '</span>' +
-        '<div class="state-headline">' + headline + '</div>' +
-        '<div class="state-body">' + body + '</div>' +
-        (withRetry ? '<button type="button" class="try-again">Try again</button>' : '');
-      var retry = stateEl.querySelector('.try-again');
-      if (retry) retry.addEventListener('click', function () {
-        stateEl.hidden = true;
-        formEl.hidden = false;
-        submitEl.disabled = false;
-        submitEl.textContent = 'Sign up';
-      });
-    }
-
-    fetch(SIGNUP_URL, { method: 'GET' })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (data && data.full) {
-          showState('error', 'Full for today',
-            'Sign-ups are <em>full</em> for today.',
-            'Come back after midnight Pacific time — capacity resets daily.',
-            false);
-        }
-      })
-      .catch(function () {});
-
-    var visitorIP = '';
-    fetch('https://api.ipify.org?format=json')
-      .then(function (r) { return r.json(); })
-      .then(function (d) { visitorIP = (d && d.ip) || ''; })
-      .catch(function () {});
-
-    formEl.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var name     = (document.getElementById('su-name').value || '').trim();
-      var telegram = (document.getElementById('su-telegram').value || '').trim();
-      var website  = (document.getElementById('su-website').value || '').trim();
-
-      if (telegram && telegram.charAt(0) !== '@') telegram = '@' + telegram;
-
-      if (!telegram || telegram === '@') {
-        showState('error', 'Missing handle', 'We need your <em>Telegram handle</em>.',
-          'Add it above (e.g. <code>@yourhandle</code>) and try again.', true);
-        return;
-      }
-      if (!/^@[A-Za-z0-9_]{4,32}$/.test(telegram)) {
-        if (!confirm("That doesn't look like a Telegram username (5–32 chars, letters/digits/underscores, e.g. @yourhandle). Send anyway?")) return;
-      }
-
-      submitEl.disabled = true;
-      submitEl.textContent = 'Sending…';
-
-      var payload = JSON.stringify({
-        name: name, telegram: telegram, platform: 'Telegram',
-        website: website, ip: visitorIP, ua: navigator.userAgent
-      });
-
-      fetch(SIGNUP_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: payload,
-        redirect: 'follow'
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data && data.ok) {
-            showState('success', "You're in",
-              "You're <em>on the list.</em>",
-              "Match-day Telegram messages will start arriving for " + telegram + " before the next match. If you haven't yet, open <a href=\"https://t.me/kclipltracker2026\" target=\"_blank\" rel=\"noopener\"><code>@kclipltracker2026</code></a> in Telegram and tap <strong>Start</strong> so the bot can reach you. Spread the word if you like it.",
-              false);
-          } else if (data && data.error === 'daily_cap') {
-            showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
-              data.message || 'Try again after midnight Pacific time.', false);
-          } else if (data && data.error === 'rate_limit') {
-            showState('error', 'Slow down', 'Too many <em>tries</em>.',
-              data.message || 'Wait an hour and try again.', true);
-          } else {
-            showState('error', 'Something broke', 'We could not <em>save</em> that.',
-              (data && data.message) || 'Try again in a minute. If it keeps failing, email kcl.narasimham@gmail.com.', true);
-          }
-        })
-        .catch(function () {
-          showState('error', 'Network error', 'Could not <em>reach</em> the server.',
-            'Check your connection and try again.', true);
-        });
-    });
-  </script>
 </body>
 </html>
