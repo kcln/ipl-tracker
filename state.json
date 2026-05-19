@@ -944,6 +944,15 @@
           "delivered_at": "2026-05-19T06:32:05.972001-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "LSG vs RR \u2014 Powerplay 1\n\nLSG: 83/0 after 6.0 overs.\n\nUpdated prediction: LSG wins (80%)\nReason: 83/0 after PP \u2014 above par (50) at this stage\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-19T07:30:17.469639-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-19T07:30:24.213741-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -951,8 +960,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-19T07:28:53.646286-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-19T07:30:17.436620-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
