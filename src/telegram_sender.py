@@ -23,6 +23,21 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CHAT_IDS_FILE = REPO_ROOT / "telegram_chat_ids.txt"
 ENV_FILE = REPO_ROOT / ".env"
 
+WELCOME_MESSAGE = (
+    "🏏 You're on the IPL 2026 tracker, {first_name}.\n"
+    "\n"
+    "Match-day messages will start landing here:\n"
+    "• Prediction before the match\n"
+    "• Powerplay + innings updates\n"
+    "• Final result and a short recap at night\n"
+    "\n"
+    "About 7 messages per match day, only on match days. No spam between.\n"
+    "\n"
+    "To leave, just block this bot. Questions or feedback: @kcla21.\n"
+    "\n"
+    "— KC · kcln.github.io/ipl-tracker"
+)
+
 
 def _log(msg: str) -> None:
     ts = datetime.now().isoformat(timespec="seconds")
@@ -185,6 +200,11 @@ def discover_and_add() -> List[dict]:
             handle = f"@{info['username']}" if info["username"] else "no @handle"
             f.write(f"{info['chat_id']}  # {name} ({handle}) — joined {today}\n")
     _log(f"auto-added {len(new)} new chat_id(s) to {CHAT_IDS_FILE.name}")
+
+    # Welcome each new signup with a short orientation DM
+    for info in new:
+        first = (info.get("first_name") or "").strip() or "there"
+        _send_one(WELCOME_MESSAGE.format(first_name=first), str(info["chat_id"]))
 
     # Pick admin: env override, else the first pre-existing chat_id in the file
     admin_id = os.environ.get("TELEGRAM_ADMIN_CHAT_ID", "").strip()
