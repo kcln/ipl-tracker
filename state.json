@@ -953,6 +953,15 @@
           "delivered_at": "2026-05-19T07:30:24.213741-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "LSG vs RR \u2014 Innings break\n\nLSG finished 220/5 in 20.0 overs.\nRR need 221 to win.\n\nUpdated prediction: LSG wins (51%)\nReason: target 221, RRR 11.05 \u00b7 defense wins 33% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-19T08:55:09.199924-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-19T08:55:16.192378-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -960,8 +969,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-19T08:53:50.182632-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-19T08:55:09.153366-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
