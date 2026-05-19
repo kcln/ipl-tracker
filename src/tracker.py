@@ -879,6 +879,24 @@ def _check_cricsheet_freshness() -> None:
         _log(f"cricsheet freshness check failed (non-fatal): {e}", "warn")
 
 
+def _process_telegram_signups() -> None:
+    """Pull any new /start-ers from the bot, auto-add them to
+    telegram_chat_ids.txt, and DM the admin. No-op if Telegram is disabled
+    or the API is unreachable."""
+    if NO_TELEGRAM:
+        return
+    try:
+        if __package__ in (None, ""):
+            from src import telegram_sender  # type: ignore
+        else:
+            from . import telegram_sender
+        added = telegram_sender.discover_and_add()
+        if added:
+            _log(f"telegram: auto-added {len(added)} new signup(s)", "ok")
+    except Exception as e:
+        _log(f"telegram signup discovery failed (non-fatal): {e}", "warn")
+
+
 def _send_via_channels(body: str) -> bool:
     """Send to every enabled channel. Returns True if at least one succeeded.
     Telegram self-gates on chat_ids file presence, so this is always safe to call."""
@@ -923,6 +941,10 @@ def main() -> int:
     # Process inbound STOP / START commands first so opt-outs land before
     # any new sync re-adds them.
     _process_optout_commands()
+
+    # Auto-add new Telegram /start-ers (web signups) to the recipient file
+    # and DM the admin. Runs every tick — cheap, idempotent on existing IDs.
+    _process_telegram_signups()
 
     # Pull any new signups before generating messages so newcomers get
     # whichever message is next due to fire. Hold onto the list so we can
