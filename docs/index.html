@@ -5,38 +5,37 @@
 <meta charset="utf-8"/>
 <title>IPL 2026 — Daily tracker · KC Lakshminarasimham</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="#F8F5F1" name="theme-color"/>
+<meta content="#F5F1EB" name="theme-color"/>
 <meta content="A machine-curated IPL 2026 tracker — predictions in the morning, results after each match, a recap at night. Texted daily." name="description"/>
 <meta content="IPL 2026 · Daily tracker" property="og:title"/>
 <meta content="Predictions in the morning, results after each match, a recap at night. Texted daily." property="og:description"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;family=Work+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Playfair+Display:ital,wght@1,400;1,700;1,900&amp;display=swap" rel="stylesheet"/>
 <style>
+    /* KCL Editorial × Bauhaus brand system — see ~/.claude/CLAUDE.md */
     :root {
-      --bg:           #F8F5F1;
-      --card:         #FFFFFF;
-      --card-2:       #FAF8F5;
-      --brown:        #3F2A26;
-      --brown-2:      #5A3E37;
-      --brown-soft:   rgba(63,42,38,0.08);
-      --brown-hair:   rgba(63,42,38,0.14);
-      --ink:          #1F1612;
-      --ink-2:        #3D2E27;
-      --ink-soft:     rgba(31,22,18,0.62);
-      --ink-faint:    rgba(31,22,18,0.40);
-      --hair:         rgba(31,22,18,0.10);
-      --hair-soft:    rgba(31,22,18,0.06);
-      --p-50:  #FAF5FF;  --p-100: #F3E8FF;  --p-200: #E9D5FF;
-      --p-300: #D8B4FE;  --p-400: #C084FC;  --p-500: #A855F7;
-      --p-600: #9333EA;  --p-700: #7E22CE;  --p-800: #6B21A8;  --p-900: #581C87;
-      --radius-lg: 24px;  --radius-md: 16px;  --radius-sm: 10px;
-      --shadow-sm: 0 1px 2px rgba(31,22,18,0.05);
-      --shadow-md: 0 1px 2px rgba(31,22,18,0.04), 0 8px 24px -8px rgba(31,22,18,0.10);
+      --bg:          #F5F1EB;
+      --card:        #FFFFFF;
+      --crimson:     #E0001C;
+      --navy:        #1E40AF;   /* prediction / standings */
+      --teal:        #0F766E;   /* in-play data */
+      --amber:       #B45309;   /* recap */
+      --rose:        #BE185D;   /* match result */
+      --ink:         #0F0F0F;
+      --ink-soft:    rgba(15,15,15,0.65);
+      --ink-faint:   rgba(15,15,15,0.40);
+      --hair:        rgba(15,15,15,0.10);
+      --bw:          2px;                      /* border width */
+      --shadow:         4px 4px 0 0 var(--ink);
+      --shadow-crimson: 4px 4px 0 0 var(--crimson);
+      --font-hero:  'Playfair Display', Georgia, serif;  /* italic only */
+      --font-body:  'Inter', system-ui, sans-serif;
+      --font-label: 'JetBrains Mono', ui-monospace, monospace;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-font-smoothing: antialiased; }
-    body { background: var(--bg); color: var(--ink); font-family: 'Work Sans', system-ui, sans-serif; font-weight: 400; min-height: 100vh; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-weight: 400; min-height: 100vh; }
     a { color: inherit; text-decoration: none; }
 
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
@@ -44,113 +43,129 @@
     nav.bar { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
     nav .mark {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--p-400), var(--p-800));
-      border-radius: 10px;
-      padding: 6px;
-      box-shadow: 0 4px 16px rgba(126,34,206,0.25);
-      transition: transform 0.15s, box-shadow 0.15s;
+      width: 44px; height: 44px; background: var(--card);
+      border: var(--bw) solid var(--ink); border-radius: 0; padding: 6px;
+      box-shadow: var(--shadow); transition: transform 0.12s, box-shadow 0.12s;
     }
-    nav .mark:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(126,34,206,0.35); }
+    nav .mark:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
+    nav .mark:active { transform: translate(2px,2px); box-shadow: none; }
     nav .mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    nav .live { font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink); padding: 9px 16px; background: var(--card); border-radius: 100px; box-shadow: var(--shadow-sm); transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
-    nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--p-600); animation: pulse 1.6s ease-in-out infinite; }
-    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(147,51,234,0.6); } 50% { box-shadow: 0 0 0 6px rgba(147,51,234,0); } }
-    nav .live:hover { background: var(--brown); color: var(--card); }
-    nav .live:hover .dot { background: var(--p-400); }
+    nav .live { font-family: var(--font-label); font-weight: 500; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); padding: 10px 16px; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 9999px; box-shadow: var(--shadow); transition: transform 0.12s, box-shadow 0.12s; display: inline-flex; align-items: center; gap: 8px; }
+    nav .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--crimson); animation: pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(224,0,28,0.6); } 50% { box-shadow: 0 0 0 6px rgba(224,0,28,0); } }
+    nav .live:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
+    nav .live:active { transform: translate(2px,2px); box-shadow: none; }
 
     .hero-grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 16px; margin-top: 8px; }
-    .h-card { background: var(--card); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); }
-    .h-card.dark { background: var(--brown); color: var(--card); }
-    .h-card .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 18px; }
-    .h-card.dark .kicker { color: rgba(255,255,255,0.72); }
-    .h-card h1 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(40px, 5.5vw, 64px); line-height: 1.0; letter-spacing: -0.025em; }
-    .h-card h1 .grad { background: linear-gradient(135deg, var(--p-400), var(--p-800)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .h-card .lead { margin-top: 18px; color: var(--ink-soft); font-size: 16px; line-height: 1.6; max-width: 52ch; }
+    .h-card { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 0; padding: 32px; box-shadow: var(--shadow); }
+    .h-card.dark { background: var(--ink); color: var(--bg); box-shadow: var(--shadow-crimson); }
+    .h-card .kicker { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--crimson); margin-bottom: 18px; }
+    .h-card.dark .kicker { color: var(--crimson); }
+    .h-card h1 { font-family: var(--font-hero); font-style: italic; font-weight: 700; font-size: clamp(40px, 5.5vw, 64px); line-height: 1.04; letter-spacing: -0.01em; }
+    .h-card h1 .grad { color: var(--crimson); font-weight: 900; }
+    .h-card .lead { margin-top: 20px; font-family: var(--font-body); color: var(--ink-soft); font-size: 16px; line-height: 1.6; max-width: 52ch; }
 
     .score { display: grid; grid-template-rows: auto 1fr auto; gap: 8px; height: 100%; }
-    .score .team-line { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; line-height: 1.05; margin-top: 8px; }
-    .score .team-line .vs { color: rgba(255,255,255,0.55); margin: 0 6px; font-weight: 400; }
-    .score .result { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase; color: rgba(255,255,255,0.84); margin-top: auto; }
-    .score .result .win { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0; text-transform: none; display: block; margin-top: 4px; color: var(--card); }
+    .score .team-line { font-family: var(--font-body); font-weight: 800; font-size: 28px; letter-spacing: -0.01em; line-height: 1.05; margin-top: 8px; }
+    .score .team-line .vs { font-family: var(--font-hero); font-style: italic; color: rgba(245,241,235,0.55); margin: 0 8px; font-weight: 400; }
+    .score .result { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase; color: rgba(245,241,235,0.70); margin-top: auto; }
+    .score .result .win { font-family: var(--font-body); font-weight: 700; font-size: 14px; letter-spacing: 0; text-transform: none; display: block; margin-top: 6px; color: var(--bg); }
 
-    .stat .v { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 56px; letter-spacing: -0.03em; line-height: 1; margin: 10px 0 6px; color: var(--p-700); }
-    .stat .desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+    .stat .v { font-family: var(--font-body); font-weight: 800; font-size: 56px; letter-spacing: -0.02em; line-height: 1; margin: 10px 0 8px; color: var(--navy); }
+    .stat .desc { font-family: var(--font-body); font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 
-    .section-head { margin: 56px 0 18px; display: flex; align-items: center; justify-content: space-between; }
-    .section-head h2 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.018em; }
-    .section-head .count { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); }
+    .section-head { margin: 56px 0 20px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: var(--bw) solid var(--crimson); padding-bottom: 12px; }
+    .section-head h2 { font-family: var(--font-hero); font-style: italic; font-weight: 700; font-size: 28px; letter-spacing: -0.01em; }
+    .section-head .count { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
 
     main#days { display: block; }
 
-    details.day { background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); box-shadow: var(--shadow-sm); margin-bottom: 14px; overflow: hidden; transition: box-shadow 0.2s; }
-    details.day:hover { box-shadow: var(--shadow-md); }
-    details.day > summary { list-style: none; cursor: pointer; padding: 22px 28px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
-    details.day > summary::-webkit-details-marker { display: none; }
-    .day-head { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: -0.015em; line-height: 1.2; }
-    .day-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--ink-faint); margin-top: 6px; }
-    details.day > summary .toggle { width: 32px; height: 32px; background: var(--bg); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: 'JetBrains Mono', monospace; font-size: 16px; transition: transform 0.25s, background 0.15s, color 0.15s; }
-    details.day[open] > summary .toggle { transform: rotate(45deg); background: var(--p-700); color: var(--card); }
+    details[data-day] { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 0; box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden; }
+    details[data-day] > summary { list-style: none; cursor: pointer; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: var(--font-body); font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+    details[data-day] > summary::-webkit-details-marker { display: none; }
+    details[data-day] > summary::after { content: '+'; font-family: var(--font-label); font-size: 20px; line-height: 1; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: var(--bg); border: var(--bw) solid var(--ink); transition: transform 0.2s, background 0.15s, color 0.15s; flex-shrink: 0; }
+    details[data-day][open] > summary::after { content: '+'; transform: rotate(45deg); background: var(--crimson); color: var(--card); }
+    details[data-day][open] > summary { border-bottom: var(--bw) solid var(--ink); }
 
-    .day-body { padding: 0 28px 24px; }
-    article { padding: 18px 0; border-top: 1px solid var(--hair-soft); display: grid; grid-template-columns: 160px 1fr; gap: 22px; align-items: start; }
-    article:first-of-type { border-top: 1px solid var(--hair); }
-    article .meta { display: flex; flex-direction: column; gap: 8px; }
-    article .meta .tag { display: inline-block; align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
-    article .meta .tag.morning { color: var(--p-700); background: var(--p-100); }
-    article .meta .tag.phase   { color: var(--p-800); background: var(--p-200); }
-    article .meta .tag.result  { color: var(--card);  background: var(--p-700); }
-    article .meta .tag.recap   { color: var(--card);  background: var(--brown); }
-    article .meta .when { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); line-height: 1.7; }
+    article { padding: 20px 24px; border-top: 1px solid var(--hair); display: grid; grid-template-columns: 168px 1fr; gap: 22px; align-items: start; }
+    article:first-of-type { border-top: 0; }
+    article .meta { display: flex; flex-direction: column; gap: 10px; }
+    article .meta .tag { display: inline-block; align-self: flex-start; font-family: var(--font-label); font-weight: 500; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; padding: 5px 9px; border: var(--bw) solid var(--ink); border-radius: 0; box-shadow: 2px 2px 0 0 var(--ink); color: var(--card); }
+    article .meta .tag.morning { background: var(--navy); }
+    article .meta .tag.phase   { background: var(--teal); }
+    article .meta .tag.result  { background: var(--rose); }
+    article .meta .tag.recap   { background: var(--amber); }
+    article .meta .when { font-family: var(--font-label); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); line-height: 1.8; }
     article .meta .when span { display: block; }
-    article .body { font-family: 'Work Sans', sans-serif; font-size: 14.5px; line-height: 1.7; color: var(--ink-2); white-space: pre-wrap; }
-    article .body strong { font-weight: 700; color: var(--p-800); }
+    article .body { font-family: var(--font-body); font-size: 14.5px; line-height: 1.7; color: var(--ink); white-space: pre-wrap; }
+    article .body strong { font-weight: 700; color: var(--crimson); }
 
     .signup-grid { margin-top: 56px; display: grid; grid-template-columns: 5fr 7fr; gap: 16px; }
-    .signup-pitch { background: var(--brown); color: var(--card); border-radius: var(--radius-lg); padding: 36px 32px; position: relative; overflow: hidden; }
-    .signup-pitch::before { content: ''; position: absolute; bottom: -50%; right: -30%; width: 160%; height: 200%; background: radial-gradient(circle, rgba(168,85,247,0.40) 0%, transparent 60%); pointer-events: none; }
+    .signup-pitch { background: var(--ink); color: var(--bg); border: var(--bw) solid var(--ink); border-radius: 0; box-shadow: var(--shadow-crimson); padding: 36px 32px; position: relative; overflow: hidden; }
+    .signup-pitch::before { content: ''; position: absolute; bottom: -50%; right: -30%; width: 160%; height: 200%; background: radial-gradient(circle, rgba(224,0,28,0.28) 0%, transparent 60%); pointer-events: none; }
     .signup-pitch-inner { position: relative; }
-    .signup-pitch .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-300); margin-bottom: 18px; }
-    .signup-pitch h2 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; letter-spacing: -0.022em; }
-    .signup-pitch p { margin-top: 16px; color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.6; }
-    .signup-pitch .stats { margin-top: 28px; display: flex; gap: 28px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.10); }
-    .signup-pitch .stats div { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-    .signup-pitch .stats strong { display: block; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.012em; color: var(--card); margin-bottom: 4px; }
+    .signup-pitch .kicker { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--crimson); margin-bottom: 18px; }
+    .signup-pitch h2 { font-family: var(--font-hero); font-style: italic; font-weight: 700; font-size: clamp(28px, 4vw, 42px); line-height: 1.06; letter-spacing: -0.01em; }
+    .signup-pitch p { margin-top: 18px; font-family: var(--font-body); color: rgba(245,241,235,0.72); font-size: 15px; line-height: 1.6; }
+    .signup-pitch .stats { margin-top: 28px; display: flex; gap: 28px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid rgba(245,241,235,0.18); }
+    .signup-pitch .stats div { font-family: var(--font-label); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,241,235,0.55); }
+    .signup-pitch .stats strong { display: block; font-family: var(--font-body); font-weight: 800; font-size: 22px; letter-spacing: -0.01em; color: var(--bg); margin-bottom: 4px; }
 
-    .signup-cta-box { background: var(--card); border-radius: var(--radius-lg); padding: 40px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--hair-soft); display: flex; flex-direction: column; justify-content: center; gap: 18px; }
-    .signup-cta-box .cta-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faint); }
-    .signup-cta-box .cta-headline { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: clamp(22px, 2.6vw, 28px); letter-spacing: -0.018em; line-height: 1.15; color: var(--ink); }
-    .signup-cta-box .cta-headline em { font-style: italic; font-weight: 900; color: var(--p-800); }
-    .signup-cta-box .cta-sub { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
-    a.tg-cta { margin-top: 6px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; background: var(--brown); color: var(--card); padding: 16px 24px; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.15s; text-decoration: none; }
-    a.tg-cta::before { content: ''; width: 18px; height: 18px; background: currentColor; -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9.04 15.32 8.86 19.6c.31 0 .45-.13.61-.29l1.47-1.4 3.05 2.23c.56.31.95.15 1.11-.51l2.01-9.42c.18-.83-.3-1.15-.86-.94L4.39 13.69c-.81.31-.79.76-.14.96l3.06.96 7.1-4.47c.33-.21.64-.09.39.13'/></svg>") center/contain no-repeat; mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9.04 15.32 8.86 19.6c.31 0 .45-.13.61-.29l1.47-1.4 3.05 2.23c.56.31.95.15 1.11-.51l2.01-9.42c.18-.83-.3-1.15-.86-.94L4.39 13.69c-.81.31-.79.76-.14.96l3.06.96 7.1-4.47c.33-.21.64-.09.39.13'/></svg>") center/contain no-repeat; }
-    a.tg-cta::after { content: '→'; font-size: 18px; transition: transform 0.2s; }
-    a.tg-cta:hover { background: var(--p-700); }
-    a.tg-cta:hover::after { transform: translateX(4px); }
+    .signup-form-box { background: var(--card); border: var(--bw) solid var(--ink); border-radius: 0; padding: 36px 32px; box-shadow: var(--shadow); }
+    form { display: grid; gap: 18px; }
+    form label { font-family: var(--font-label); font-weight: 500; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px; display: block; }
+    input[type="text"], input[type="tel"] { width: 100%; font-family: var(--font-body); font-size: 16px; font-weight: 500; background: var(--bg); color: var(--ink); border: var(--bw) solid var(--ink); border-radius: 0; padding: 13px 15px; outline: none; transition: box-shadow 0.12s, transform 0.12s; }
+    input::placeholder { color: var(--ink-faint); }
+    input:focus { background: var(--card); box-shadow: var(--shadow-crimson); }
 
-    .fine { margin-top: 6px; font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
-    .fine code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-    .fine a { color: var(--brown); text-decoration: underline; text-underline-offset: 2px; }
-    .fine a:hover { color: var(--p-700); }
-    .fine a code { background: var(--p-100); color: var(--brown); }
+    .platform { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .platform label.radio { cursor: pointer; text-align: center; padding: 13px; border-radius: 0; background: var(--bg); color: var(--ink); margin-bottom: 0; font-family: var(--font-body); font-weight: 600; font-size: 14px; letter-spacing: 0; text-transform: none; border: var(--bw) solid var(--ink); transition: transform 0.1s, box-shadow 0.1s; }
+    .platform label.radio:has(input:checked) { background: var(--ink); color: var(--bg); box-shadow: 3px 3px 0 0 var(--crimson); }
+    .platform input[type="radio"] { display: none; }
 
-    footer.foot { margin: 64px 0 56px; padding: 24px 28px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--hair-soft); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-    footer .made { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
-    footer .made a { background: linear-gradient(120deg, var(--p-100), var(--p-200)); color: var(--p-800); padding: 3px 10px; border-radius: 100px; font-weight: 600; }
-    footer .links { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+    /* Honeypot — off-screen */
+    .honey { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+
+    button.send { justify-self: stretch; font-family: var(--font-label); font-weight: 500; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; background: var(--crimson); color: var(--card); padding: 16px 24px; border: var(--bw) solid var(--ink); border-radius: 9999px; box-shadow: var(--shadow); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.12s, box-shadow 0.12s; }
+    button.send::after { content: '→'; font-size: 16px; transition: transform 0.2s; }
+    button.send:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 0 var(--ink); }
+    button.send:hover::after { transform: translateX(4px); }
+    button.send:active { transform: translate(2px,2px); box-shadow: none; }
+    button.send:disabled { opacity: 0.6; cursor: wait; box-shadow: var(--shadow); transform: none; }
+
+    .fine { margin-top: 16px; font-family: var(--font-body); font-size: 12px; color: var(--ink-faint); line-height: 1.55; }
+    .fine code { background: var(--bg); padding: 2px 6px; border-radius: 0; border: 1px solid var(--hair); font-family: var(--font-label); font-size: 11px; }
+
+    /* Inline success / error state */
+    .signup-state { padding: 28px 32px; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 0; box-shadow: var(--shadow); }
+    .signup-state .state-label { display: block; font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px; }
+    .signup-state .state-headline { font-family: var(--font-hero); font-style: italic; font-weight: 700; font-size: 26px; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 10px; }
+    .signup-state .state-body { font-family: var(--font-body); color: var(--ink-soft); font-size: 14px; line-height: 1.6; }
+    .signup-state.success .state-label, .signup-state.success .state-headline { color: var(--teal); }
+    .signup-state.success .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
+    .signup-state.error   .state-label, .signup-state.error   .state-headline { color: var(--crimson); }
+    .signup-state.error   .state-headline em { color: var(--crimson); font-style: italic; font-weight: 900; }
+    .signup-state button.try-again { margin-top: 14px; font-family: var(--font-label); font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); background: var(--card); border: var(--bw) solid var(--ink); border-radius: 9999px; box-shadow: 2px 2px 0 0 var(--ink); padding: 9px 16px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
+    .signup-state button.try-again:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 0 var(--ink); }
+    .signup-state button.try-again:active { transform: translate(2px,2px); box-shadow: none; }
+
+    footer.foot { margin: 64px 0 56px; padding: 22px 28px; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 0; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    footer .made { font-family: var(--font-body); font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+    footer .made a { background: var(--crimson); color: var(--card); padding: 4px 12px; border: var(--bw) solid var(--ink); border-radius: 9999px; font-weight: 600; }
+    footer .links { font-family: var(--font-label); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
 
     @media (max-width: 800px) {
       .hero-grid { grid-template-columns: 1fr; }
       .signup-grid { grid-template-columns: 1fr; }
-      article { grid-template-columns: 1fr; gap: 10px; }
+      article { grid-template-columns: 1fr; gap: 12px; }
     }
     @media (max-width: 540px) {
       .wrap { padding: 0 18px; }
       .h-card { padding: 24px; }
       .h-card h1 { font-size: 40px; }
-      details.day > summary { padding: 18px 20px; }
-      .day-body { padding: 0 20px 20px; }
-      .signup-pitch, .signup-cta-box { padding: 28px 24px; }
+      details[data-day] > summary { padding: 16px 18px; font-size: 16px; }
+      article { padding: 18px; }
+      .signup-pitch, .signup-form-box { padding: 28px 24px; }
     }
   </style>
 </head>
@@ -166,7 +181,7 @@
 <div class="h-card" style="grid-row: span 2;">
 <div class="kicker">IPL 2026 · Daily tracker</div>
 <h1>Every match.<br/>Every <span class="grad">prediction.</span></h1>
-<p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Delivered daily on Telegram.</p>
+<p class="lead">A machine-curated record of every match day this season — a prediction before play, a result after each match, a recap at night. Texted daily to your phone.</p>
 </div>
 <div class="h-card dark">
 <div class="score">
@@ -680,21 +695,40 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 <section class="signup-grid" id="signup">
 <div class="signup-pitch">
 <div class="signup-pitch-inner">
-<div class="kicker">Get the messages</div>
-<h2>Match-day updates, on Telegram.</h2>
+<div class="kicker">Get the texts</div>
+<h2>Match-day updates, on your phone.</h2>
 <p>Predictions before play. Powerplay and innings update. Final recap after match.</p>
 <div class="stats">
 <div><strong>~7</strong>messages / match day</div>
-<div><strong>/stop</strong>to opt out</div>
+<div><strong>1-tap</strong>opt out</div>
 </div>
 </div>
 </div>
-<div class="signup-cta-box">
-<div class="cta-eyebrow">One tap</div>
-<div class="cta-headline">Tap Start on <em>@Kipl26bot</em>.</div>
-<div class="cta-sub">That's the whole signup. Telegram requires you to message the bot first so it's allowed to message you back. After you tap Start, you're on the list for the next match.</div>
-<a class="tg-cta" href="https://t.me/Kipl26bot" rel="noopener" target="_blank">Start on Telegram</a>
-<p class="fine">Send <code>/stop</code> in the chat anytime to leave, <code>/start</code> to rejoin. No phone number needed. No spam.</p>
+<div class="signup-form-box">
+<form id="signup-form" novalidate="">
+<div>
+<label for="su-name">Name</label>
+<input autocomplete="name" id="su-name" name="name" placeholder="Priya Kumar" type="text"/>
+</div>
+<div>
+<label for="su-phone">Phone (with country code)</label>
+<input autocomplete="tel" id="su-phone" name="phone" placeholder="+14155551234" required="" type="tel"/>
+</div>
+<div>
+<label>Platform</label>
+<div class="platform">
+<label class="radio"><input checked="" name="platform" type="radio" value="iPhone"/> iPhone</label>
+<label class="radio"><input name="platform" type="radio" value="Android"/> Android</label>
+</div>
+</div>
+<div aria-hidden="true" class="honey">
+<label for="su-website">Website</label>
+<input autocomplete="off" id="su-website" name="website" tabindex="-1" type="text"/>
+</div>
+<button class="send" id="signup-submit" type="submit">Sign up</button>
+<p class="fine" id="signup-fine">Each request is reviewed before texts start. Reply <code>STOP</code> anytime to leave, <code>START</code> to rejoin. Format: <code>+14155551234</code></p>
+</form>
+<div aria-live="polite" class="signup-state" hidden="" id="signup-state" role="status"></div>
 </div>
 </section>
 <footer class="foot">
@@ -703,46 +737,101 @@ Predicted final top 4: <strong>GT, SRH, RCB, PBKS</strong></div></article></deta
 </footer>
 </div>
 <script>
-(function () {
-  // Render every time on the page in the visitor's local time zone instead
-  // of the fixed IST/ET/CT/PT list. Two passes: (1) the .when stamp next to
-  // each article tag uses the article's data-generated (an ISO timestamp);
-  // (2) the multi-TZ inline strings inside .body get rewritten by parsing
-  // the IST anchor plus the parent details[data-day].
+    var SIGNUP_URL = 'https://script.google.com/macros/s/AKfycbx8wwSgBEPz-SMMTtsi2sEt9xzAUWgDBAtN7Wdg94wJb8VLT-Q5dctZDO0rl_1s4yV6/exec';
 
-  function fmtTime(d) {
-    if (isNaN(d)) return '';
-    return d.toLocaleString(undefined, {
-      hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short'
+    var formEl   = document.getElementById('signup-form');
+    var stateEl  = document.getElementById('signup-state');
+    var submitEl = document.getElementById('signup-submit');
+
+    function showState(kind, label, headline, body, withRetry) {
+      formEl.hidden = (kind === 'success' || kind === 'capped');
+      stateEl.hidden = false;
+      stateEl.className = 'signup-state ' + kind;
+      stateEl.innerHTML =
+        '<span class="state-label">' + label + '</span>' +
+        '<div class="state-headline">' + headline + '</div>' +
+        '<div class="state-body">' + body + '</div>' +
+        (withRetry ? '<button type="button" class="try-again">Try again</button>' : '');
+      var retry = stateEl.querySelector('.try-again');
+      if (retry) retry.addEventListener('click', function () {
+        stateEl.hidden = true;
+        formEl.hidden = false;
+        submitEl.disabled = false;
+        submitEl.textContent = 'Sign up';
+      });
+    }
+
+    fetch(SIGNUP_URL, { method: 'GET' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.full) {
+          showState('error', 'Full for today',
+            'Sign-ups are <em>full</em> for today.',
+            'Come back after midnight Pacific time — capacity resets daily.',
+            false);
+        }
+      })
+      .catch(function () {});
+
+    var visitorIP = '';
+    fetch('https://api.ipify.org?format=json')
+      .then(function (r) { return r.json(); })
+      .then(function (d) { visitorIP = (d && d.ip) || ''; })
+      .catch(function () {});
+
+    formEl.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name     = (document.getElementById('su-name').value || '').trim();
+      var phone    = (document.getElementById('su-phone').value || '').trim();
+      var platform = (document.querySelector('input[name="platform"]:checked') || {}).value || 'iPhone';
+      var website  = (document.getElementById('su-website').value || '').trim();
+
+      if (!phone) {
+        showState('error', 'Missing phone', 'We need your <em>phone number</em>.',
+          'Add it above (with country code, e.g. <code>+14155551234</code>) and try again.', true);
+        return;
+      }
+      if (!/^\+\d{8,15}$/.test(phone)) {
+        if (!confirm("That doesn\'t look like an E.164 phone number (e.g. +14155551234). Send anyway?")) return;
+      }
+
+      submitEl.disabled = true;
+      submitEl.textContent = 'Sending…';
+
+      var payload = JSON.stringify({
+        name: name, phone: phone, platform: platform,
+        website: website, ip: visitorIP, ua: navigator.userAgent
+      });
+
+      fetch(SIGNUP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: payload,
+        redirect: 'follow'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.ok) {
+            showState('success', "You're in",
+              "You're <em>on the list.</em>",
+              "Match-day texts will start arriving on " + phone + " before the next match. Spread the word if you like it.",
+              false);
+          } else if (data && data.error === 'daily_cap') {
+            showState('error', 'Full for today', 'Sign-ups are <em>full</em> for today.',
+              data.message || 'Try again after midnight Pacific time.', false);
+          } else if (data && data.error === 'rate_limit') {
+            showState('error', 'Slow down', 'Too many <em>tries</em>.',
+              data.message || 'Wait an hour and try again.', true);
+          } else {
+            showState('error', 'Something broke', 'We could not <em>save</em> that.',
+              (data && data.message) || 'Try again in a minute. If it keeps failing, email kcl.narasimham@gmail.com.', true);
+          }
+        })
+        .catch(function () {
+          showState('error', 'Network error', 'Could not <em>reach</em> the server.',
+            'Check your connection and try again.', true);
+        });
     });
-  }
-
-  document.querySelectorAll('article[data-generated]').forEach(function (art) {
-    var iso = art.getAttribute('data-generated');
-    var when = art.querySelector('.when');
-    if (!iso || !when) return;
-    var d = new Date(iso);
-    var local = fmtTime(d);
-    if (local) when.innerHTML = '<span>' + local + '</span>';
-  });
-
-  var tzPattern = /(\d{1,2}):(\d{2})\s*(am|pm)\s*IST\s*\/\s*\d{1,2}:\d{2}\s*(?:am|pm)\s*ET\s*\/\s*\d{1,2}:\d{2}\s*(?:am|pm)\s*CT\s*\/\s*\d{1,2}:\d{2}\s*(?:am|pm)\s*PT/gi;
-
-  document.querySelectorAll('details[data-day] article').forEach(function (art) {
-    var body = art.querySelector('.body');
-    if (!body) return;
-    var details = art.closest('details[data-day]');
-    var day = details && details.getAttribute('data-day');
-    if (!day) return;
-    body.innerHTML = body.innerHTML.replace(tzPattern, function (match, h, m, ampm) {
-      var hour = parseInt(h, 10) % 12;
-      if (ampm.toLowerCase() === 'pm') hour += 12;
-      var iso = day + 'T' + String(hour).padStart(2, '0') + ':' + m + ':00+05:30';
-      var local = fmtTime(new Date(iso));
-      return local || match;
-    });
-  });
-})();
-</script>
+  </script>
 </body>
 </html>
