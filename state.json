@@ -1031,7 +1031,34 @@
       }
     },
     "2026-05-20": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2505",
+          "teams": [
+            "KKR",
+            "MI"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Kolkata Knight Riders Won by 4 Wickets",
+          "predicted_winner": "KKR",
+          "actual_winner": "KKR",
+          "inn1": {
+            "runs": 147,
+            "wkts": 8,
+            "overs": 20.0,
+            "raw": "147/8 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 148,
+            "wkts": 6,
+            "overs": 18.5,
+            "raw": "148/6 (18.5 Ov)"
+          },
+          "first_batting": "MI",
+          "second_batting": "KKR"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -1095,6 +1122,24 @@
           "delivered_at": "2026-05-20T10:38:15.839749-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "KKR beat MI by 4 Wickets\nMI 147/8 (20.0)  \u00b7  KKR 148/6 (18.5)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-20T11:48:35.861716-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Wednesday, May 20 - Day recap\n\nKKR beat MI by 4 Wickets\nMI 147/8 (20.0)  \u00b7  KKR 148/6 (18.5)\n\nSeason to date prediction: 8 of 11 correct (73%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-20T11:48:36.986915-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-20T11:48:40.664949-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1102,8 +1147,8 @@
           "state": "none",
           "entered_at": "2026-05-20T07:56:01.724372-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 18.4,
-          "last_overs_progress_at": "2026-05-20T11:47:20.529618-07:00",
+          "last_overs_value": 18.5,
+          "last_overs_progress_at": "2026-05-20T11:48:34.346734-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
