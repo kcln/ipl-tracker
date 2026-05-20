@@ -1059,17 +1059,26 @@
           "delivered_at": "2026-05-20T07:37:30.834133-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_update_1_1",
+          "body": "KKR vs MI \u2014 Status update\n\nPlay stopped \u2014 overs counter has not advanced\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-20T07:56:01.724479-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-20T07:56:10.037195-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2505": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
+          "state": "active",
+          "entered_at": "2026-05-20T07:56:01.724372-07:00",
+          "entered_phase": "in_play",
           "last_overs_value": 8.0,
           "last_overs_progress_at": "2026-05-20T07:45:47.996546-07:00",
           "last_note_hash": null,
-          "fired_count": 0
+          "fired_count": 1
         }
       }
     }
