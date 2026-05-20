@@ -1068,15 +1068,24 @@
           "delivered_at": "2026-05-20T07:56:10.037195-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_resumed_1_1",
+          "body": "KKR vs MI \u2014 Play has resumed\n\nResumed after a 51-minute delay.\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-20T08:46:38.988897-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-20T08:46:46.153157-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2505": {
-          "state": "active",
+          "state": "none",
           "entered_at": "2026-05-20T07:56:01.724372-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 8.0,
-          "last_overs_progress_at": "2026-05-20T07:45:47.996546-07:00",
+          "last_overs_value": 8.1,
+          "last_overs_progress_at": "2026-05-20T08:46:38.988848-07:00",
           "last_note_hash": null,
           "fired_count": 1
         }
