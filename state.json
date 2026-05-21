@@ -1155,7 +1155,34 @@
       }
     },
     "2026-05-21": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2506",
+          "teams": [
+            "GT",
+            "CSK"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Gujarat Titans Won by 89 Runs",
+          "predicted_winner": "GT",
+          "actual_winner": "GT",
+          "inn1": {
+            "runs": 229,
+            "wkts": 4,
+            "overs": 20.0,
+            "raw": "229/4 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 140,
+            "wkts": 10,
+            "overs": 13.4,
+            "raw": "140/10 (13.4 Ov)"
+          },
+          "first_batting": "GT",
+          "second_batting": "CSK"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -1199,6 +1226,24 @@
           "generated_at": "2026-05-21T09:46:23.497979-07:00",
           "delivered": true,
           "delivered_at": "2026-05-21T09:46:29.733137-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "GT beat CSK by 89 Runs\nGT 229/4 (20.0)  \u00b7  CSK 140/10 (13.4)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-21T10:32:13.726351-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Thursday, May 21 - Day recap\n\nGT beat CSK by 89 Runs\nGT 229/4 (20.0)  \u00b7  CSK 140/10 (13.4)\n\nSeason to date prediction: 9 of 12 correct (75%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-21T10:32:14.928019-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-21T10:32:21.395318-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
