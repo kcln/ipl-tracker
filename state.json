@@ -1165,6 +1165,15 @@
           "delivered_at": "2026-05-21T00:01:09.792229-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "GT vs CSK \u2014 Toss\n\nToss: CSK won and chose to field.\n\nUpdated prediction: GT wins (91%)\nReason: GT's pre-match form outweighs the toss going to CSK\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-21T06:33:33.659101-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-21T06:33:37.732466-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
