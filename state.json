@@ -1183,6 +1183,15 @@
           "delivered_at": "2026-05-21T07:32:22.946741-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "GT vs CSK \u2014 Innings break\n\nGT finished 229/4 in 20.0 overs.\nCSK need 230 to win.\n\nUpdated prediction: GT wins (68%)\nReason: target 230, RRR 11.50 \u00b7 defense wins 50% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-21T08:57:01.922506-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-21T08:57:09.093879-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1190,8 +1199,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.3,
-          "last_overs_progress_at": "2026-05-21T08:55:40.854206-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-21T08:57:01.869951-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
