@@ -1261,7 +1261,34 @@
       }
     },
     "2026-05-22": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2507",
+          "teams": [
+            "SRH",
+            "RCB"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Sunrisers Hyderabad Won by 55 Runs",
+          "predicted_winner": "SRH",
+          "actual_winner": "SRH",
+          "inn1": {
+            "runs": 255,
+            "wkts": 4,
+            "overs": 20.0,
+            "raw": "255/4 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 200,
+            "wkts": 4,
+            "overs": 20.0,
+            "raw": "200/4 (20.0 Ov)"
+          },
+          "first_batting": "SRH",
+          "second_batting": "RCB"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -1307,6 +1334,24 @@
           "delivered_at": "2026-05-22T09:43:33.346925-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "SRH beat RCB by 55 Runs\nSRH 255/4 (20.0)  \u00b7  RCB 200/4 (20.0)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-22T11:00:19.676976-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Friday, May 22 - Day recap\n\nSRH beat RCB by 55 Runs\nSRH 255/4 (20.0)  \u00b7  RCB 200/4 (20.0)\n\nSeason to date prediction: 10 of 13 correct (77%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-22T11:00:20.530777-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-22T11:00:26.381138-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1314,8 +1359,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.4,
-          "last_overs_progress_at": "2026-05-22T10:59:03.269554-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-22T11:00:18.945039-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
