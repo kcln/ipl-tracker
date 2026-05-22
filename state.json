@@ -1259,6 +1259,31 @@
           "fired_count": 0
         }
       }
+    },
+    "2026-05-22": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Friday, May 22\n\nToday's matches:\n\nMatch 1: SRH vs RCB\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: SRH wins\nReason: SRH have home advantage at Rajiv Gandhi International Stadium\n\nCurrent top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-22T00:00:22.072548-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-22T00:00:28.589496-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2507": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
