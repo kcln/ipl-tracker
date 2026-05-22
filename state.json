@@ -1271,6 +1271,15 @@
           "delivered_at": "2026-05-22T00:00:28.589496-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "SRH vs RCB \u2014 Toss\n\nToss: SRH won and chose to bat.\n\nUpdated prediction: SRH wins (61%)\nReason: SRH won the toss and chose to bat \u00b7 batting first wins 66% here historically\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-22T06:32:49.246907-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-22T06:32:53.520981-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
