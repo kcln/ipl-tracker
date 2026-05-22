@@ -1289,6 +1289,15 @@
           "delivered_at": "2026-05-22T07:30:02.403075-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "SRH vs RCB \u2014 Innings break\n\nSRH finished 255/4 in 20.0 overs.\nRCB need 256 to win.\n\nUpdated prediction: SRH wins (85%)\nReason: target 256, RRR 12.80 \u00b7 defense wins 66% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-22T08:52:39.099183-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-22T08:52:44.544299-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1296,8 +1305,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-22T08:51:17.398069-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-22T08:52:39.065750-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
