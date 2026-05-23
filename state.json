@@ -1395,6 +1395,15 @@
           "delivered_at": "2026-05-23T07:32:51.981919-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "LSG vs PBKS \u2014 Innings break\n\nLSG finished 196/6 in 20.0 overs.\nPBKS need 197 to win.\n\nUpdated prediction: LSG wins (60%)\nReason: target 197, RRR 9.85 \u00b7 defense wins 50% at this ground\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-23T08:49:54.577453-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-23T08:50:01.659739-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1402,8 +1411,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-23T08:47:24.952227-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-23T08:49:54.551879-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
