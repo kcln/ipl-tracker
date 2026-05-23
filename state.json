@@ -1386,6 +1386,15 @@
           "delivered_at": "2026-05-23T06:32:34.774228-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "LSG vs PBKS \u2014 Powerplay 1\n\nLSG: 66/2 after 6.0 overs.\n\nUpdated prediction: LSG wins (62%)\nReason: 66/2 after PP \u2014 above par (50) at this stage\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-23T07:32:46.791242-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-23T07:32:51.981919-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1393,8 +1402,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.5,
-          "last_overs_progress_at": "2026-05-23T07:31:25.601131-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-23T07:32:46.737081-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
