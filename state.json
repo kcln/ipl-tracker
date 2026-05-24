@@ -1510,6 +1510,15 @@
           "delivered_at": "2026-05-24T05:04:33.686305-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "RR vs MI \u2014 Powerplay 2\n\nMI: 49/4 after 6.0 overs, chasing 206.\n\nUpdated prediction: RR wins (90%)\nReason: 49/4 chasing 206 \u2014 RRR 11.2 vs CRR 8.2\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-24T05:59:25.180035-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-24T05:59:30.204463-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1517,8 +1526,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.4,
-          "last_overs_progress_at": "2026-05-24T05:55:39.425040-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-24T05:59:25.178025-07:00",
           "last_note_hash": null,
           "fired_count": 0
         },
