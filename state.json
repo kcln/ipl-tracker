@@ -1598,8 +1598,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 0.4,
-          "last_overs_progress_at": "2026-05-24T09:16:50.725971-07:00",
+          "last_overs_value": 1.0,
+          "last_overs_progress_at": "2026-05-24T09:18:00.977546-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
