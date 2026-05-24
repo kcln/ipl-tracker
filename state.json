@@ -1499,6 +1499,32 @@
           },
           "first_batting": "RR",
           "second_batting": "MI"
+        },
+        {
+          "id": "2510",
+          "teams": [
+            "KKR",
+            "DC"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Delhi Capitals Won by 40 Runs",
+          "predicted_winner": "KKR",
+          "actual_winner": "DC",
+          "inn1": {
+            "runs": 203,
+            "wkts": 5,
+            "overs": 20.0,
+            "raw": "203/5 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 163,
+            "wkts": 10,
+            "overs": 18.4,
+            "raw": "163/10 (18.4 Ov)"
+          },
+          "first_batting": "DC",
+          "second_batting": "KKR"
         }
       ],
       "messages": [
@@ -1589,6 +1615,24 @@
           "generated_at": "2026-05-24T09:44:19.885246-07:00",
           "delivered": true,
           "delivered_at": "2026-05-24T09:44:24.778284-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "post_match_2",
+          "body": "DC beat KKR by 40 Runs\nDC 203/5 (20.0)  \u00b7  KKR 163/10 (18.4)\n\nPre-match prediction: incorrect\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-24T10:57:25.487956-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Sunday, May 24 - Day recap\n\nRR beat MI by 30 Runs\nRR 205/8 (20.0)  \u00b7  MI 175/9 (20.0)\nDC beat KKR by 40 Runs\nDC 203/5 (20.0)  \u00b7  KKR 163/10 (18.4)\n\nSeason to date prediction: 11 of 16 correct (69%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-24T10:57:26.055345-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-24T10:57:31.998945-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
