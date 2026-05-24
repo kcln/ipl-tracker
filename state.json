@@ -1535,8 +1535,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 18.2,
-          "last_overs_progress_at": "2026-05-24T07:10:28.701021-07:00",
+          "last_overs_value": 18.3,
+          "last_overs_progress_at": "2026-05-24T07:12:56.065357-07:00",
           "last_note_hash": null,
           "fired_count": 0
         },
@@ -1544,8 +1544,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 2.1,
-          "last_overs_progress_at": "2026-05-24T07:11:42.245245-07:00",
+          "last_overs_value": 2.3,
+          "last_overs_progress_at": "2026-05-24T07:12:56.065357-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
