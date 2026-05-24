@@ -1501,6 +1501,15 @@
           "delivered_at": "2026-05-24T03:38:21.586535-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "RR vs MI \u2014 Innings break\n\nRR finished 205/8 in 20.0 overs.\nMI need 206 to win.\n\nUpdated prediction: RR wins (51%)\nReason: target 206, RRR 10.30 \u00b7 defense wins 33% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-24T05:04:28.928617-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-24T05:04:33.686305-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1508,8 +1517,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-24T05:03:14.165914-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-24T05:04:28.926458-07:00",
           "last_note_hash": null,
           "fired_count": 0
         },
