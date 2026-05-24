@@ -1483,6 +1483,15 @@
           "delivered_at": "2026-05-24T00:06:02.434864-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "MI vs RR \u2014 Toss\n\nToss: MI won and chose to field.\n\nUpdated prediction: MI wins (54%)\nReason: MI won the toss and chose to field \u00b7 chases win 66% here historically\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-24T02:32:21.295736-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-24T02:32:26.523548-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
