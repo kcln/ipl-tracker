@@ -1573,6 +1573,15 @@
           "delivered_at": "2026-05-24T07:32:28.057848-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_2",
+          "body": "DC vs KKR \u2014 Innings break\n\nDC finished 203/5 in 20.0 overs.\nKKR need 204 to win.\n\nUpdated prediction: DC wins (58%)\nReason: target 204, RRR 10.20 \u00b7 defense wins 40% at this ground \u00b7 200+ totals are rarely chased\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-24T08:58:04.410404-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-24T08:58:09.167010-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1589,8 +1598,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.5,
-          "last_overs_progress_at": "2026-05-24T08:56:53.572956-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-24T08:58:04.397397-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
