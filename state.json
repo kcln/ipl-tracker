@@ -1657,6 +1657,31 @@
           "fired_count": 0
         }
       }
+    },
+    "2026-05-26": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Tuesday, May 26\n\nToday's matches:\n\nMatch 1: RCB vs GT\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: RCB wins\nReason: RCB have home advantage at Himachal Pradesh Cricket Association Stadium\n\nCurrent top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-26T00:00:16.819552-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T00:00:24.372243-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2535": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
