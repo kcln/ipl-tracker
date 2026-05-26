@@ -1714,17 +1714,26 @@
           "delivered_at": "2026-05-26T08:51:09.800354-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_update_1_2",
+          "body": "RCB vs GT \u2014 Status update\n\nPlay stopped \u2014 overs counter has not advanced\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-26T09:22:03.187049-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T09:22:10.090808-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2535": {
-          "state": "none",
-          "entered_at": "2026-05-26T07:03:34.269591-07:00",
-          "entered_phase": "post_toss_pre_play",
+          "state": "active",
+          "entered_at": "2026-05-26T09:22:03.186897-07:00",
+          "entered_phase": "in_play",
           "last_overs_value": 20.0,
           "last_overs_progress_at": "2026-05-26T08:51:02.865555-07:00",
           "last_note_hash": null,
-          "fired_count": 1
+          "fired_count": 2
         }
       }
     }
