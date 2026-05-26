@@ -1659,7 +1659,34 @@
       }
     },
     "2026-05-26": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2535",
+          "teams": [
+            "RCB",
+            "GT"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Royal Challengers Bengaluru Won by 92 Runs (Qualified)",
+          "predicted_winner": "RCB",
+          "actual_winner": "RCB",
+          "inn1": {
+            "runs": 254,
+            "wkts": 5,
+            "overs": 20.0,
+            "raw": "254/5 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 162,
+            "wkts": 10,
+            "overs": 19.3,
+            "raw": "162/10 (19.3 Ov)"
+          },
+          "first_batting": "RCB",
+          "second_batting": "GT"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -1741,6 +1768,24 @@
           "delivered_at": "2026-05-26T10:00:29.181519-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "RCB beat GT by 92 Runs (Qualified)\nRCB 254/5 (20.0)  \u00b7  GT 162/10 (19.3)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: SRH, RCB, GT, RR",
+          "generated_at": "2026-05-26T11:16:23.982622-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Tuesday, May 26 - Day recap\n\nRCB beat GT by 92 Runs (Qualified)\nRCB 254/5 (20.0)  \u00b7  GT 162/10 (19.3)\n\nSeason to date prediction: 12 of 17 correct (71%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: SRH, RCB, GT, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-26T11:16:24.371307-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T11:16:28.987360-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1748,8 +1793,8 @@
           "state": "none",
           "entered_at": "2026-05-26T09:22:03.186897-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 19.0,
-          "last_overs_progress_at": "2026-05-26T11:12:31.510677-07:00",
+          "last_overs_value": 19.3,
+          "last_overs_progress_at": "2026-05-26T11:16:23.756074-07:00",
           "last_note_hash": null,
           "fired_count": 2
         }
