@@ -1669,6 +1669,15 @@
           "delivered_at": "2026-05-26T00:00:24.372243-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "RCB vs GT \u2014 Toss\n\nToss: GT won and chose to field.\n\nUpdated prediction: GT wins (55%)\nReason: GT won the toss and chose to field \u00b7 chases win 66% here historically\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-26T06:32:57.473150-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T06:33:05.717506-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
