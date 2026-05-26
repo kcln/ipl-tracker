@@ -1723,15 +1723,24 @@
           "delivered_at": "2026-05-26T09:22:10.090808-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_resumed_1_2",
+          "body": "RCB vs GT \u2014 Play has resumed\n\nResumed after a 5-minute delay.\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-26T09:27:18.689596-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T09:27:25.121416-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2535": {
-          "state": "active",
+          "state": "none",
           "entered_at": "2026-05-26T09:22:03.186897-07:00",
           "entered_phase": "in_play",
-          "last_overs_value": 20.0,
-          "last_overs_progress_at": "2026-05-26T08:51:02.865555-07:00",
+          "last_overs_value": 0.1,
+          "last_overs_progress_at": "2026-05-26T09:27:18.689458-07:00",
           "last_note_hash": null,
           "fired_count": 2
         }
