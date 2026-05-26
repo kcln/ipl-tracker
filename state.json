@@ -1678,17 +1678,26 @@
           "delivered_at": "2026-05-26T06:33:05.717506-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "status_update_1_1",
+          "body": "RCB vs GT \u2014 Status update\n\nPlay delayed \u2014 first ball not yet bowled\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-26T07:03:34.269688-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-26T07:03:54.741227-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
         "2535": {
-          "state": "none",
-          "entered_at": null,
-          "entered_phase": null,
+          "state": "active",
+          "entered_at": "2026-05-26T07:03:34.269591-07:00",
+          "entered_phase": "post_toss_pre_play",
           "last_overs_value": null,
           "last_overs_progress_at": null,
           "last_note_hash": null,
-          "fired_count": 0
+          "fired_count": 1
         }
       }
     }
