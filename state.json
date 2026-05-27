@@ -1799,6 +1799,31 @@
           "fired_count": 2
         }
       }
+    },
+    "2026-05-27": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Wednesday, May 27\n\nToday's matches:\n\nMatch 1: SRH vs RR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: SRH wins\nReason: SRH have home advantage at New International Cricket Stadium\n\nCurrent top 4: RCB, GT, SRH, RR\nPredicted final top 4: SRH, RCB, GT, RR",
+          "generated_at": "2026-05-27T00:20:31.655555-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-27T00:20:36.732559-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2536": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
