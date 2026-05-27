@@ -1820,6 +1820,15 @@
           "delivered_at": "2026-05-27T06:33:37.342753-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_1_1",
+          "body": "RR vs SRH \u2014 Powerplay 1\n\nRR: 80/0 after 6.0 overs.\n\nUpdated prediction: RR wins (80%)\nReason: 80/0 after PP \u2014 above par (50) at this stage\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-27T07:31:16.813195-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-27T07:31:22.366949-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1827,8 +1836,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 3.5,
-          "last_overs_progress_at": "2026-05-27T07:20:02.446912-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-27T07:31:16.811403-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
