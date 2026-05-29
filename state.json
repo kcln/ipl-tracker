@@ -1905,6 +1905,31 @@
           "fired_count": 0
         }
       }
+    },
+    "2026-05-29": {
+      "matches": [],
+      "messages": [
+        {
+          "type": "morning",
+          "body": "IPL 2026 - Friday, May 29\n\nToday's matches:\n\nMatch 1: GT vs RR\n7:30 PM IST / 10:00 AM ET / 9:00 AM CT / 7:00 AM PT\nPrediction: GT wins\nReason: GT have better recent form\n\nCurrent top 4: RCB, GT, SRH, RR\nPredicted final top 4: GT, RCB, SRH, RR",
+          "generated_at": "2026-05-29T00:00:49.865026-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-29T00:00:55.240539-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        }
+      ],
+      "delay_state": {
+        "2537": {
+          "state": "none",
+          "entered_at": null,
+          "entered_phase": null,
+          "last_overs_value": null,
+          "last_overs_progress_at": null,
+          "last_note_hash": null,
+          "fired_count": 0
+        }
+      }
     }
   }
 }
