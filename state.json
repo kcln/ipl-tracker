@@ -1944,6 +1944,15 @@
           "delivered_at": "2026-05-29T08:59:08.246286-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "powerplay_2_1",
+          "body": "RR vs GT \u2014 Powerplay 2\n\nGT: 69/0 after 6.0 overs, chasing 215.\n\nUpdated prediction: GT wins (63%)\nReason: 69/0 chasing 215 \u2014 RRR 10.4 vs CRR 11.5\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-29T09:44:29.740671-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-29T09:44:35.794380-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -1951,8 +1960,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 5.4,
-          "last_overs_progress_at": "2026-05-29T09:43:06.563554-07:00",
+          "last_overs_value": 6.0,
+          "last_overs_progress_at": "2026-05-29T09:44:29.707776-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
