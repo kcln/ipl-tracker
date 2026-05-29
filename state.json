@@ -1917,6 +1917,15 @@
           "delivered_at": "2026-05-29T00:00:55.240539-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "GT vs RR \u2014 Toss\n\nToss: RR won and chose to bat.\n\nUpdated prediction: GT wins (94%)\nReason: RR won the toss but chose to bat \u2014 against the venue trend\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-29T06:33:01.974241-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-29T06:33:07.453930-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
