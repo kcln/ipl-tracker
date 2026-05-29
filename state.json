@@ -1907,7 +1907,34 @@
       }
     },
     "2026-05-29": {
-      "matches": [],
+      "matches": [
+        {
+          "id": "2537",
+          "teams": [
+            "GT",
+            "RR"
+          ],
+          "scheduled_ist": "19:30",
+          "status": "complete",
+          "result": "Gujarat Titans Won by 7 Wickets (Qualified)",
+          "predicted_winner": "GT",
+          "actual_winner": "GT",
+          "inn1": {
+            "runs": 214,
+            "wkts": 6,
+            "overs": 20.0,
+            "raw": "214/6 (20.0 Ov)"
+          },
+          "inn2": {
+            "runs": 219,
+            "wkts": 3,
+            "overs": 18.4,
+            "raw": "219/3 (18.4 Ov)"
+          },
+          "first_batting": "RR",
+          "second_batting": "GT"
+        }
+      ],
       "messages": [
         {
           "type": "morning",
@@ -1951,6 +1978,24 @@
           "generated_at": "2026-05-29T09:44:29.740671-07:00",
           "delivered": true,
           "delivered_at": "2026-05-29T09:44:35.794380-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
+        },
+        {
+          "type": "post_match_1",
+          "body": "GT beat RR by 7 Wickets (Qualified)\nRR 214/6 (20.0)  \u00b7  GT 219/3 (18.4)\n\nPre-match prediction: correct\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR",
+          "generated_at": "2026-05-29T10:56:13.777874-07:00",
+          "delivered": false,
+          "delivered_at": null,
+          "delivery_skipped": true,
+          "skipped_reason": "newer message available"
+        },
+        {
+          "type": "end_of_day",
+          "body": "IPL 2026 - Friday, May 29 - Day recap\n\nGT beat RR by 7 Wickets (Qualified)\nRR 214/6 (20.0)  \u00b7  GT 219/3 (18.4)\n\nSeason to date prediction: 13 of 19 correct (68%)\n\nUpdated top 4: RCB, GT, SRH, RR\nPredicted final top 4: RCB, GT, SRH, RR\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-29T10:56:14.240135-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-29T10:56:18.935982-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
         }
