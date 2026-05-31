@@ -2041,6 +2041,15 @@
           "delivered_at": "2026-05-31T07:34:12.836137-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "innings_break_1",
+          "body": "GT vs RCB \u2014 Innings break\n\nGT finished 155/8 in 20.0 overs.\nRCB need 156 to win.\n\nUpdated prediction: GT wins (52%)\nReason: target 156, RRR 7.80 \u00b7 defense wins 57% at this ground\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-31T08:49:00.088813-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-31T08:49:07.904204-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
@@ -2048,8 +2057,8 @@
           "state": "none",
           "entered_at": null,
           "entered_phase": null,
-          "last_overs_value": 19.4,
-          "last_overs_progress_at": "2026-05-31T08:47:34.584362-07:00",
+          "last_overs_value": 20.0,
+          "last_overs_progress_at": "2026-05-31T08:49:00.074634-07:00",
           "last_note_hash": null,
           "fired_count": 0
         }
