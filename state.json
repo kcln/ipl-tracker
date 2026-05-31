@@ -2023,6 +2023,15 @@
           "delivered_at": "2026-05-31T00:01:00.606466-07:00",
           "delivery_skipped": false,
           "skipped_reason": null
+        },
+        {
+          "type": "toss_1",
+          "body": "RCB vs GT \u2014 Toss\n\nToss: RCB won and chose to field.\n\nUpdated prediction: RCB wins (53%)\nReason: RCB won the toss and chose to field\n\nArchive: https://kcln.github.io/ipl-tracker/",
+          "generated_at": "2026-05-31T06:32:47.309479-07:00",
+          "delivered": true,
+          "delivered_at": "2026-05-31T06:33:07.586484-07:00",
+          "delivery_skipped": false,
+          "skipped_reason": null
         }
       ],
       "delay_state": {
